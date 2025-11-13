@@ -1,0 +1,377 @@
+---
+title: "Lineare Modelle II"
+author: "<table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'><col width='10%'><col width='10%'>
+  <tr style='border:none'>
+    <td style='display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none' nowrap>
+      <font style='font-style:normal'>Statistik mit R</font><br>
+      <a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+        <i class='fas fa-clock' style='font-size:.9em;' ></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <i class='fas fa-home' style='font-size:.9em;'></i>
+      </a>
+      <a href='mailto:therbootcamp@gmail.com'>
+        <i class='fas fa-envelope' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+        <i class='fab fa-linkedin' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <font style='font-style:normal'>The R Bootcamp</font>
+      </a>
+    </td>
+    <td style='width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none'>
+      <img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+    </td>
+  </tr></table>"
+output:
+  html_document:
+    css: practical.css
+    self_contained: no
+---
+
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(comment = NA, 
+                      fig.width = 6, 
+                      fig.height = 6,
+                      fig.align = 'center',
+                      echo = TRUE, 
+                      eval = TRUE, 
+                      warning = FALSE)
+
+options(digits = 3)
+
+# Load packages
+library(tidyverse)
+
+# Load packages
+wein <- read_csv("1_Data/wein.csv")
+
+```
+
+<p align="center" width="100%">
+  <img src="image/vinho2.png" alt="Trulli" style="width:100%">
+  <br>
+  <font style="font-size:10px">from <a href="https://www.delinat.com/weinlese-blog/wie-lange-ist-ein-wein-haltbar/">delinat.com</a></font>
+</p>
+
+
+# {.tabset}
+
+## Überblick
+
+Am Ende des Practicals wirst du wissen...
+
+1. Wie du kategoriale Variablen als Prädiktoren in einer Regression verwendest und interpretierst. 
+2. Wie du Interaktionen integrierst und warum es wichtig sein kann die Variablen zu standardisieren.
+
+## Aufgaben
+
+### A - Setup
+
+1. Öffne dein `TheRBootcamp` R project. 
+
+2. Öffne ein neues R Skript. Schreibe deinen Namen, das Datum und "Lineare Modelle II Practical" als Kommentare an den Anfang des Skripts.
+
+```{r, eval = FALSE, echo = TRUE}
+## NAME
+## DATUM
+## Lineare Modelle II Practical
+```
+
+3. Speichere das neue Skript unter dem Namen `lineare_modelle_II_practical.R` im `2_Code` Ordner.
+
+4. Lade das Paket `tidyverse`.
+
+```{r}
+library(tidyverse)
+```
+
+5. Verwende die `read_csv()` Funktion um wiederum `wein.csv` einzulesen.
+
+```{r, echo = T, eval = T, message = F}
+# Lese Daten ein
+wein <- read_csv(file = "1_Data/wein.csv")
+```
+
+6. Führe den Code unten wieder aus, um sicherzustellen, dass alle `character` Variablen als Faktoren vorliegen, was den statistischen Modellen hilft kategoriale Variablen richtig zu interpretieren. 
+
+```{r, echo = TRUE}
+# Konvertiere alle character zu factor
+wein <- wein %>% mutate_if(is.character, factor)
+```
+
+
+### B - Gruppenvergleiche: <i>t</i>-Test versus Regression
+
+1. In diesem Abschnitt geht es darum den Effekt der `Farbe` (Prädiktor) des Weins, rot oder weiss, auf die `Qualität` des Weines zu prüfen. Verwende hierzu zunächst den Code unten um zwei Vektoren zu erstellen, die jeweils die Qualitätswerte für weisse und rote Weine beinhalten. 
+
+```{r, echo = TRUE}
+# Qualitätsvektoren nach Farbe
+weiss <- wein %>% filter(Farbe == 'weiss') %>% pull(Qualität)
+rot <- wein %>% filter(Farbe == 'rot') %>% pull(Qualität)
+```
+
+2. Verwende nun das `t.test()` Template unten um die beiden Vektoren mit einem <i>t</i>-Test miteinander zu vergleichen. Du brauchst das Ergebnis nicht zu speichern. 
+
+```{r, eval = FALSE, echo = TRUE}
+# t-test
+t.test(x = XX, y = XX)
+```
+
+```{r}
+# t-test
+t.test(x = weiss, y = rot)
+```
+
+3. Was verrät dir der Output des <i>t</i>-Tests über den Unterschied weisser und roter Weine in der wahrgenommenen Qualität? Die Antwort findest du in der zweiten Zeile (beginnend mit `t=..`) zusammen mit der letzten Zeile.  
+
+4. Weisse Weine wurden `0.241886` (Differenz der beiden Mittelwerte) Punkte als qualitativ wertiger wahrgenommen und dieser Unterschied ist signifikant. Versuche nun das selbe Ergebnis mit einer Regression zu erzielen. Prädiziere hierzu `Qualität` durch `Farbe`.
+
+```{r, eval = FALSE, echo = TRUE}
+# Regression
+wein_lm <- lm(formula = XX ~ XX, 
+              data = XX)
+```
+
+```{r}
+# Regression
+wein_lm <- lm(formula = Qualität ~ Farbe, 
+              data = wein)
+```
+
+5. Printe zunächst einmal das Objekt und betrachte die Regressionsgewichte. Kommt dir die eine oder andere Zahl bekannt vor?
+
+6. Genau, das Regressionsgewicht für `Farbe` spiegelt exakt den Unterschied der beiden Mittelwerte wieder. Was repräsentiert dann der Intercept?: Den Wert derjenigen Kategorie, der R den Wert 0 zugewiesen hat. Dies ist bei ursprünglich `character` Variablen per Default diejenige Kategorie die alphabetisch früher kommt, d.h., `'rot' < 'weiss'`.   
+
+7. Lasse dir jetzt die `summary()` für das Modell ausgeben und vergleiche Freiheitsgrade, <i>t</i>- und p-Wert mit denen aus dem <i>t</i>-Test. 
+
+```{r}
+# summary
+summary(wein_lm)
+```
+
+8. Die Werte im t-Test stimmen trotz der gleichen Schätzwerte für die Gewichte nicht ganz überein. Dies liegt daran, dass die `t.test()` Funktion per Default eine Variante rechnet die erlaubt, dass die Varianzen in den beiden Gruppen (rot und weiss) unterschiedlich sind. Die Regression dagegen geht stets davon aus, dass diese gleich sind, was wir im Detail in der Session zu robuste Statistiken besprechen werden. Rechne den <i>t</i>-Test noch einmal, diesmal mit dem zusätzlichen Argument `var.equal = TRUE`.   
+
+```{r, eval = FALSE, echo = TRUE}
+# t-test
+t.test(x = XX, y = XX, var.equal = )
+```
+
+```{r}
+# t-test
+t.test(x = weiss, y = rot, var.equal = TRUE)
+```
+
+9. Ordnung ist eingekehrt. Alle Werte im <i>t</i>-Test und der Regression sollten jetzt identisch sein, was daran liegt, dass die beiden Modelle nun exakt identisch sind. 
+
+### C - Gruppenvergleiche: Kodierung
+
+1. Per Default verwendet R die Dummy-Kodierung, in der eine Ausprägung den Wert 0 erhält und eine andere den Wert 1. Eine alternative Kodierung existiert in der Effektkodierung, die stattdessen die Werte -1 und 1 vergibt. Um die Konsequenzen dieser beiden Kodierungen direkt zu vergleichen, erstelle zunächst für jede Kodierung eine neue Variable im Datensatz unter Verwendung des Codes unten. 
+
+```{r, echo = TRUE}
+# Kodierungen der Farbe
+wein <- wein %>% mutate(Farbe_dummy = ifelse(Farbe == 'rot', 0, 1),
+                        Farbe_effekt = ifelse(Farbe == 'rot', -1, 1))
+```
+
+2. Rechne nun zwei Regressionen, jeweils eine mit einer der beiden Farbkodierungen als Prädiktor und speichere sie ab als `wein_dummy` und `wein_effekt`.   
+
+```{r, eval = FALSE, echo = TRUE}
+# Regression dummy
+wein_dummy <- lm(formula = XX ~ XX, 
+                 data = XX)
+
+# Regression effekt
+wein_effekt <- lm(formula = XX ~ XX, 
+                  data = XX)
+```
+
+```{r}
+# Regression dummy
+wein_dummy <- lm(formula = Qualität ~ Farbe_dummy, 
+                 data = wein)
+
+# Regression effekt
+wein_effekt <- lm(formula = Qualität ~ Farbe_effekt, 
+                  data = wein)
+```
+
+3. Printe nun die beiden Objekte und vergleiche die Gewichte. Diejenigen der Dummy-Kodierung sollten dir bekannt vorkommen. Wie verhalten sich die Gewichte der Effektkodierung dagegen? Erkennst du den Zusammenhang?
+
+4. Der Effekt der Farbe unter der Effektkodierung entspricht genau der Hälfte des Effekts unter der Dummykodierung und um dies auszugleichen hat sich der Intercept auch um genau den selben Wert verändert, nur in die andere Richtung. Verifiziere die Gewichte mit den einfachen Rechnungen im Code unten. 
+
+```{r, echo = TRUE}
+# Dummy-Kodierung
+mean(rot) # intercept
+mean(weiss) - mean(rot) # gewicht farbe
+
+# EffekKodierung
+(mean(rot) + mean(weiss))/2 # intercept
+mean(weiss) - (mean(rot) + mean(weiss))/2 # gewicht farbe
+```
+
+5. Vergleiche nun die `summary()` der beiden Modelle. Was unterscheidet sich, und was nicht?
+
+```{r}
+# Regression dummy
+summary(wein_dummy)
+
+# Regression effekt
+summary(wein_effekt)
+```
+
+6. Die Kodierung hat ausgenommen die Skalierung des Regressionsgewichts und des zugehörigen Standardfehlers keinen Einfluss. <i>t</i>-Wert und Signifikanz sind identisch. Einzig der Intercept ändert sich wesentlich, da er unter der Effektkodierung tatsächlich weiter von Null entfernt ist.
+
+### D - Interaktionen
+
+1. Der erste Abschnitt hat gezeigt, dass weisser Wein gegenüber Rotem bevorzugt wurde. Könnte dies daran liegen, dass nicht für andere Variablen kontrolliert wurde? Oder könnte es sein, dass dieser Unterschied nur unter bestimmten Bedingungen gilt, d.h., dass es Moderatoren für den Effekt der Farbe gibt? Rechne eine Regression die zusätzlich `Alkohol` mit aufnimmt und verknüpfe die Prädiktoren mit `*` sodass auch die Interaktion berücksichtigt wird.   
+
+```{r, eval = FALSE, echo = TRUE}
+# Regression mit Interaktion
+wein_lm <- lm(formula = XX ~ XX * XX, 
+              data = XX)
+```
+
+```{r}
+# Regression mit Interaktion
+wein_lm <- lm(formula = Qualität ~ Farbe * Alkohol, 
+              data = wein)
+```
+
+2. Printe das Objekt und betrachte die Gewichte. Wie interpretierst du die einzelnen Werte?
+
+3. Die Gewichte lassen sich folgendermassen interpretieren: Unter Berücksichtigung von Alkohol und der Interaktion, werden weisse Weine um `.7` besser bewertet. Unter Berücksichtigung der Farbe und der Interaktion, führt ein Anstieg von einem Volumenprozent zu einer Verbesserung der wahrgenommenen Qualität von `.36`. Unter Berücksichtigung von Farbe und Alkohol, führt die Interaktion, also das Produkt der beiden Prädiktoren zu einer Veränderung von `-.05`. Dies ist so zu interpretieren, dass der Effekt von Alkohol unter Weissweinen um genau diese Grösse kleiner ist. Dies bedeutet im Umkehrschluss dass der Effekt von Farbe unter hoch-alkoholischen Weinen kleiner ausfällt. Verwendet den Code unten um diese Ergebnisse zu visualisieren. Gelb bedeutet Weisswein, lila (dunkel blau, fast schwarz) Rotwein.
+
+```{r, echo =T}
+# Visualisierung
+ggplot(data = wein, 
+       aes(x = Alkohol, y = Qualität, col = Farbe, alpha = .01)) + 
+  scale_color_manual(values = viridis::cividis(2)) + 
+  geom_jitter(width=2,height=1.5,size=.1) + theme_minimal() + theme(legend.position = 'none') +
+  geom_smooth(data = wein %>% filter(Farbe == 'weiss'), method = 'lm') + 
+  geom_smooth(data = wein %>% filter(Farbe == 'rot'), method = 'lm')
+
+```
+
+4. Lasse dir nun die `summary()` anzeigen und inspiziere die <i>t</i>-Werte und Signifikanzen. Welche Prädiktoren sind signifikant?
+
+5. Alle drei Prädiktoren sind signifikant. <i>t</i>-Wert und Signifikanz sind am extremsten für `Alkohol`, jedoch ist das Gewicht für `Alkohol` nur halb so gross. Wie ist dies zu erklären?  
+
+6. Genau die Gewichte hängen auch von der Skalierung der Prädiktoren ab. Rechne nun die Regression noch einmal, aber diesmal mit skalierten Prädiktoren. Siehe Code unten.
+
+```{r, eval = FALSE, echo = TRUE}
+# Skalierungsfunktion
+skaliere = function(x) (x - mean(x))/sd(x)
+
+# Regression mit skalierten Prädiktoren
+wein_lm <- lm(formula = XX ~ XX * XX, 
+              data = XX %>% mutate_if(is.numeric, skaliere))
+```
+
+```{r}
+# Skalierungsfunktion
+skaliere = function(x) (x - mean(x))/sd(x)
+
+# Regression mit skalierten Prädiktoren
+wein_lm <- lm(formula = Qualität ~ Farbe * Alkohol, 
+              data = wein %>% mutate_if(is.numeric, skaliere))
+```
+
+7. Printe zunächst einmal das Objekt und betrachte die Gewichte. Alle Werte haben sich substantiell verändert. Insbesondere hat nun Alkohol das zweifach höhere Gewicht. Wie sind diese neuen Gewichte zu interpretieren, wenn du bedenkst, dass nach der Skalierung alle Variablen eine Standardabweichung = 1 haben? 
+
+8. Nach Skalierung sind die Gewichte als Veränderungen in Standardabweichungen zu interpretieren. Z.B., eine Veränderung von einer Standardabweichungen in `Alkohol` führt demnach zu einer Veränderung von `.4928` Standardabweichungen in der Qualität. Am meisten hat sich der Intercept verändert. Wie interpretiert ihr diesen unter der Skalierung?     
+
+9. Der Intercept ist der geschätzte Mittelwert des Kriteriums für den Fall in dem alle Prädiktoren Null sind. Ohne Skalierung ist dieser Fall schwer zu interpretieren, da Null nicht vorkommen muss in den Prädiktoren. Unter der Skalierung ändert sich dies aber, denn nun haben alle Prädiktoren, mit Ausnahme des Faktors `Farbe` einen Mittelwert von Null. Das heisst der Intercept spiegelt die Qualität für ein mittleres Level von Alkohol, rote Weine und keine Interaktion in Standardabweichungen wieder. Dies kannst du wiederum in der Visualisierung nachvollziehen. Benutze den Code unten und suche den Punkt auf der lila Linie für Alkohol = 0.    
+
+```{r, echo = T}
+# Visualisierung
+ggplot(data = wein %>% mutate_if(is.numeric, skaliere), 
+       aes(x = Alkohol, y = Qualität, col = Farbe, alpha = .01)) + 
+  scale_color_manual(values = viridis::cividis(2))  +
+  geom_jitter(width=2,height=1.5,size=.1) + theme_minimal() + theme(legend.position = 'none') +
+  geom_smooth(data = wein %>% mutate_if(is.numeric, skaliere) %>% filter(Farbe == 'weiss'), method = 'lm') + 
+  geom_smooth(data = wein %>% mutate_if(is.numeric, skaliere) %>% filter(Farbe == 'rot'), method = 'lm')
+
+```
+
+10. Schaue dir nun die `summary()` an. Was hat sich verändert bzgl. <i>t</i>-Werten, Signifikanzen, und Standardfehlern, und R-squared? 
+
+11. Ein wesentlicher Einfluss besteht auf die Variable `Farbe`, welche als einzige nicht mit standardisiert wurde. Vor der Standardisierung von `Alkohol` war Farbe beinahe perfekt mit der Interaktion korreliert, was zu einem extrem aufgeblasenen Standardfehler geführt hat. Die Standardisierung hat diese Korrelation jedoch stark reduziert, so dass der Standardfehler auf das Niveau der anderen Prädiktoren gefallen ist. In der Konklusion lohnt es sich beinahe immer die Prädiktoren (oder auch das Kriterium) zu standardisieren, wenn ein Vergleich der Gewichte und Signifikanzen von Interesse ist. 
+
+## Beispiele
+
+```{r, eval = FALSE, echo = TRUE}
+# Regression mit R
+
+library(tidyverse)
+
+# Model:
+# Sagt der Hubraum (displ) die pro gallone 
+# fahrbaren Meilen voraus?
+hwy_mod <- lm(formula = hwy ~ displ,
+               data = mpg)
+
+# Ergebnisse 
+summary(hwy_mod)
+coef(hwy_mod)
+
+# Gefittete Werte
+hwy_fit <- fitted(hwy_mod)
+hwy_fit
+
+# Residuums 
+hwy_resid <- residuals(hwy_mod)
+hwy_resid
+
+```
+
+
+## Datensätze
+
+|Datei | Zeile | Spalte |
+|:----|:-----|:------|
+|[wein.csv](https://raw.githubusercontent.com/therbootcamp/SmR_2020Mai/master/TheRBootcamp/1_Data/wein.csv) | 6497 | 13 |
+
+#### wein.csv
+
+Der `wein.csv` Datensatz enthält aus den Jahren 2004 bis 2007 des Comissão De Viticultura Da Região Dos Vinhos Verdes, der Offiziellen Zertifizierungsagentur des Vinho Verde in Portugal.
+
+| Name | Beschreibung |
+|:-------------|:-------------------------------------|
+|Qualität | Qualitätsurteil über den Wein von 1-9 |
+|Farbe| Roter oder weisser Wein |
+|Gelöste_Säure| Konzentration der im Wein gelösten Säuren |
+|Freie_Säure| Konzentration der verflüchtigbaren Säuren |
+|Citronensäure| Citronensäurekonzentration im Wein |
+|Restzucker| Zuckerkonzentration im Wein|
+|Chloride| Chloridkonzentration im Wein|
+|Freie_Schwefeldioxide| Konzentration der verflüchtigbaren Schwefeldioxide |
+|Gesamt_Schwefeldioxide| Konzentration der Schwefeldioxide insgesamt |
+|Dichte|Dichte des Weins|
+|pH_Wert|pH-Wert des Weins. Je kleiner, desto saurer. |
+|Sulphate| Sulphatkontration im Wein |
+|Alkohol| Alkoholkonzentration im Wein in %|
+
+## Funktionen
+
+### Pakete
+
+|Package| Installation|
+|:------|:------|
+|`tidyverse`|`install.packages("tidyverse")`|
+
+### Funktionen
+
+| Function| Package | Description |
+|:---|:------|:---------------------------------------------|
+|   `lm`|`stats`| Fitte ein lineares Modell  |
+|   `fitted`|`stats`| Extrahiere vorhergesagte Werte|
+|   `residuals`|`stats`| Extrahiere Residuen |
+
+## Resourcen
+
+### Books
+
+- [Discovering Statistics with R](https://www.amazon.com/Discovering-Statistics-Using-Andy-Field/dp/1446200469) von Andy Field ist sehr gut
+- [YaRrr! The Pirate's Guide to R](https://bookdown.org/ndphillips/YaRrr/) hat hilfreiche und unterhaltsame Kapitel zu Statistik mit R.

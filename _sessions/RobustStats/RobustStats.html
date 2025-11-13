@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Robuste Statistik</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="  Statistik mit R   The R Bootcamp                  " />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="baselrbootcamp.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Robuste Statistik
+### <br> Statistik mit R<br>
+<a href='https://therbootcamp.github.io' style='font-size:1.2em;'> The R
+Bootcamp </a> <br>
+<a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+<i class='fas fa-clock' style='font-size:1.2em;'></i> </a> 
+<a href='https://therbootcamp.github.io'>
+<i class='fas fa-home' style='font-size:1.2em;' ></i> </a> 
+<a href='mailto:therbootcamp@gmail.com'>
+<i class='fas fa-envelope' style='font-size: 1.2em;'></i> </a> 
+<a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+<i class='fab fa-linkedin' style='font-size: 1.2em;'></i> </a>
+### April 2022
+
+---
+
+layout: true
+
+<div class="my-footer">
+  <span style="text-align:center">
+    <span> 
+      <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png" height=14 style="vertical-align: middle"/>
+    </span>
+    <a href="https://therbootcamp.github.io/">
+      <span style="padding-left:82px"> 
+        <font color="#7E7E7E">
+          www.therbootcamp.com
+        </font>
+      </span>
+    </a>
+    <a href="https://therbootcamp.github.io/">
+      <font color="#7E7E7E">
+       Statistik mit R | April 2022
+      </font>
+    </a>
+    </span>
+  </div> 
+
+---
+
+
+
+
+
+
+
+# Robuste Statistik
+
+.pull-left45[
+
+### Parametrische Annahmen
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Parametrische Modelle / Tests kommen mit &lt;high&gt;starken Annahmen&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Für &lt;high&gt;Effizienz und Verzerrungsfreiheit&lt;/high&gt; sollten diese Annahmen erfüllt sein.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+### Nicht-parametrische Statistik
+
+&lt;ul&gt;
+  &lt;li class="m3"&gt;&lt;span&gt;Nicht-parametrische Modelle kommen &lt;high&gt;ohne Annahmen über die Verteilung&lt;/high&gt; in der Population aus.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m4"&gt;&lt;span&gt;Involviert &lt;high&gt;Rangbildung&lt;/high&gt;, &lt;high&gt;Kombinatorik&lt;/high&gt; und &lt;high&gt;Bootstrap&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/artifact.png" height=440px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://xkcd.com/1781/"&gt;xkcd.com&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+
+]
+
+---
+
+# Annahmen der Regression
+
+.pull-left45[
+
+Auf Deutsch...
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Passen die Daten?&lt;/span&gt;&lt;/li&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;span&gt;Quantitativ oder dichotom (A1)&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;Varianz grösser Null (A2)&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;Interkorrelation moderat (A3)&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Passt das Modell?&lt;/span&gt;&lt;/li&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;span&gt;Linearer Zusammenhang (A4, A5, A7)&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;Konstante Fehlervarianz (A6)&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;Normalverteilte Fehler (A8)&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;  
+&lt;/ul&gt;
+
+]
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/assumptions_berry.png" height=440px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href=""&gt;Berry (1993)&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+
+]
+
+---
+
+# Passen die Daten?
+
+.pull-left45[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Ein typisches Daten-Problem sind &lt;high&gt;zu hohe Prädiktorkorrelationen&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;span&gt;&lt;high&gt;Singularität&lt;/high&gt; - Mindestens ein Prädiktor kann &lt;high&gt;vollständig&lt;/high&gt; durch andere erklärt werden.&lt;/span&gt;&lt;/li&gt;
+    &lt;br&gt;
+    &lt;li&gt;&lt;span&gt;&lt;high&gt;Multikollinearität&lt;/high&gt; - Mindestens ein Prädiktor kann &lt;high&gt; fast vollständig&lt;/high&gt; durch andere erklärt werden.&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;br&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Der &lt;high&gt;Variance Inflation Factor&lt;/high&gt; (VIF) schätzt das Ausmass an Multikollinearität. Literatur empfiehlt VIF&lt;10 &lt;a href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/Stine1995.pdf"&gt;(Stine, 1995)&lt;/a&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/vif.png" style="padding-top:25px"&gt;
+&lt;/p&gt;
+
+]
+---
+
+# Passt das Modell?
+
+.pull-left45[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Die Passung des Modells wird bestenfalls über &lt;high&gt;graphische Illustrationen&lt;/high&gt; bestimmt.&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Statistische Kennwerte&lt;/high&gt; können zusätzliche Informationen liefern.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="50%"&gt;
+  &lt;col width="50%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Annahme&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Statistik&lt;/b&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Linearität
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+   &lt;mono&gt;lm&lt;/mono&gt;, &lt;mono&gt;glm&lt;/mono&gt; (curve fitting)
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Homoskedastizität
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;bartlett.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Normalität
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;skewness&lt;/mono&gt;, &lt;mono&gt;kurtosis&lt;/mono&gt;, &lt;mono&gt;shapiro.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Ausreisser
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;cooks.distance&lt;/mono&gt;, &lt;mono&gt;mahalanobis&lt;/mono&gt;, etc.
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;/table&gt;
+
+]
+
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;font style="font-size=10px"&gt;&lt;i&gt;Einfache Regression&lt;/i&gt;&lt;/font&gt;&lt;br&gt;
+&lt;img src="image/assumptions.png" height=420px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# Passt das Modell?
+
+.pull-left45[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Die Passung des Modells wird bestenfalls über &lt;high&gt;graphische Illustrationen&lt;/high&gt; bestimmt.&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Statistische Kennwerte&lt;/high&gt; können zusätzliche Informationen liefern.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="50%"&gt;
+  &lt;col width="50%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Annahme&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Statistik&lt;/b&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Linearity
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+   &lt;mono&gt;lm&lt;/mono&gt;, &lt;mono&gt;glm&lt;/mono&gt; (curve fitting)
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Homoskedastizität
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;bartlett.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Normalität
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;skewness&lt;/mono&gt;, &lt;mono&gt;kurtosis&lt;/mono&gt;, &lt;mono&gt;shapiro.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Ausreisser
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;cooks.distance&lt;/mono&gt;, &lt;mono&gt;mahalanobis&lt;/mono&gt;, etc.
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;/table&gt;
+
+]
+
+
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;font style="font-size=10px"&gt;&lt;i&gt;Residualanalyse&lt;/i&gt;&lt;/font&gt;&lt;br&gt;
+&lt;img src="image/assumptions_res.png" height=420px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+.pull-left45[
+
+# Fehlende Prädiktoren
+
+&lt;br2&gt;
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Verletzungen der Linearitätsannahme&lt;/high&gt; sind am gravierendsten.&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Fehlende Prädiktoren&lt;/high&gt; oft verantwortlich.&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;li class="m3"&gt;&lt;span&gt;Ob &lt;high&gt;zusätzliche Prädiktoren&lt;/high&gt; die Passung verbessern kann getestet werden: &lt;mono&gt;anova(model_1, model_2)&lt;/mono&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+
+.pull-right45[
+&lt;br&gt;&lt;br&gt;
+&lt;p align = "center"&gt;
+&lt;img src="image/assumptions_missingvar.png" height=500px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+
+---
+
+.pull-left5[
+
+# Fehlende Prädiktoren
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Test auf quadratischen Trend&lt;/high&gt; in Szenario C.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: error_rate ~ stress
+## Model 2: error_rate ~ stress + stress2
+##   Res.Df RSS Df Sum of Sq   F Pr(&gt;F)    
+## 1    298 253                            
+## 2    297 110  1       143 388 &lt;2e-16 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*' 0.05 '.'
+##   0.1 ' ' 1
+```
+
+
+]
+
+
+.pull-right45[
+&lt;br&gt;&lt;br&gt;
+&lt;p align = "center"&gt;
+&lt;img src="image/assumptions_missingvar.png" height=500px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+---
+
+# Nicht-parametrische Statistik
+
+.pull-left45[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Wenn Annahmen nicht zutreffen, kann auf nicht-parametrische Methoden zurückgegriffen werden, die höhrere &lt;high&gt;Robustheit&lt;/high&gt; aufweisen&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="50%"&gt;
+  &lt;col width="50%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Ansatz&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Methode&lt;/b&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Rang-Kombinatorik
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+   &lt;mono&gt;wilcox.test&lt;/mono&gt;, &lt;mono&gt;friedman.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Häufigkeit-Kombinatorik
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+   &lt;mono&gt;sign.test&lt;/mono&gt;, &lt;mono&gt;chisq.test&lt;/mono&gt;
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    M-Schätzung
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rq&lt;/mono&gt; (quantile regr.), &lt;mono&gt;rfit&lt;/mono&gt; (rank regr.)
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    Bootstrap
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;boot&lt;/mono&gt; (anything)
+  &lt;/td&gt;  
+&lt;/tr&gt;
+&lt;/table&gt;
+
+
+]
+
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/robust_marking.png"&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+.pull-left45[
+
+# Rangsummentest
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Gruppenvergleiche können mit dem &lt;high&gt;Rangsummentest&lt;/high&gt; von Wilcoxon bzw. Mann-Whitney durchgeführt werden&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Der Rangsummentest testet, ob die &lt;high&gt;Summen gmeinsam gebildeter Ränge&lt;/high&gt; in den Gruppen identisch sind.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align = "center"&gt;
+&lt;img src="image/wilcox_form.png" height=250px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+.pull-right45[
+
+&lt;br&gt;&lt;br&gt;
+&lt;p align = "center"&gt;
+&lt;img src="image/wilcox.png" height=500px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+---
+
+.pull-left45[
+
+# Wilcoxon test
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Gruppenvergleiche können mit dem &lt;high&gt;Rangsummentest&lt;/high&gt; von Wilcoxon bzw. Mann-Whitney durchgeführt werden&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Der Rangsummentest testet, ob die &lt;high&gt;Summen gmeinsam gebildeter Ränge&lt;/high&gt; in den Gruppen identisch sind.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align = "center"&gt;
+&lt;img src="image/wilcox_form.png" height=250px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+
+]
+
+
+
+.pull-right45[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+```r
+# data
+group_1 &lt;- c(18, 24, 29, 12, 11, 31)
+group_2 &lt;- c(27, 16, 23, 8, 15, 21)
+
+# wilcoxon test
+wilcox.test(group_1, group_2)
+```
+
+
+```
+## 
+## 	Wilcoxon rank sum exact test
+## 
+## data:  group_1 and group_2
+## W = 22, p-value = 0.6
+## alternative hypothesis: true location shift is not equal to 0
+```
+
+]
+
+
+---
+
+.pull-left45[
+
+# Vorzeichentest
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Einfacher Test für abhängige Daten basierend auf der &lt;high&gt;Kombinatorik von Häufigkeiten&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Der Vorzeichentest testet, ob die &lt;high&gt;Vorzeichen von Differenzen (+,-)&lt;/high&gt; gleich wahrscheinlich sind.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p align = "center"&gt;
+&lt;img src="image/signtest_form.png" style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+]
+
+.pull-right45[
+
+&lt;br&gt;&lt;br&gt;
+&lt;p align = "center"&gt;
+&lt;img src="image/signtest.png" height=500px style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+
+---
+
+.pull-left45[
+
+# Vorzeichentest
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Einfacher Test für abhängige Daten basierend auf der &lt;high&gt;Kombinatorik von Häufigkeiten&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Der Vorzeichentest testet, ob die &lt;high&gt;Vorzeichen von Differenzen (+,-)&lt;/high&gt; gleich wahrscheinlich sind.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p align = "center"&gt;
+&lt;img src="image/signtest_form.png" style="padding-top:10px"&gt;
+&lt;/p&gt;
+
+
+]
+
+.pull-right45[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+```r
+# data
+time_1 &lt;- c(18, 24, 29, 12, 11, 31)
+time_2 &lt;- c(27, 16, 23, 8, 15, 21)
+
+# sign test
+N &lt;- length(time_1)
+n_plus &lt;- sum(time_1 - time_2 &gt; 0)
+dbinom(x = n_plus : N, 
+       size = N, 
+       prob = .5) %&gt;% # H0
+  sum()
+```
+
+
+```
+## [1] 0.3438
+```
+]
+
+---
+
+.pull-left55[
+
+# Robuste Regression
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &amp;rho;(e) verbessert werden.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align = "center"&gt;
+  &lt;img src="image/Mest.png" height=70px style="padding-top:15px"&gt;
+&lt;/p&gt;
+
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="35%"&gt;
+  &lt;col width="30%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Funktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Paket&lt;/b&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Fehlerfunktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Beschreibung&lt;/b&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;lm&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;stats&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_lm.png" height=23px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Kleinste-Quadrate
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rq&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;quantreg&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_quantile.png" height=20px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Quantil-Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rfit&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;Rfit&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_rank.png" height=40px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Rangbasierte Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+.pull-right4[
+  
+  &lt;br&gt;&lt;br&gt;
+  &lt;p align = "center"&gt;
+  &lt;img src="image/robust_reg.png" height=500px style="padding-top:10px"&gt;
+  &lt;/p&gt;
+
+]
+
+---
+
+.pull-left55[
+
+# Robuste Regression
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &amp;rho;(e) verbessert werden.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align = "center"&gt;
+  &lt;img src="image/Mest.png" height=70px style="padding-top:15px"&gt;
+&lt;/p&gt;
+
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="35%"&gt;
+  &lt;col width="30%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Funktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Paket&lt;/b&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Fehlerfunktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Beschreibung&lt;/b&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;lm&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;stats&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_lm.png" height=23px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Kleinste-Quadrate
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rq&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;quantreg&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_quantile.png" height=20px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Quantil-Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rfit&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;Rfit&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_rank.png" height=40px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Rangbasierte Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+.pull-right4[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+
+
+```r
+# Quantile regression
+library(quantreg)
+m &lt;- rq(formula = y ~ x, 
+        data = outlier_df)
+summary(m)
+```
+
+```
+## 
+## Call: rq(formula = y ~ x, data = outlier_df)
+## 
+## tau: [1] 0.5
+## 
+## Coefficients:
+##             coefficients lower bd
+## (Intercept)  0.01626     -0.04042
+## x            0.47497      0.30777
+##             upper bd
+## (Intercept)  0.13365
+## x            0.54799
+```
+
+]
+
+
+---
+
+.pull-left55[
+
+# Robuste Regression
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &amp;rho;(e) verbessert werden.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p align = "center"&gt;
+  &lt;img src="image/Mest.png" height=70px style="padding-top:15px"&gt;
+&lt;/p&gt;
+
+
+&lt;table style="cellspacing:0; cellpadding:0; border:none; padding-top:10px"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="13%"&gt;
+  &lt;col width="35%"&gt;
+  &lt;col width="30%"&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Funktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Paket&lt;/b&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Fehlerfunktion&lt;/b&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;b&gt;Beschreibung&lt;/b&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;lm&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;stats&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_lm.png" height=23px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Kleinste-Quadrate
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rq&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;quantreg&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_quantile.png" height=20px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Quantil-Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;rfit&lt;/mono&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    &lt;mono&gt;Rfit&lt;/mono&gt;
+  &lt;/td&gt;  
+  &lt;td bgcolor="white"&gt;
+    &lt;img src="image/robust_rank.png" height=40px&gt;
+  &lt;/td&gt;
+  &lt;td bgcolor="white"&gt;
+    Rangbasierte Regression
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+]
+
+.pull-right4[
+
+&lt;br&gt;&lt;br&gt;
+
+
+
+
+```r
+# Rank-based regression
+library(Rfit)
+m &lt;- rfit(formula = y ~ x, 
+          data = outlier_df)
+summary(m)
+```
+
+```
+## Call:
+## rfit.default(formula = y ~ x, data = outlier_df)
+## 
+## Coefficients:
+##             Estimate Std. Error
+## (Intercept)   0.0328     0.0551
+## x             0.3048     0.0417
+##             t.value p.value    
+## (Intercept)    0.60    0.55    
+## x              7.31 2.2e-12 ***
+## ---
+## Signif. codes:  
+##   0 '***' 0.001 '**' 0.01 '*'
+##   0.05 '.' 0.1 ' ' 1
+## 
+## Multiple R-squared (Robust): 0.05718 
+## Reduction in Dispersion Test: 19.29 p-value: 2e-05
+```
+
+]
+
+
+---
+
+# Bootstraptests
+
+.pull-left45[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Bootstrap tests basieren auf wiederholten &lt;high&gt;Zufallsziehungen der Daten&lt;/high&gt; (mit Zurücklegen).&lt;/span&gt;&lt;/li&gt;
+  &lt;br&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Für jedes Bootstrap sample wird die relevante Statistik berechnet, wodurch eine &lt;high&gt;verteilungsunabhängige, simulierte Stichprobenverteilung&lt;/high&gt; entsteht.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+]
+
+.pull-right45[
+
+  &lt;p align = "center"&gt;
+  &lt;img src="image/muench.png" height=380px style="border-radius:0px"&gt;&lt;br&gt;
+    &lt;font style="font-size:10px"&gt;Baron Münchhausen, from &lt;a href="https://de.wikipedia.org/wiki/Datei:M%C3%BCnchhausen-Sumpf-Hosemann.png"&gt;wikipedia.org&lt;/a&gt;&lt;/font&gt;
+  &lt;/p&gt;
+
+]
+
+
+---
+
+.pull-left4[
+
+# Bootstraptests
+
+&lt;b&gt;Schritt 1&lt;/b&gt;&lt;br&gt;Ziehe `\(R\)` &lt;high&gt;Bootstrap-Stichproben&lt;/high&gt; `\(B_i\)` von Grösse `\(n\)` Beobachtungen (= eine Zeile im Datensatz). 
+
+&lt;b&gt;Schritt 2&lt;/b&gt;&lt;br&gt;&lt;high&gt;Berechne Statistik&lt;/high&gt; `\(f(B_i)\)`, z.B., einen Gruppenunterschied oder ein Regressionsgewicht, für jede der `\(R\)` Bootstrap-Stichproben. 
+
+&lt;b&gt;Schritt 3&lt;/b&gt;&lt;br&gt;&lt;high&gt;Evaluiere die Simulierte Statistik&lt;/high&gt;, z.B., mit einem Konfidenzinterval.
+
+&lt;p align="center"&gt;&lt;img src="image/bootCI.png" height=50px style="padding-top:10px"&gt;&lt;/p&gt;
+
+
+
+
+
+]
+
+.pull-right45[
+  
+  &lt;br&gt;&lt;br&gt;
+  &lt;p align = "center"&gt;
+  &lt;img src="image/bootstrap.png" height=470px style="padding-top:10px"&gt;
+  &lt;/p&gt;
+
+]
+
+
+---
+
+.pull-left4[
+
+# Bootstraptests
+
+&lt;b&gt;Schritt 1&lt;/b&gt;&lt;br&gt;Ziehe `\(R\)` &lt;high&gt;Bootstrap-Stichproben&lt;/high&gt; `\(B_i\)` von Grösse `\(n\)` Beobachtungen (= eine Zeile im Datensatz). 
+
+&lt;b&gt;Schritt 2&lt;/b&gt;&lt;br&gt;&lt;high&gt;Berechne Statistik&lt;/high&gt; `\(f(B_i)\)`, z.B., einen Gruppenunterschied oder ein Regressionsgewicht, für jede der `\(R\)` Bootstrap-Stichproben. 
+
+&lt;b&gt;Schritt 3&lt;/b&gt;&lt;br&gt;&lt;high&gt;Evaluiere die Simulierte Statistik&lt;/high&gt;, z.B., mit einem Konfidenzinterval.
+
+&lt;p align="center"&gt;&lt;img src="image/bootCI.png" height=50px style="padding-top:10px"&gt;&lt;/p&gt;
+
+
+
+
+
+]
+
+.pull-right5[
+  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;  
+  
+
+
+
+
+```r
+# Bootstrap
+library(boot)
+
+# bootstrap function
+stat_fun &lt;- function(data, indices){
+  data &lt;- data[indices,] # bootstrap
+  m &lt;- lm(error_rate ~ stress + stress2, 
+          data = data)
+  coefficients(m)
+  }
+
+# bootstrap samples
+B &lt;- boot(stress_df, 
+          statistic = stat_fun, 
+          R = 1000)
+```
+
+]
+
+---
+
+.pull-left4[
+
+# Bootstraptests
+
+&lt;b&gt;Schritt 1&lt;/b&gt;&lt;br&gt;Ziehe `\(R\)` &lt;high&gt;Bootstrap-Stichproben&lt;/high&gt; `\(B_i\)` von Grösse `\(n\)` Beobachtungen (= eine Zeile im Datensatz). 
+
+&lt;b&gt;Schritt 2&lt;/b&gt;&lt;br&gt;&lt;high&gt;Berechne Statistik&lt;/high&gt; `\(f(B_i)\)`, z.B., einen Gruppenunterschied oder ein Regressionsgewicht, für jede der `\(R\)` Bootstrap-Stichproben. 
+
+&lt;b&gt;Schritt 3&lt;/b&gt;&lt;br&gt;&lt;high&gt;Evaluiere die Simulierte Statistik&lt;/high&gt;, z.B., mit einem Konfidenzinterval.
+
+&lt;p align="center"&gt;&lt;img src="image/bootCI.png" height=50px style="padding-top:10px"&gt;&lt;/p&gt;
+
+
+
+
+
+]
+
+.pull-right5[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+```r
+# Bootstrap CI for stress
+boot.ci(B, index = 2)
+```
+
+```
+## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+## Based on 1000 bootstrap replicates
+## 
+## CALL : 
+## boot.ci(boot.out = B, index = 2)
+## 
+## Intervals : 
+## Level      Normal              Basic         
+## 95%   ( 0.1534,  0.2883 )   ( 0.1478,  0.2806 )  
+## 
+## Level     Percentile            BCa          
+## 95%   ( 0.1694,  0.3021 )   ( 0.1589,  0.2916 )  
+## Calculations and Intervals on Original Scale
+```
+
+]
+
+---
+
+.pull-left4[
+
+# Bootstraptests
+
+&lt;b&gt;Schritt 1&lt;/b&gt;&lt;br&gt;Ziehe `\(R\)` &lt;high&gt;Bootstrap-Stichproben&lt;/high&gt; `\(B_i\)` von Grösse `\(n\)` Beobachtungen (= eine Zeile im Datensatz). 
+
+&lt;b&gt;Schritt 2&lt;/b&gt;&lt;br&gt;&lt;high&gt;Berechne Statistik&lt;/high&gt; `\(f(B_i)\)`, z.B., einen Gruppenunterschied oder ein Regressionsgewicht, für jede der `\(R\)` Bootstrap-Stichproben. 
+
+&lt;b&gt;Schritt 3&lt;/b&gt;&lt;br&gt;&lt;high&gt;Evaluiere die Simulierte Statistik&lt;/high&gt;, z.B., mit einem Konfidenzinterval.
+
+&lt;p align="center"&gt;&lt;img src="image/bootCI.png" height=50px style="padding-top:10px"&gt;&lt;/p&gt;
+
+
+]
+
+.pull-right5[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+```r
+# Bootstrap CI for stress2
+boot.ci(B, index = 3)
+```
+
+```
+## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+## Based on 1000 bootstrap replicates
+## 
+## CALL : 
+## boot.ci(boot.out = B, index = 3)
+## 
+## Intervals : 
+## Level      Normal              Basic         
+## 95%   ( 0.6626,  0.7902 )   ( 0.6653,  0.7920 )  
+## 
+## Level     Percentile            BCa          
+## 95%   ( 0.6541,  0.7807 )   ( 0.6668,  0.7931 )  
+## Calculations and Intervals on Original Scale
+```
+
+]
+
+---
+
+class: middle, center
+
+&lt;h1&gt;&lt;a href="https://therbootcamp.github.io/SmR_2022Apr/_sessions/RobustStats/RobustStats_practical.html"&gt;Practical&lt;/a&gt;&lt;/h1&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

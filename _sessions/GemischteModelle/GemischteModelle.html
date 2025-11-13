@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Gemischte Modelle</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Statistik mit R   The R Bootcamp                  " />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="baselrbootcamp.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Gemischte Modelle
+### Statistik mit R<br> <a href='https://therbootcamp.github.io'> The R Bootcamp </a> <br> <a href='https://therbootcamp.github.io/SmR_2021Oct/'> <i class='fas fa-clock' style='font-size:.9em;'></i> </a>  <a href='https://therbootcamp.github.io'> <i class='fas fa-home' style='font-size:.9em;' ></i> </a>  <a href='mailto:therbootcamp@gmail.com'> <i class='fas fa-envelope' style='font-size: .9em;'></i> </a>  <a href='https://www.linkedin.com/company/basel-r-bootcamp/'> <i class='fab fa-linkedin' style='font-size: .9em;'></i> </a>
+### Oktober 2021
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span style="text-align:center"&gt;
+    &lt;span&gt; 
+      &lt;img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png" height=14 style="vertical-align: middle"/&gt;
+    &lt;/span&gt;
+    &lt;a href="https://therbootcamp.github.io/"&gt;
+      &lt;span style="padding-left:82px"&gt; 
+        &lt;font color="#7E7E7E"&gt;
+          www.therbootcamp.com
+        &lt;/font&gt;
+      &lt;/span&gt;
+    &lt;/a&gt;
+    &lt;a href="https://therbootcamp.github.io/"&gt;
+      &lt;font color="#7E7E7E"&gt;
+       Statistik mit R | Oktober 2021
+      &lt;/font&gt;
+    &lt;/a&gt;
+    &lt;/span&gt;
+  &lt;/div&gt; 
+
+---
+
+
+
+
+
+# Ein Beispiel zur Datenerhebung
+
+&lt;br&gt;
+
+.pull-left45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/example1.png" width=450px&gt;&lt;br&gt;
+&lt;/p&gt;
+
+]
+
+.pull-right45[
+
+&lt;p align = "center"&gt;
+&lt;img src="image/example2.png" width=450px&gt;&lt;br&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+
+# [IID](https://de.wikipedia.org/wiki/Unabh%C3%A4ngig_und_identisch_verteilte_Zufallsvariablen) Annahme
+
+.pull-left45[
+Bisherige Regressionsmodelle machen die Annahme, dass die Residuen unabhängig und gleichverteilt sind (independent and identically distributed, &lt;high&gt;iid&lt;/high&gt;).
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Unabhängig&lt;/high&gt;: Das Auftreten eines Wertes hat keinen Einfluss auf das Auftreten anderer Werte.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Gleichverteilt&lt;/high&gt;: Alle Datenpunkte stammen aus derselben Wahrscheinlichkeitsverteilung.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+Bisherige Modelle sind gegenüber der Verletzung der Unabhängigkeitsannahme &lt;high&gt;nicht robust&lt;/high&gt;.
+
+
+]
+
+.pull-right45[
+
+&lt;img src="image/iid_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+
+# Beispiele von Daten, bei denen die IID.-Annahme verletzt ist
+
+
+.pull-left55[
+
+&lt;br&gt;
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Leistung von Schülern in der PISA Studie(&lt;high&gt;Schüler &gt; Klassen &gt; Schulen &gt; Ländern&lt;/high&gt;).&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Multizentrische klinische Studie (&lt;high&gt;Patienten &gt; Ärzte &gt; Zentrum&lt;/high&gt;).&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m3"&gt;&lt;span&gt;Vergleich unterschiedlicher Designs oder Geschmäcker eines Produkts mit &lt;high&gt;mehreren Einschätzungen pro Person&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+**Wichtig**: *Verletzungen der IID-Annahme können zu irreführenden Resultaten führen, z.B. dem Unterschätzen des Standardfehlers.* 
+
+
+]
+
+.pull-right35[
+
+
+&lt;p align = "center"&gt;
+&lt;img src="image/pisa.png" height=100px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://de.wikipedia.org/wiki/PISA-Studien"&gt;wikipedia.org&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+&lt;p align = "center"&gt;
+&lt;img src="image/multi-arm-trial.jpg" height=100px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://www.mssociety.org.uk/research/latest-research/latest-research-news-and-blogs/first-multi-drug-clinical-trial-in-ms-successfully-completed"&gt;mssociety.org.uk&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+&lt;p align = "center"&gt;
+&lt;img src="image/sweets.jpg" height=100px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://londonist.com/london/free-and-cheap/this-5-metre-high-pick-n-mix-wall-has-half-a-tonne-of-free-sweets"&gt;londonist.com&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+
+
+]
+---
+
+
+# Beispiel - Multizentrische klinische Studie
+
+.pull-left45[
+&lt;br&gt;
+Wir wollen die Effektivität unterschiedlicher Dosierungen eines Medikamentes evaluieren. Dazu haben wir Daten über drei Zentren.
+
+
+So würden wir eine Regression über alle Zentren rechnen (aber ist dies eine gute Idee?):
+
+
+```r
+mod &lt;- lm(formula = Merkmal ~ Dosis,
+          data = DATEN_ZENTREN)
+```
+
+
+]
+
+.pull-right45[
+
+&lt;br&gt;
+
+
+&lt;p align="center"&gt;
+&lt;img src="GemischteModelle_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# Beispiel - Multizentrische klinische Studie
+
+.pull-left45[
+
+
+Wir wollen die Effektivität unterschiedlicher Dosierungen eines Medikamentes evaluieren. Dazu haben wir Daten über drei Zentren.
+
+So würden wir eine Regression pro Zentrum rechnen (aber ist dies eine gute Idee?):
+
+
+```r
+mod_s1 &lt;- lm(formula = Merkmal ~ Dosis,
+             data = DATEN_ZENTRUM1)
+
+mod_s2 &lt;- lm(formula = Merkmal ~ Dosis,
+             data = DATEN_ZENTRUM2)
+
+mod_s3 &lt;- lm(formula = Merkmal ~ Dosis,
+             data = DATEN_ZENTRUM3)
+```
+
+
+]
+
+.pull-right45[
+
+&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;img src="GemischteModelle_files/figure-html/unnamed-chunk-5-1.png" width="100%" /&gt;
+&lt;/p&gt;
+
+]
+
+
+---
+
+# Gemischtes Modell
+
+.pull-left5[
+
+Gemischte Modelle (mixed effects models) bieten eine bessere Möglichkeit Daten zu analysieren, welche die IID Annahme verletzen.
+
+Gemischte Modelle kombinieren zwei Arten von Effekten, die unterschiedliche Zwecke erfüllen: 
+
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Feste Effekte (fixed effects)&lt;/high&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;Die Globaleffekte, welche wir quantifizieren möchten.&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;ul&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Zufällige Effekte (random effects)&lt;/high&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;Berücksichtigung der Abhängigkeiten in den Daten.&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;Diejenigen Effekte, über welche wir generalisieren möchten.&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right45[
+
+
+```r
+                      # feste Effekte
+LMM &lt;- lmer(formula = y ~ FE1 + FE2 + 
+                      # zufällige Effekte
+                      (FE1|RE) + (FE2|RE), 
+            data = DATEN)
+```
+
+&lt;p align="center"&gt;
+&lt;img src="GemischteModelle_files/figure-html/unnamed-chunk-7-1.png" width="100%" /&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# Feste Effekte
+
+.pull-left5[
+
+&lt;br&gt;
+Feste Effekte repräsentieren dieselben Gruppeneffekte wie bei den bisherigen Regressionsmodellen; zum Beispiel den Effekt eines Medikamentes auf ein relevantes Merkmal.
+
+Bis jetzt haben wir ausschliesslich Modelle mit festen Effekten betrachtet.
+
+
+
+```r
+mod &lt;- lm(formula = Merkmal ~ Dosis,
+          data = DATEN_ZENTREN)
+```
+
+
+]
+
+.pull-right45[
+
+&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;img src="GemischteModelle_files/figure-html/unnamed-chunk-9-1.png" width="100%" /&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# Beispieldaten
+
+.pull-left45[
+
+Wir möchten den Einfluss von Alkoholkonsum auf Filmrezensionen auf [Rotten Tomatoes](https://www.rottentomatoes.com/) untersuchen.
+
+Wir rekrutieren zwei Versuchspersonen, die je zwei Filme beurteilen, und zwar einmal im nüchternen Zustand und einmal nachdem sie 4 kleine Biere getrunken haben.
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Wiederholte Messung (&lt;i&gt;within subjects design&lt;/i&gt;).&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Dieselben Filme an beiden Zeitpunkten für beide VPs.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+]
+
+.pull-right45[
+
+
+&lt;img src="image/dat_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+]
+
+
+
+---
+
+
+# Modell mit ausschliesslich festen Effekten
+
+&lt;img src="image/FE_plot.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Zufällige Effekte
+
+.pull-left45[
+Kontrollieren für Quellen, die Abhängigkeiten in den Daten verursachen können, unter der Annahme, dass aus diesen Quellen zufällig gezogen wird. Dabei sind wir nicht direkt an den konkreten Werten der zufälligen Effekte interessiert.
+
+
+Zufällige Effekte:
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Sind häufig der Teil, über welchen wir generalisieren möchten.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Sind immer kategoriale Variablen (&lt;high&gt;factors&lt;/high&gt;).&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m3"&gt;&lt;span&gt;Repräsentieren zufällige Ziehungen aus der Population.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+]
+
+.pull-right45[
+
+
+&lt;img src="image/MEM_example.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+# Zufällige Effekte
+
+.pull-left45[
+Kontrollieren für Quellen, die Abhängigkeiten in den Daten verursachen können, unter der Annahme, dass aus diesen Quellen zufällig gezogen wird. Dabei sind wir nicht direkt an den konkreten Werten der zufälligen Effekte interessiert.
+
+
+&gt;&lt;i&gt;Durch das Spezifizieren zufälliger Effekte in unserem Modell sind wir in der Lage, die Eigenheiten unserer Stichprobe auszublenden und eine allgemeinere Schätzung der festen Effekte zu erhalten.&lt;/i&gt;
+&lt;font style="font-size:10px"&gt;&lt;a href="http://davidkellen.org/wp-content/uploads/2017/04/introduction-mixed-models.pdf"&gt;Singmann &amp; Kellen, 2017
+
+
+]
+
+.pull-right45[
+
+
+&lt;img src="image/MEM_example.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+# Zufällige Effekte - Intercepts und Slopes
+
+.pull-left45[
+
+Wir unterscheiden zwischen zwei Arten zufälliger Effekte:
+
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Random Intercepts&lt;/high&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;Geschätzte durchschnittliche Abweichung jedes Faktorlevels des zufälligen Effekts vom Intercept des festen Effekts.&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Random Slopes&lt;/high&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;ul class="level"&gt;
+    &lt;li&gt;&lt;span&gt;Geschätzte Abweichung jedes Faktorlevels des zufälligen Effektes vom Slope des festen Effekts.&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+]
+
+.pull-right45[
+
+&lt;img src="image/RI_example.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="image/MEM_example.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+
+# Modell mit Random Intercepts 
+
+.pull-left45[
+
+
+&lt;img src="image/subj_RI_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Random Intercepts über Probanden&lt;/figcaption&gt;
+&lt;/p&gt;
+
+
+]
+
+.pull-right45[
+
+
+&lt;img src="image/mov_RI_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Random Intercepts über Filme&lt;/figcaption&gt;
+&lt;/p&gt;
+
+]
+
+
+---
+
+# Modell mit Random Intercepts und Random Slopes
+
+.pull-left45[
+
+
+&lt;img src="image/subj_RI_RS_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Random Intercepts und Slopes über Probanden&lt;/figcaption&gt;
+&lt;/p&gt;
+
+
+]
+
+.pull-right45[
+
+
+&lt;img src="image/mov_RI_RS_plot.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Random Intercepts und Slopes über Filme&lt;/figcaption&gt;
+&lt;/p&gt;
+
+
+]
+
+
+---
+
+# Modell mit gekreuzten zufälligen Effekten
+
+&lt;img src="image/cr_RI_RS_plot.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/Cr_RI_RS.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form2.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form3.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form4.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form5.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form6.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressionsgleichung des gemischten Modells
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="image/form7.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gekreuzte vs. Hierarchische Zufällige Effekte
+&lt;br&gt;
+.pull-left35[
+&lt;img src="image/crossed_RE.png" width="85%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Crossed Random Effects&lt;/figcaption&gt;
+&lt;/p&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+**Gekreuzte zufällige Effekte:** Alle Modellstrukuren mit multiplen zufälligen Effekten, welche nicht geschachtelt sind.
+
+]
+
+.pull-right55[
+
+&lt;img src="image/nested_RE.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;p align = "center"&gt;
+&lt;figcaption align = "center" style="display: block; margin: auto;"&gt;Nested Random Effects&lt;/figcaption&gt;
+&lt;/p&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+**Hierarchische zufällige Effekte:** Jedes Level eines untergeordneten Faktors erscheint in nur einem level des übergeordneten Faktors (geschachtelte Ebenen).
+
+]
+
+
+---
+
+# Auswahl der Struktur der zufälligen Effekte
+
+.pull-left45[
+
+Es ist wichtig, die korrekte Struktur der zufälligen Effekte festzulegen. Ansonsten kann es zu einer `\(\alpha\)`-Fehler-Inflation oder einer Power-Deflation kommen.
+
+Es wurde argumentiert, dass man die &lt;high&gt;maximale Struktur der zufälligen Effekte spezifizieren sollte, die durch das Design gerechtfertigt ist (*maximal model*; [Barr et al., 2014](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3881361/pdf/nihms533954.pdf)).
+
+Dies kann jedoch zu konservativ sein, wenn die maximale Struktur nicht in den Daten vorhanden ist. Ein Kompromiss findet sich in der Durchführung eines &lt;high&gt;Rückwärtsauswahlverfahrens&lt;/high&gt; (siehe [Matuschek, Kliegl, Vasishth, Baayen, &amp; Bates, 2017](https://www.sciencedirect.com/science/article/pii/S0749596X17300013)).
+
+]
+
+.pull-right45[
+
+&lt;br&gt;
+
+&lt;p align = "center"&gt;
+&lt;img src="image/maximum_minimum.jpg" height=200px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://www.shutterstock.com/de/search/maximum.+minimum.?studio=1"&gt;shutterstock.com&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+
+]
+
+
+---
+
+# Gemischte Modelle in R
+
+.pull-left45[
+
+&lt;br&gt;
+
+Auswahl an Paketen zur Berechnung gemischter Modelle:
+
+| Package| Function|
+|:------|:----|
+| [lme4](https://CRAN.R-project.org/package=lme4)| `glmer()`, `lmer()`|
+| [afex](https://CRAN.R-project.org/package=afex)| `mixed()`|
+| [rstanarm](https://CRAN.R-project.org/package=rstanarm)| `stan_glmer()`,  `stan_lmer()` |
+| [brms](https://CRAN.R-project.org/package=brms)| `brm()`|
+
+
+]
+
+.pull-right5[
+
+&lt;br&gt;
+
+
+```r
+# Gemischtes Modell mit lme4::lmer()
+
+# feste Effekte
+LMM_out &lt;- lmer(formula = Reaction ~ Days +
+# Random Intercepts und Slopes für ID
+                  (Days|Subject),
+# Daten
+                 data = sleepstudy)
+
+# Output
+summary(LMM_out)
+```
+
+
+
+]
+
+---
+
+# Zufällige Effekte in &lt;high&gt;lme4&lt;/high&gt;
+
+
+Zufällige Effekte werden mit einem neuen Element in den Formeln spezifiziert:
+
+
+| Formel | Bedeutung |
+|:----------|:-------------------|
+| `(1 `&amp;#124;` S)` | Random intercepts über `S` |
+| `(1 `&amp;#124;` S) + (1 `&amp;#124;` I)` | Random intercepts über `S` und `I`|
+| `(X1 `&amp;#124;` S)` OR `(1 + X1`&amp;#124;` S)`| Random intercepts über `S` und random slopes für `X1` über `S` mit Korrelationen  |
+| `(X1 * X2 `&amp;#124;` S)`| Random intercepts über `S` and random slopes für `X1`, `X2`, and deren Interaktion `X1:X2` über `S` mit Korrelationen  |
+| `(0 + X1 `&amp;#124;` S)`| Random slopes für `X1` über `S`, keine random intercepts |
+| `(X1 `&amp;#124;&amp;#124;` S)`| Random intercepts über `S` und random slopes für `X1` über `S` keine Korrelationen |
+| `(1 `&amp;#124;` S/C)` OR `(1 `&amp;#124;` S) + (1 `&amp;#124;` S:C)`| Random intercepts über `S` und `C` mit `C` geschachtelt unter `S` |
+
+---
+
+# Gemischte Modelle in R - Ein Beispiel
+
+.pull-left45[
+
+&lt;br&gt;
+
+Wir wollen das &lt;high&gt;tomatometer&lt;/high&gt; Rating vorhersagen, mit &lt;high&gt;zustand&lt;/high&gt; als festen Effekt und mit random intercepts und random slopes über Rater (&lt;high&gt;id&lt;/high&gt;), sowie random intercepts und random slopes über Item (&lt;high&gt;film&lt;/high&gt;). 
+
+
+&lt;p align = "center"&gt;
+&lt;img src="image/interstellar.png" height=200px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://www.rottentomatoes.com/m/interstellar_2014"&gt;rottentomatoes.com&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+
+
+]
+
+.pull-right5[
+
+&lt;br&gt;
+
+*Was denkt ihr ist die korrekte Modellspezifikation?*
+
+
+```r
+# Gemischtes Modell mit lme4::lmer()
+
+# Feste Effekte
+LMM &lt;- XXX(formula = XXX ~ XXX +
+# Random intercepts und slopes über id
+                  (XXX) +
+# Random intercepts und slopes über film
+                  (XXX),
+# Daten
+                data = tomato)
+
+# Output
+summary(LMM)
+```
+
+]
+
+
+---
+
+# Gemischte Modelle in R - Ein Beispiel
+
+.pull-left45[
+
+&lt;br&gt;
+
+Wir wollen das &lt;high&gt;tomatometer&lt;/high&gt; Rating vorhersagen, mit &lt;high&gt;zustand&lt;/high&gt; als festen Effekt und mit random intercepts und random slopes über Rater (&lt;high&gt;id&lt;/high&gt;), sowie random intercepts und random slopes über Item (&lt;high&gt;film&lt;/high&gt;). 
+
+&lt;p align = "center"&gt;
+&lt;img src="image/interstellar.png" height=200px&gt;&lt;br&gt;
+&lt;font style="font-size:10px"&gt;from &lt;a href="https://www.rottentomatoes.com/m/interstellar_2014"&gt;rottentomatoes.com&lt;/a&gt;&lt;/font&gt;
+&lt;/p&gt;
+
+]
+
+.pull-right5[
+
+&lt;br&gt;
+
+*So können wir das Modell in R spezifizieren:*
+
+
+```r
+# Gemischtes Modell mit lme4::lmer()
+
+# Feste Effekte
+LMM &lt;- lmer(formula = tomatometer ~ zustand +
+# Random intercepts und slopes über id
+                  (zustand|id) +
+# Random intercepts und slopes über film
+                  (zustand|film),
+# Daten
+                data = tomato)
+
+# Output
+summary(LMM)
+```
+
+
+
+]
+
+
+---
+
+# `lmer()` Output
+
+
+&lt;img src="image/lmer_output.png" width="58%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: middle, center
+
+&lt;h1&gt;&lt;a href="https://therbootcamp.github.io/SmR_2021Oct/_sessions/GemischteModelle/GemischteModelle_practical.html"&gt;Practical&lt;/a&gt;&lt;/h1&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,1065 @@
+---
+title: "Gemischte Modelle"
+author: "<table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'><col width='10%'><col width='10%'>
+  <tr style='border:none'>
+    <td style='display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none' nowrap>
+      <font style='font-style:normal'>Statistik mit R</font><br>
+      <a href='https://therbootcamp.github.io/SmR_2021Oct/'>
+        <i class='fas fa-clock' style='font-size:.9em;' ></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <i class='fas fa-home' style='font-size:.9em;'></i>
+      </a>
+      <a href='mailto:therbootcamp@gmail.com'>
+        <i class='fas fa-envelope' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+        <i class='fab fa-linkedin' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <font style='font-style:normal'>The R Bootcamp</font>
+      </a>
+    </td>
+    <td style='width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none'>
+      <img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+    </td>
+  </tr></table>"
+output:
+  html_document:
+    css: practical.css
+    self_contained: no
+---
+
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(comment = NA, 
+                      fig.width = 6, 
+                      fig.height = 6,
+                      fig.align = 'center',
+                      echo = FALSE, 
+                      eval = FALSE, 
+                      warning = TRUE)
+
+options(digits = 3)
+
+# Load packages
+library(tidyverse)
+library(lme4)
+library(parameters)
+library(pbkrtest)
+library(performance)
+
+# Load data
+tom <- read_csv("1_Data/tomatometer.csv")
+schools <- read_csv("1_Data/schools.csv")
+cr <- read_csv("1_Data/cancer_remission.csv")
+```
+
+<p align="center" width="100%">
+  <img src="image/rottentomatoes.png" alt="Trulli" style="width:100%">
+  <br>
+  <font style="font-size:10px">from <a href="https://www.rottentomatoes.com/">rottentomatoes.com</a></font>
+</p>
+
+
+# {.tabset}
+
+## Overview
+
+Am Ende dieses Practicals wirst du wissen, wie du:
+
+1. gemischte Modelle in R berechnen kannst.
+2. p-Werte für feste Effekte extrahieren kannst.
+3. die richtige Struktur der zufälligen Effekte auswählen kannst.
+4. gekreuzte und hierarchische zufällige Effekte spezifizieren kannst.
+5. Varianzkomponenten extrahieren kannst und die Intraklassenkorrelation (ICC) berechnen kannst.
+6. dein gemischtes Modell visualisieren kannst.
+7. ein generalisiertes gemischtes Modell berechnen kannst.
+
+## Aufgaben
+
+### A - Setup
+
+1. Öffne dein `TheRBootcamp` R Project. 
+
+```{r}
+# Gemacht!
+```
+
+2. Öffne ein neues R Skript. Am Anfang des Skripts, schreibe deinen Namen und das Datum als Kommentar und speichere das Skript als `GemischteModelle_Practical.R` in deinem `2_Code` Ordner.  
+
+```{r}
+# Gemacht!
+```
+
+3. Lade mit `library()` die `tidyverse`, `lme4`, `performance`, und `parameters` Pakete.
+
+```{r, echo = TRUE, eval = FALSE}
+# Lade benötigte Pakete
+library(tidyverse)
+library(lme4)
+library(performance)
+library(parameters)
+```
+
+4. Unter Verwendung des folgenden Codes, lese die `tomatometer.csv` und `schools.csv` Datensätze ein und speichere sie unter den Namen `tom` und `schools`.
+
+```{r, echo = TRUE, eval = FALSE}
+# Lese tomatometer.csv aus dem 1_Data Ordner
+tom <- read_csv(file = "1_Data/tomatometer.csv")
+
+# Lese school.csv aus dem 1_Data Ordner
+schools <- read_csv(file = "1_Data/schools.csv")
+```
+
+5. Printe die Datensätze. 
+
+6. Verwende `names(XX)`, `summary(XX)`, und `View(XX)` um einen weiteren Überblick über die Daten zu bekommen.
+
+7. Wiederum, führe den Code unten aus um sicherzustellen, dass alle `character` Variablen als Faktoren vorliegen, was den statistischen Modellen hilft kategoriale Variablen richtig zu interpretieren. 
+
+```{r, echo = TRUE}
+# Konvertiere alle character zu factor
+tom <- tom %>% mutate_if(is.character, factor)
+schools <- schools %>% mutate_if(is.character, factor)
+```
+
+### B - Rechnen Eines Linearen Gemischten Modells
+
+Im ersten Teil dieses Practicals arbeitest du  mit dem `tom` Datensatz aus den Folien um die Wirkung des `zustand`s einer Person (`nuechtern`  vs. `betrunken`) auf ihre `tomatometer`-Bewertung zu analysieren.
+
+1. Rechne ein Modell mit nur festen Effekten, in welchem du `tomatometers` mit dem `zustand` vorhersagst. Speichere das Ergebnis als `FE_mod` und schaue dir das Ergebnis an.
+
+```{r, echo = TRUE, eval = FALSE}
+# Verwende lm, da lmer nur mit mindestens einem zufälligen Effekt funktioniert
+FE_mod <- glm(formula = XXX ~ XXX, 
+              data = XXX)
+
+# Inspiziere die Resultate
+summary(XXX)
+```
+
+```{r}
+# Verwende lm, da lmer nur mit mindestens einem zufälligen Effekt funktioniert
+FE_mod <- glm(formula = tomatometer ~ zustand, 
+              data = tom)
+
+# Inspiziere die Resultate
+summary(FE_mod)
+```
+
+2. Im Moment wird `"betrunken"` als Referenzkategorie verwendet, sodass der intercept den Mittelwert des Zustands `"betrunken"` angibt und der slope die Differenz der Mittelwerte der Bewertungen im Zustand `"betrunken"` und `"nuechtern"` angibt. Um ein intuitiveres Modell mit `"nuechtern"` als Referenzkategorie zu erhalten, können wir die Variable  `zustand` erneut in einen Faktor umwandeln und dabei diesmal die Abfolge der Levels bestimmen. Verwende dafür den untenstehenden Code.
+
+```{r, echo = TRUE}
+# Wandle die zustand variable in einen Faktor um, mit nuechtern als erstes Level
+tom <- tom %>%
+  mutate(zustand = factor(zustand, levels = c("nuechtern", "betrunken")))
+```
+
+3. Rechne erneut das Modell der Aufgabe B1.
+
+```{r}
+# Verwende lm, da lmer nur mit mindestens einem zufälligen Effekt funktioniert
+FE_mod <- glm(formula = tomatometer ~ zustand, 
+              data = tom)
+
+# Inspiziere die Resultate
+summary(FE_mod)
+```
+
+4. Vergleiche die Outputs der Aufgaben B1 und B3. Wie haben sich die Koeffizienten verändert? Weshalb?
+
+5. Rechne ein gemischtes Modell mit Random Intercepts über die `id` der Rater. Zufällige Effekte werden in Klammern in der Modell-`formula` spezifiziert. Ein Modell mit nur Random Intercepts trägt allein eine `1` for dem Gruppierungsfaktor. Das `REML = FALSE` im untenstehenden Code sagt R, dass das Model mit Maximum Likelihood (ML), statt mit Restricted Maximum Likelihood (REML) gefitted werden soll. Dies ist für die späteren Modellvergleiche wichtig, soll uns aber im Detail nicht weiter beschäftigen.
+
+```{r echo = TRUE, eval = FALSE}
+# Gemischtes Modell mit random intercepts über ids
+subj_RI_mod <- lmer(formula = XXX ~ XXX + # Feste Effekte
+                    (1|XXX),              # zufällige Effekte
+                    data = XXX,           # Daten
+                    REML = FALSE)
+```
+
+```{r}
+# Gemischtes Modell mit random intercepts über ids
+subj_RI_mod <- lmer(formula = tomatometer ~ zustand + # Feste Effekte
+                    (1|id),                           # zufällige Effekte
+                    data = tom,                       # Daten
+                    REML = FALSE)
+```
+
+6. Unter Verwendung der `summary()` Funktion, vergleiche die Outputs des gemischten Modells und des Modells aus B3.
+
+```{r}
+summary(subj_RI_mod)
+summary(FE_mod)
+```
+
+7. Hat sich der Effekt von `zustand` verändert? Was hat sich genau am Effekt von `zustand` auf die Bewertungen geändert? 
+
+```{r}
+# Während sich die Schätzungen der festen Effekte kaum verändert haben, haben
+# sich die t-Werte erheblich verändert (der t-Wert für zustandbetrunken in
+# FE_mod ist niedriger als der in subj_RI_mod, und der für den Intercept ist um
+# 50% gesunken).
+```
+
+8. Interessierst du dich wie die geschätzten Fixed und Random Effects aussehen? Du kannst sie mit `fixef(XX)` und `ranef(XX)` aus dem Modellobjekt extrahieren. Probiere es aus. 
+
+9. Baue dein gemischtes Modell aus Aufgabe B5 aus, indem du Random Slopes für `zustand` über `id`s hinzufügst. Füge die `zustand` Variable auf der Linken Seite der *Pipe* `|` in dem Teil der `formula`, in dem die zufälligen Effekte spezifiziert werden.
+
+```{r echo = TRUE, eval = FALSE}
+# Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids
+subj_RI_RS_mod <- lmer(formula = XXX ~ XXX + # Feste Effekte
+                      (XXX|XXX),             # Zufällige Effekte
+                      data = XXX,            # Daten
+                      REML = FALSE)
+```
+
+```{r}
+# Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids
+subj_RI_RS_mod <- lmer(formula = tomatometer ~ zustand + # Feste Effekte
+                      (zustand|id),                      # Zufällige Effekte
+                      data = tom,                        # Daten
+                      REML = FALSE)
+```
+
+10. Vergleiche die Outputs der drei bisherigen Modelle miteinander. Verwende dazu die `summary()` Funktion. Haben sich die Koeffizienten verändert? Was hat sich verändert?
+
+```{r}
+summary(subj_RI_RS_mod)
+summary(subj_RI_mod)
+summary(FE_mod)
+
+# Für FE_mod und subj_RI_mod: siehe Antwort zu B7. Die Koeffizienten haben sich
+# wiederum nicht verändert, da sich die Gruppenmittelwerte nicht verändert haben.
+# Jedoch haben sich die t-Werte wieder stark verändert. Zum Beispiel ist der 
+# t-Wert des Koeffizienten "zustandbetrunken" in subj_RI_mod 98.31 und derjenige
+# im Modell subj_RI_RS_mod  "nur" 51.81.
+```
+
+11. Jeder Film wurde in beiden Zuständen bewertet. Wir haben also nicht nur Abhängigkeiten in den Daten der Rater, sondern auch der Filme. Um für diese Abhängigkeit zu kontrollieren, können wir unser Modell aus der Aufgabe B10 mit weiteren zufälligen Effekten ausbauen. Füge Random Intercepts über `film` und Random Slopes für `zustand` über `film` zum Modell hinzu. Über das zusätzliche Argument `control` wird ein anderer Optimierungsalgorithmus spezifiert, mithilfe dessen das Modell konvergiert. Die Details sollen uns für den Moment nicht kümmern; wir freuen uns einfach, dass das Modell konvergiert.
+
+```{r echo = TRUE, eval = FALSE}
+# Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids, sowie random intercepts über film und random slopes für zustand über 
+# film
+max_mod <- lmer(formula = XXX ~ XXX + # Feste Effekte
+               (XXX|XXX) + (XXX|XXX), # Zufällige Effekte
+               data = XXX,            # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+```{r}
+# Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids, sowie random intercepts über film und random slopes für zustand über 
+# film
+max_mod <- lmer(formula = tomatometer ~ zustand +           # Feste Effekte
+               (zustand|id) + (zustand|film),               # Zufällige Effekte
+               data = tom,                                  # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+12. Mit der `check_convergence()` Funktion des `performance` Paket können wir überprüfen, ob ein Modell konvergiert ist. Wenn die Funktion `TRUE` zurückgibt, ist alles in Ordnung. Teste, ob `max_mod` konvergiert ist.
+
+```{r}
+check_convergence(max_mod)
+```
+
+13. `max_mod` ist das *maximale, vom Design gerechtfertigten Modell*. Was heisst das? Weshalb macht es Sinn, dieses Modell zu spezifizieren?
+
+```{r}
+# Es heisst, dass alle zufälligen Effekte spezifiziert wurden, die gemäss unserer
+# Datenstruktur spezifiziert werden können.
+# Barr und Kollegen fanden, dass wenn man NICHT das maximale Modell spezifiziert,
+# man eine Inflation von Typ-I Fehlern riskiert. Die Resultate der nächsten 
+# Aufgabe unterstützen diesen Befund. Es gib jedoch auch hier einen Tradeoff,
+# doch dazu später mehr.
+```
+
+14. Vergleiche mit `summary()` die Resultate der unterschiedlich Komplexen Modelle, die du bisher gerechnet hast.
+```{r}
+summary(max_mod)
+summary(subj_RI_RS_mod)
+summary(subj_RI_mod)
+summary(FE_mod)
+```
+
+15. Was hat sich mit der zunehmend komplexen Struktur der zufälligen Effekte verändert?
+
+```{r}
+# Die t-Werte für den Effekt von "zustand" haben sich stark verändert. Jetzt ist
+# er "nur" 17.28. Dies ist zwar noch immer substantiell, jedoch zeigt dieser
+# Befund auch die Resultate von Barr et al. (2013), die besagen, dass für 
+# konfirmatorische Hypothesentests immer die maximale Struktur der zufälligen 
+# Effekte spezifiziert werden sollte, da es sonst zu einer alpha-Fehler-Inflation
+# kommen kann (das heisst, dass in diesem Fall die feste Effekte zu häufig als
+# statistisch signifikant gewertet werden, selbst wenn dies tatsächlich nicht 
+# angebracht ist).
+```
+
+### C - $R^2$
+
+Beim rechnen von statistischen Modellen sind wir häufig daran interessiert, einen wie grossen Anteil diese erklären können. In linearen (gemischten) Modellen, wird dies durch das Bestimmtheitsmass $R^2$ angegeben; for generalisierte (gemischte) Modelle, können wir Pseudo-$R^2$ Werte berechnen. 
+
+1. Verwende die `r2()` Funktion aus dem `performance` Paket, um den $R^2$ Werte des maximalen Modells zu berechnen.
+
+```{r}
+r2(max_mod)
+```
+
+2. Was bedeutet der Output der vorherigen Aufgabe? Was ist das *marginal $R^2$* und was ist das *conditional $R^2$*? 
+
+```{r}
+# "marginal r-squared" gibt nur die erklärte Varianz der festen Effekte an.
+#    In diesem Fall heisst das, dass das maximale Modell mit den festen
+#    Effekten 55% der in den Daten vorhandenen Varianz erklären kann.
+# "conditional r-squared" gibt die erklärte Varianz der festen Effekte UND der
+#    zufälligen Effekte an. In diesem Fall heisst das, dass das maximale Model
+#    mit den festen und zufälligen Effekten 83% der in den Daten vorhandenen
+#    Varianz erklären kann.
+
+```
+
+3. Vergleiche die $R^2$ Werte von `max_mod` mit denen der weniger komplexen Modelle. Sind die Veränderungen gross? Welche $R^2$-Werte haben sich verändert?
+
+```{r}
+r2(max_mod)
+r2(subj_RI_RS_mod)
+r2(subj_RI_mod)
+```
+
+### D - Visualisierung
+
+Häufig ist es hilfreich, unser Modell zu visualisieren. Führe den untenstehenden Code aus, um aus `max_mod` Koeffizienten zu extrahieren und zu visualieren. Da Plotting kein Schwerpunkt dieses Kurses ist, gehen wir hier aber nicht weiter ins Detail. Falls du Fragen zum Code hast, kannst du uns gerne rufen.
+
+1. Visualisiere mit dem untenstehenden Code dein `max_mod`.
+
+```{r echo = TRUE}
+# Extrahiere feste Effekte
+m_line <- fixef(max_mod)
+
+# Extrahiere zufällige Effekte
+ranefs <- ranef(max_mod)
+predicted <- tibble(
+  intercept = ranefs$id[,1] + fixef(max_mod)[1],
+  slope = ranefs$id[,2] + fixef(max_mod)[2])
+
+# Ziehe 15 zufällige Rater um separate Linien für diese zu plotten
+rand15 <- sample(1:nrow(predicted), 15)
+
+LMM_plot <- ggplot(tom, aes(zustand, tomatometer)) +
+  geom_point(colour= "#606061", alpha = .15, size = 2.5)+
+  geom_segment(aes(x = 1, y = intercept, xend = 2, yend = intercept + slope),
+               data = predicted %>% slice(rand15), colour = "#EA4B68", size = 1.5,
+               alpha = .8) +
+  geom_segment(aes(x = 1, y = m_line[1], xend = 2, yend = sum(m_line)),
+               colour = "black", size = 2, alpha = 1) +
+  theme(axis.title.x = element_text(vjust = -1),
+        axis.title.y = element_text(vjust = 1)) +
+  theme_bw() +
+  coord_cartesian(ylim= c(0, 100)) +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18,face = "bold")
+  )
+
+LMM_plot
+```
+
+
+### E - p-Werte für Feste Effekte Berechnen
+
+Wie du sicherlich festgestellt hast, enthält der `lmer()` output keine p-Werte. Das liegt nicht and der Faulheit der Autoren von `lme4`, sondern daran, dass es noch immer eine Diskussion darum gibt, wie p-Werte für gemischte Modelle am besten berechnet werden sollten. Es gibt jedoch mehrere Möglichkeiten zu testen, ob eine Variable ein signifikanter Prädiktor unserer abhängigen Variable ist. Wir werden uns nun einige davon anschauen.
+
+#### Likelihood Ratio Test
+
+Eine Möglichkeit p-Werte zu erhalten, besteht darin, einen Likelihood Ratio Test ([LRT](https://en.wikipedia.org/wiki/Likelihood-ratio_test)) durchzuführen. Dafür wird ein Modell einmal mit und einmal ohne den gewünschten festen Effekt gerechnet, wobei alles Andere gleich gehalten wird. Die beiden Modelle werden dann mit dem LRT verglichen (siehe Link oben für Details). Dieser Test funktioniert allerdings nur dann korrekt, wenn die Modelle mit Maximum Likelihood (ML) und nicht mit Restricted Maximum Likelihood (REML) Schätzung gerechnet wurden. Deshalb haben wir immer `REML = FALSE` verwendet.
+
+1. Rechne zuerst ein Modell, in welchem nur die Intercepts (fester Effekt und zufällige Effekte) als Prädiktoren von `tomatometer` geschätzt werden.
+
+```{r echo = TRUE, eval = FALSE}
+# Modell mit nur Intercepts als Prädiktoren von Tomatometer
+IO_mod <- lmer(formula = XXX ~ 1 +  # 1 heisst, dass nur der Intercept geschätzt wird
+              (1|XXX) + (1|XXX),    # Zufällige Effekte
+              data = XXX,           # Daten
+              REML = FALSE)
+```
+
+```{r}
+# Modell mit nur Intercepts als Prädiktoren von Tomatometer
+IO_mod <- lmer(formula = tomatometer ~ 1 + # 1 heisst, dass nur der Intercept geschätzt wird
+               (1|id) + (1|film),          # Zufällige Effekte
+               data = tom,                 # Daten
+               REML = FALSE)
+```
+
+
+2. Inspiziere den output mit `summary()`.
+
+```{r}
+summary(IO_mod)
+```
+
+3. Rechne nun dasselbe Modell wie gerade eben, aber füge die Variable `zustand` als festen Effekt hinzu. Speichere das Modell als `RI_mod`. Damit das Modell konvergiert verwenden wir wiederum einen anderen Optimierungsalgorithmus. 
+
+```{r echo = TRUE, eval = FALSE}
+# Modell mit zustand als Prädiktor und Random Intercepts für id und film
+RI_mod <- lmer(formula = XXX ~ XXX +  # Feste Effekte
+              (1|XXX) + (1|XXX),      # Zufällige Effekte
+              data = XXX,             # Daten
+              REML = FALSE,
+              control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+```{r}
+# Modell mit zustand als Prädiktor und Random Intercepts für id und film
+RI_mod <- lmer(formula = tomatometer ~ zustand + # Feste Effekte
+               (1|id) + (1|film),                # Zufällige Effekte
+               data = tom,                       # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+4. Überprüfe mit der `check_convergence()` Funktion ob `RI_mod` konvergiert ist.
+
+```{r}
+check_convergence(RI_mod)
+```
+
+5. Führe mit der `anova()` Funktion einen LRT durch, indem du beide Modellouputs als Argumente spezifizierst. Ist der Unterschied signifikant? What heisst das?
+
+```{r echo = TRUE, eval = FALSE}
+# Rechne einen LRT
+anova(XXX, XXX)
+```
+
+```{r}
+# Rechne einen LRT
+anova(IO_mod, RI_mod)
+
+# Der Unterschied ist signifikant. Das komplexere Modell ist also signifikant
+# besser darin, die Varianz zu erklären. "zustand" ist also ein signifikanter
+# Prädiktor
+```
+
+#### Konfidenzintervall
+
+Diese Methode berechnet keinen p-Wert, sondern die Konfidenzintervalle um die Parameter. Dann testen wir, ob 0 in den Konfidenzintervallen enthalten ist. Falls nicht, betrachten wir die jeweiligen Zusammenhänge als signifikant.
+
+6. Zur Berechnung von Konfidenzintervallen verwenden wir die `confint()` Funktion des `lme4` Pakets. Berechne damit die Konfidenzintervalle von `RI_mod` und speichere den Output als `ci_mod`. **Achtung**: Das Berechnen der Konfidenzintervalle dauert eine Weile. 
+
+```{r echo = TRUE, eval = FALSE}
+# Berechne Konfidenzintervalle für die festen Effekte
+ci_mod <- confint(XXX)
+```
+
+```{r}
+# Berechne Konfidenzintervalle für die festen Effekte
+ci_mod <- confint(RI_mod)
+```
+
+7. Printe das `ci_mod` Objekt. Unterstützen die Konfidenzintervalle die Konklusion die du aus dem LRT und den t-Werten gezogen hast?
+
+```{r}
+ci_mod
+```
+
+#### Weitere Tests
+
+8. Weitere Möglichkeiten p-Werte zu erhalten sind das Anschauen der t-Werte (t > 2 kann als Signifikanz interpretiert werden) oder einen [Wald test](https://en.wikipedia.org/wiki/Wald_test) mit der `p_value()` Funktion des `parameters` Pakets. Berechne mit `p_value()` die p-Werte von `RI_mod`.
+
+```{r echo = TRUE, eval = FALSE}
+# Berechne p-Werte für die festen Effekte
+p_value(XXX)
+```
+
+```{r}
+# Berechne p-Werte für die festen Effekte
+p_value(RI_mod)
+```
+
+9. Statt einem Wald test wird auch die [Kenward-Roger Approximation](https://www.jstatsoft.org/article/view/v059i09) empfohlen. Um die p-Werte mit dieser Methode zu berechnen, können wir in der `p_value()` Funktion `method = "kenward"` setzen. Da dies aber sehr lange dauern kann, musst du diese Aufgabe nicht ausführen. 
+
+```{r echo=TRUE, eval = FALSE}
+# Berechne p-Werte für die festen Effekte
+p_value(RI_mod, method = "kenward")
+```
+
+
+### F - Signifikanz von Zufälligen Effekten (Modellselektion)
+
+Vielleicht erinnerst du dich and das *keep it maximal* Prinzip, welches besagt, dass wir immer das maximale Modell spezifizieren sollen ([Barr, Levy, Scheepers, & Tily, 2013](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3881361/)). Nun ist es aber so, dass das maximale Model einen Powerverlust bedeuten kann. Daher kann es sinnvoll sein, eine Datengetriebene Auswahl der Struktur der zufälligen Effekte durchzuführen ([Matuschek, Kliegl, Vasishth, Baayen, & Bates, 2017](https://www.sciencedirect.com/science/article/pii/S0749596X17300013)). Um es mit den Worten von Matuschek und Kollegen auszudrücken (frei übersetzt): "[Ein] sparsames gemischtes Modell [...], welches nur Varianzkomponenten beinhaltet, die von den Daten gestützt werden, verbessert die Balance zwischen Typ I Fehler und Power" (p. 305). Um diese Balance zu finden, werden wir LRTs durchführen.
+
+Bei diesen LRTs sollten wir nicht das normale 5% $\alpha$-Niveau verwenden. Eine Begründung finden wir wiederum in [Matuschek und Kollegen (2017; p. 308; wiederum frei übersetzt)](https://www.sciencedirect.com/science/article/pii/S0749596X17300013):
+
+> Im Kontext der Modellauswahl ist es wichtig dem Reflex zu widerstehen, $\alpha_{LRT} = 0.05$ zu wählen. $\alpha_{LRT}$ kann nicht wie üblich als den “erwarteten Modellselektions Typ I Fehlerrate” interpretiert werden, sondern als relatives Gewicht von Modellkomplexität und Goodness-Of-Fit. Zum Beispiel, die Wahl von $\alpha_{LRT} = 0$ impliziert eine unendlich starke Bestrafung für Modellkomplexität und daher würde immer das minimale Modell gewählt, ungeachtet der von den Daten gelieferten Evidenz. Die Wahl von $\alpha_{LRT} = 1$ impliziert eine unendlich starke Bestrafung für Goodness-Of-Fit und das maximale Modell würde daher immer gewählt. Ein $\alpha_{LRT} = 0.05$ könnte daher eine unverhälnissmässig starke Bestrafung der Modellkomplexität bedeuten und dadurch ein reduziertes [also weniger komplexes] Modell wählen, selbst wenn die Daten ein komplexeres Modell favorisieren würden.
+
+Wir folgen in dieser Übung dem Vorschlag von Matuschek und Kollegen und verwenden $\alpha_{LRT} = 0.2$. Da die `anova()` Funktion $\alpha = 0.05$ verwendet, müssen wir diesen Test selber implementieren.
+
+1. Zunächst müssen wir das Modell anpassen, dessen Komplexität im Vergleich zum maximalen Modell eine Stufe niedriger ist. Überlegen dir, welches Modell das wäre, und notiere dir die Antwort als Kommentar in deinem Skript. Nicht schummeln, indem du die nächste Aufgabe ansiehst!
+
+
+```{r echo = TRUE}
+#  Dies ist nur ein Platzhalter, um den Platz bis zur nächsten Aufgabe zu vergrößern, um es für dich leichter zu machen, nicht zu schummeln. 
+# Hier gibt es nichts zu sehen...
+# Nur eine kleine Nebenbemerkung (was eigentlich sehr interessant ist, so dass du
+# vielleicht weiterlesen möchtest, auch wenn dies dem Zweck dieses Teils
+# widerspricht, dich daran zu hindern dir zuerst die Antworten ansehen; also
+# erwäge, zuerst die Aufgabe zu erledigen und erst dann diese schrecklich
+# interessante Nebenbemerkung zu lesen):
+#     Wusstest du, dass der Grund, warum R den Pfeil "<-" als Zuordnungsoperator
+#     verwendet ist, weil R auf der Programmiersprache S basiert, welche wiederum
+#     auf APL basiert?
+#     Nun wurde APL offenbar auf einer bestimmten Tastatur entworfen, die eine
+#     "<-" Taste hatte. Zudem gab es kein "==" um die Gleichheit von Objekten zu
+#     testen. Also Gleichheit wurde mit "=" getestet und "<-" wurde als
+#     Zuweisungsoperator gewählt (Informationen aus diesem Blogpost:
+#     https://colinfay.me/r-assignment/).
+```
+
+
+2. Die Antwort auf die letzte Frage ist, dass du die Korrelation zwischen den zufälligen Effekten, also zwischen den Random Intercepts und den Random Slopes, auf Null setzst. Verwende dazu den doppelten  Balken "`||`" in der Syntax, in der die zufälligen Effekte spezifiziert werden, also `(Datenmatrix||Gruppierungsvariable)`. Fitte dieses Modell.
+
+
+```{r echo = TRUE, eval = FALSE}
+# Eingeschränktes gemischtes Modell, mit random Intercepts über, und Random Slopes
+# für zustand über id und film
+con_mod <- lmer(formula = XXX ~ XXX +   # Feste Effekte
+               (XXX||XXX) + (XXX||XXX), # Zufällige Effekte
+               data = XXX,              # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+```{r}
+# Eingeschränktes gemischtes Modell, mit random Intercepts über, und Random Slopes
+# für zustand über id und film
+con_mod <- lmer(formula = tomatometer ~ zustand +  # Feste Effekte
+               (zustand||id) + (zustand||film),    # Zufällige Effekte
+               data = tom,                         # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = "bobyqa")) # Optimierungsalgorithmus
+```
+
+3. Überprüfe mit `check_convergence()` ob das Modell konvergiert ist.
+
+```{r}
+check_convergence(con_mod)
+```
+
+4. Dieses Modell ist nicht konvergiert. Das kann passieren und es ist nicht immer einfach herauszufinden, weshalb ein Modell nicht konvergiert. Eine weiterführende Möglichkeit ist, Bayesianische Methoden mit MCMC sampling zu verwenden (zum Beispiel mit dem `rstanarm` Paket), und zu schauen ob dieses Modell konvergiert. Wir beschränken uns hier aber auf frequentistische Analysen und werden hier daher nicht weiter forschen. In der Praxis kann es aber durchaus Sinn machen, weiter zu untersuchen, ob man das Modell mit einer anderen Methode zum konvergieren bringt. Um die Übung fortsetzen zu können, tun wir für den Moment so, als ob das Modell konvergiert wäre.
+
+5. Jetzt ist es an der Zeit, den LRT vorzubereiten. Der Unterschied in der *deviance* (definiert als -2 * die LogLikelihood) zweier Modelle ist approximativ $\chi^2$-verteilt. Dadurch können wir die Signifikanz eines Unterschiedes testen, indem wir überprüfen, ob der erhaltene $\chi^2$ Wert grösser als ein bestimmter kritischer Wert ist. Wir verwenden unser $\alpha_{LRT}$ um den kritischen Wert zu erfahren. Führe dazu folgenden Code aus.
+
+```{r echo = TRUE}
+alpha <- .2 # bestimme das alpha-Niveau
+kW <- qchisq(1 - alpha, df = 2) # bestimme den kritischen Wert, ab dem ein Unterschied
+                                # als signifikant zu betrachten ist. Wir haben zwei 
+                                # Freiheitsgrade, da das eingeschränkte Modell zwei
+                                # Freiheitsgrade mehr als das maximale Modell hat
+                                # (da zwei Parameter, die Kovarianzen, weniger geschätzt werden)
+```
+
+6. Nun können wir den Unterschied der *deviances* der Modelle berechnen, indem wir die *deviance* des maximalen Modells von derjenigen des eingeschränkten Modells subtrahieren. Extrahiere die *deviances* der beiden Modelle mihilfe der `deviance()` Funktion und speichere das Resultat als `d_diff`. 
+
+
+```{r echo = TRUE, eval = FALSE}
+d_diff <- deviance(XXX) - deviance(XXX)
+```
+
+```{r}
+d_diff <- deviance(con_mod) - deviance(max_mod)
+```
+
+7. Teste, ob der Unterschied in der *deviance* gross genug ist, um gemäss dem von uns gewählten $\alpha_{LRT}$ als signifikant zu gelten.
+**Tipp:** Teste ob `d_diff` grösser ist, als der kritische Wert `kW`.
+
+
+```{r}
+# Teste, ob der Unterschied gross genug ist, um als signifikant zu gelten
+d_diff > kW
+```
+
+8. Das Resultat der vorherigen Aufgabe war `FALSE`. Was heisst das? Würdest du jetzt mit dem maximalen Modell weiterarbeiten? Was würde es bedeuten, wenn das Resultat `TRUE` gewesen wäre; wie würden dann deine nächsten Schritte aussehen?
+
+```{r}
+# FALSE als Resultat bedeutet in diesem Fall, dass der Unterschied in der deviance
+# der beiden Modelle nicht gross genug war, als dass wir das maximale Modell als 
+# signifikant besser einschätzen würden. Wir würden also nicht das maximale Modell
+# verwenden. Wäre das Resultat TRUE, würde das bedeuten, dass das maximale Modell
+# signifikant besser fitted und daher verwendet werden sollte.
+```
+
+
+### X - Herausforderungen
+
+#### Mehr zu p-Werten für feste Effekte: Parametrisches Bootstrapping
+
+Ein weiterer Signifikanztest für feste Effekte ist das parametrische Bootstrapping. Dieses ist insbesondere dann sinnvoll anzuwenden, wenn sich der p-Wert am Rande des Alpha-Niveaus befindet. Beim parametrischen Bootstrapping werden aus den bestehenden Daten wiederholt Stichproben mit Zurücklegen gezogen (resampling mit Zurücklegen) und das Modell an jeder dieser Stichproben gerechnet. Damit erhalten wir eine empirische Verteilung des interessierenden Parameters oder Effekts. Der Nachteil dieser Methode ist, dass sie ziemlich lange dauern kann.
+
+1. Für lineare gemischte Modelle (angewendet mit `lmer()`) kannst du die `PBmodcomp()` Funktion des `pbkrtest` Pakets nutzen. Schaue dir die Hilfe-Funktion von `PBmodcomp()` so an:
+
+```{r eval = FALSE, echo=TRUE}
+?PBmodcomp
+```
+
+2. Benutze nun die `PBmodcomp()` Funktion um p-Werte für das Modell zu erhalten. Du wirst dazu ein weniger komplexes Modell spezifizieren müssen, gegen welches getestet werden soll. Benutze dazu `IO_mod`. Da dieses Vorgehen ziemlich lange dauern kann, benutze hier nur 50 Simulationen (setze diese Zahl höher, wenn du tatsächliche Analysen durchführst).
+
+```{r eval = FALSE, echo=TRUE}
+# Führe parametrisches Bootstrapping durch
+pb_mod <- PBmodcomp(largeModel = XXX, 
+                    smallModel = XXX, 
+                    nsim = XXX)
+```
+
+
+```{r}
+# Führe parametrisches Bootstrapping durch
+pb_mod <- PBmodcomp(largeModel = max_mod,
+                    smallModel = IO_mod,
+                    nsim = 50)
+```
+
+3. Lasse dir das `pb_mod` Objekt anzeigen und schaue dir die Resultate an. Unterscheiden sich die Resultate von denen der anderen Tests die du zuvor angewendet hast? Ist der mit parametrischem Bootstrappen ermittelte p-Wert vergleichbar mit demjenigen des Likelihood Ratio Tests?
+
+```{r}
+pb_mod
+```
+
+#### Intra-Klassen Korrelation (ICC)
+
+Die intra-Klassen Korrelation (ICC) ist "der Anteil der durch die in der Population vorhandenen Gruppenstruktur erklärten Varianz" (Hox, 2002, S. 15). Es wird berechnet, indem die Zwischengruppenvarianz durch die Summe der Innergruppen- und der Zwischengruppenvarianz (d.h., die totale Varianz) geteilt wird.
+
+1. Berechne die ICC des Maximalmodells mit der `icc()` Funktion aus dem `performance` Paket.
+
+```{r}
+icc(max_mod)
+```
+
+2. Oft wird ein ICC basierend auf dem reinen Intercepts-Modell mit Random Intercepts berechnet. In Aufgabe C1 hast du dieses Modell bereits gerechnet und unter `IO_mod` abgespeichert. Berechne nun die ICC für dieses Modell.
+
+```{r}
+icc(IO_mod)
+```
+
+3. Jetzt mache dasselbe für das Modell `RI_mod`, welches vom Modell `IO_mod`, welches du gerade benutzt hast, nur dadurch abweicht, dass es feste Effekte enthält.
+
+```{r}
+icc(RI_mod)
+```
+
+4. Vergleiche die Ergebnisse der beiden letzten Aufgaben. Hat sich etwas verändert? Überlege dir, was diese Änderungen zu bedeuten haben.
+
+#### Gekreuzte versus geschachtelte zufällige Effekte
+
+Bisher haben wir uns ausschliesslich mit gekreuzten zufälligen Effekten beschäftigt. Nun werden wir uns auch Daten mit *geschachtelten zufälligen Effekten* anschauen, wo jedes Level eines geschachtelten Faktors nur innerhalb eines einzigen Levels eines übergeordneten Faktors auftritt. Ein beliebtes Beispiel dafür ist der Fall von Klassen innerhalb von Schulen. Jede Klasse ist nur Teil einer einzigen Schule, deshalb sind hier die Klassen geschachtelt innerhalb der Schulen.
+
+Um herauszufinden, ob zufällige Effekte gekreuzt oder geschachtelt sind, musst du normalerweise etwas über das Studiendesign wissen, da die Struktur oft nicht einfach aus den Faktor-Levels ersichtlich ist. In unserem Beispiel der Klassen geschachtelt in Schulen wäre ein potentiell problemantischer Fall beispielsweise die Bezeichnung der Klassen durch Nummerierung *innerhalb* der Schulen statt über alle Schulen hinweg. Zum Beispiel enthielte Schule 1 Klassen 1 bis 10 und Schule 2 Klassen 1 bis 6. Natürlich ist dann Klasse 1 der Schule 1 nicht dieselbe wie Klasse 1 der Schule 2. Was jedoch für dich offensichtich erscheinen mag, ist nicht offensichtlich für R. R weiss nichts über die Konzepte von Schulen und Klassen, deshalb muss du ihm sagen, ob die Faktoren geschachtelt sind oder nicht, indem du die entsprechende Syntax in der Formel verwendest. Jetzt stelle dir den Fall vor, wo Klassen in Schulen geschachtelt sind, nun aber über alle Schulen hinweg nummeriert sind, also von 1 bis zur totalen Anzahl an Klassen im Datensatz. Somit hat jede Klasse eine eindeutige Bezeichnung. Ist dies der Fall, spielt es keine Rolle wie du die Struktur spezifizierst.
+
+1. Für diese Aufgaben arbeitest du mit dem `school` Datensatz, welchen du bereits in Abschnitt A geladen hast. Erstelle unter Verwendung der `table()` Funktion eine Kreuztabelle von Schulen und Klassen.
+
+```{r eval = FALSE, echo = TRUE}
+table(XXX, XXX)
+```
+
+```{r}
+table(schools$school, schools$class)
+```
+
+2. Rechne ein gemischtes Modell mit Random Intercepts für Klassen geschachtelt in Schulen, in welchem Extraversion (`extra`) mit Offenheit (`open`) und der sozialen Bewertung (`social`) vorhergesagt wird. Speichere das Modell als `hier_mod`. **Tipp**: Die geschachtelte Struktur der zufälligen Effekte wird mit folgender Syntax spezifiziert: `(1|higher_level_variable/lower_level_variable)`.
+
+```{r}
+# Hierarchisches gemischtes Modell
+hier_mod <- lmer(formula = extra ~ open + social + # Dies sind die festen Effekte
+               (1|school/class),        # Dies sind die geschachtelten zufälligen Effekte
+               data = schools,          # Hier werden die Daten spezifiziert
+               REML = FALSE)
+```
+
+3. Ist das Modell konvergiert? Überprüfe dies mit `check_convergence()`.
+
+```{r}
+check_convergence(hier_mod)
+```
+
+4. Schaue dir die Ergebnisse des Modells mit `summary()` an.
+
+```{r}
+summary(hier_mod)
+```
+
+5. Rechne nun dasselbe Modell nochmals, jedoch diesmal mit gekreuzten random intercepts, wie in den vorherigen Abschnitten, anstelle der geschachtelten random intercepts. Speichere das Modell als `cross_mod`.
+
+```{r}
+# Hierarchisches gemischtes Modell
+cross_mod <- lmer(formula = extra ~ open + agree +  # Dies sind die festen Effekte
+                 (1|school) + (1|class),  # Dies sind die gekreuzten zufälligen Effekte
+                 data = schools,          # Hier werden die Daten spezifiziert
+                 REML = FALSE)
+```
+
+6. Überprüfe, ob das Modell konvergiert ist.
+
+```{r}
+check_convergence(cross_mod)
+```
+
+7. Schaue dir die Ergebnisse mit der `summary()` Funktion an.
+
+```{r}
+summary(cross_mod)
+
+```
+
+8. Haben sich die Resultate im Vergleich zu denjenigen mit geschachtelten zufälligen Effekten verändert?
+
+```{r}
+# Es gibt Unterschiede in den t-Werten und den Schätzwerten für die festen Effekte.
+# Ausserdem haben sich die geschätzten Varianzen der zufälligen Effekte verändert,
+# sowie die Anpassungsgüte des Modells, und zwar ist das Modell mit den gekreuzten
+# zufälligen Effekten schlechter angepasst.
+```
+
+#### Mehr zur Auswahl zufälliger Effekte
+
+1. In Aufgabe D6 hast du herausgefunden, dass das eingeschränkte Modell, in welchem die Korrelationen zwischen den zufälligen Effekten auf Null gesetzt werden, nicht signifikant schlechter war als das maximale Modell. Wenn du also eine konfirmatorische Hypothese testen würdest, solltest du dieses Modell anstelle des maximalen Modells annehmen. Wir haben in dieser Aufgabe die Rückwärtselimination aber nicht weitergeführt. Dies wollen wir hier nachholen. Rechne nun ein Modell mit Random Intercepts und Slopes über die Rater, jedoch ohne Korrelationen dazwischen, und mit Random Intercepts über die Filme.
+
+```{r}
+# Eingeschränktes Modell mit Random Intercepts und Slopes über die Rater, ohne 
+# Korrelationen dazwischen, und mit Random Intercepts über die Filme
+con_mod2 <- lmer(formula = tomatometer ~ zustand +  # Dies sind die festen Effekte
+                (zustand||id) + (1|film),      # Dies sind die zufälligen Effekte
+                data = tom,                    # Hier werden die Daten spezifiziert
+                REML = FALSE,
+                control = lmerControl(optimizer = "bobyqa")) # verwende einen anderen
+                                                             # Optimizer um Konvergenz-
+                                                             # Probleme zu verhindern
+```
+
+2. Führe nun das Vorgehen aus Abschnitt D durch um herauszufinden welches der beiden Modelle beibehalten werden sollte. **Hinweis**: Das Argument `df` in der `qchisq()` Funktion wird hier auf `df = 1` gesetzt, da diese beiden Modelle sich um nur einen Freiheitsgrad unterscheiden.
+
+```{r}
+# Alpha ist immer noch dasselbe
+alpha <- .2 # Spezifiziere das Alpha-Niveau
+kW1 <- qchisq(1 - alpha, df = 1) # Ermittle den kritischen Wert über welchem die
+                                 # Differenz signifikant ist. Diesmal haben wir 
+                                 # nur einen Freiheitsgrad, da das komplexere
+                                 # Modell nur einen Parameter mehr hat als das
+                                 # einfachere Modell
+
+# Ermittle die Differenz in der Deviance zwischen den beiden Modellen
+d_diff <- deviance(con_mod2) - deviance(con_mod)
+
+# Teste, ob diese Differenz grösser als der zuvor ermittelte kritische Wert und
+# damit signifikant ist
+d_diff > kW1
+```
+
+3. Zu welcher Schlussfolgerung bist du gelangt? Welches Modell sollten wir beibehalten?
+
+```{r}
+# Das Modell con_mod, in dem die Korrelationen auf Null gesetzt sind würde beibehalten
+# werden, da das maximale Modell nicht signifikant besser war, und die einfacheren
+# Modelle signifikant schlechter abschnitten. Da dieses Modell allerdings nicht
+# konvergierte, das maximale Modell jedoch schon, könnte es in diesem Fall trotzdem
+# Sinn machen das maximale Modell auszuwählen.
+```
+
+#### Generalisierte lineare gemischte Modelle
+
+1. Nun werden wir uns generalisierte lineare gemischte Modelle anschauen. Lade dazu den Datensatz `cancer_remission.csv` und speichere ihn unter `cr`.
+
+```{r}
+cr <- read_csv(file = "1_Data/cancer_remission.csv")
+```
+
+2. Schaue dir die Daten an. Es handelt sich um einen Teil von simulierten Daten von [UCLA Institute for Digital Research and Education Search](https://stats.idre.ucla.edu/).
+
+```{r eval = FALSE}
+cr
+summary(cr)
+View(cr)
+```
+
+3. Sage die Krebsremissionsrate (`remission`) durch das Krebsstadium (`CancerStage`), die Dauer des Patientenaufenthalts (`LengthofStay`), die Erfahrung des Arztes (`Experience`), und durch random intercepts über die Ärzte (`DID`) vorher. Benutze dazu die `glmer` Funktion mit `family = binomial`. Benutze auch hier, wie schon in früheren Aufgaben, den "bobyqa" Optimizer.
+
+```{r eval = FALSE, echo=TRUE}
+cr_mod <- glmer(formula = XXX ~ XXX + XXX + XXX +
+                (1 | XXX),
+                data = XXX,
+                family = binomial, # Damit sagst du glmer, dass es eine logistische Regression rechnen soll
+                control = glmerControl(optimizer = "bobyqa"))
+```
+
+
+```{r}
+cr_mod <- glmer(formula = remission ~ CancerStage + LengthofStay + Experience +
+                (1 | DID),
+                data = cr,
+                family = binomial, # Damit sagst du glmer, dass es eine logistische Regression rechnen soll
+                control = glmerControl(optimizer = "bobyqa"))
+```
+
+4. Ist das Modell konvergiert?
+
+```{r}
+check_convergence(cr_mod)
+```
+
+5. Schaue dir die Ergebnisse an.
+
+```{r}
+summary(cr_mod)
+```
+
+6. Extrahiere den $R^2$ Wert für dieses Modell mit der `r2()`.
+
+```{r}
+r2(cr_mod)
+```
+
+**Hinweis**:
+Generalisierte lineare gemischte Modelle zu rechnen und zu interpretieren kann ziemlich anspruchsvoll sein und uns fehlt hier die Zeit, diese detaillierter zu behandeln. Falls du mehr darüber wissen möchtest, kannst du dir dieses [Tutorial](https://stats.idre.ucla.edu/other/mult-pkg/introduction-to-generalized-linear-mixed-models/) oder die Referenzen unter Ressourcen genauer anschauen.
+
+
+## Beispiele
+
+```{r, eval = FALSE, echo = TRUE}
+
+# Lade Pakete
+library(lme4)
+library(parameters)
+library(pbkrtest)
+library(performance)
+
+# schaue die sleepstudy daten aus dem lme4 Paket
+head(sleepstudy)
+
+# Hilfeseite des sleepstudy Datensatzes
+?sleepstudy
+
+# Modell mit nur festen Effekten, zur Vorhersage von Reaktionszeiten mit der Anzahl
+# Tage an Schlafentzug als Prädiktor
+sleep_FE <- glm(formula = Reaction ~ Days, data = sleepstudy)
+
+# Modelloutput
+summary(sleep_FE)
+
+# gemischtes Modell mit nur Random Intercepts über Teilnehmende
+sleep_IO <- lmer(formula = Reaction ~ 1 + (1|Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# Modelloutput
+summary(sleep_IO)
+
+# gemischtes Modell mit Schlafentzug als Prädiktor und Random Intercepts über
+# Teilnehmende
+sleep_RI <- lmer(formula = Reaction ~ Days + (1|Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# Modelloutput
+summary(sleep_RI)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_RI)
+
+# berechne p-Werte für die festen Effekte mit Kenward-Roger Approximation
+p_value(sleep_RI, method = "kenward")
+
+# alternativ, berechne p-Werte mit der anova() Funktion
+anova(sleep_IO, sleep_RI)
+
+# gemischtes Modell mit Random Intercepts und Random Slopes für Schlafentzug über
+# Teilnehmende, ohne die Kovarianz zwischen Random Intercepts und Random Slopes zu
+# schätzen
+sleep_nc <- lmer(formula = Reaction ~ Days + (Days||Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_nc)
+
+# Modelloutput
+summary(sleep_nc)
+
+# maximales Modell
+sleep_max <- lmer(formula = Reaction ~ Days + (Days|Subject),
+                  data = sleepstudy,
+                  REML = FALSE)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_max)
+
+# Modelloutput
+summary(sleep_max)
+
+### Auswahl der zufälligen Effekte
+
+# setze alpha auf .2
+alpha <- .2
+
+# berechne kritischen Wert ab welchem die Differenz signifikant ist
+kW <- qchisq(1 - alpha, df = 1)
+
+# berechne die Differenz zwischen den deviances
+d_diff <- deviance(sleep_nc) - deviance(sleep_max)
+
+# teste ob die Differenz grösser als der kritische Wert ist
+d_diff > kW
+
+# die Kovarianz bringt keinen grossen Zusatznutzen. Wie sieht es mit den
+# Random Slopes aus?
+d_diff <- deviance(sleep_RI) - deviance(sleep_nc)
+
+# teste ob die Differenz grösser als der kritische Wert ist
+d_diff > kW # -> behalte Random Intercepts und verwende sleep_nc
+
+# berechne Bestimmteitsmass
+r2(sleep_nc)
+
+# berechne Intraklassenkorrelation
+icc(sleep_nc, adjusted = TRUE)
+
+### Visualisierung
+
+# extrahiere feste Effekte
+m_line <- fixef(sleep_nc)
+
+# extrahiere zufällige Effekte
+ranefs <- ranef(sleep_nc)
+predicted <- tibble(
+  intercept = ranefs$Subject[,1] + fixef(sleep_nc)[1],
+  slope = ranefs$Subject[,2] + fixef(sleep_nc)[2])
+
+# ziehe 10 Teilnehmende um ihre Trajektorien zu plotten
+rand10 <- sample(1:nrow(predicted), 10)
+
+LMM_plot <- ggplot(sleepstudy, aes(Days, Reaction)) +
+  geom_point(colour= "#606061", alpha = .15, size = 2.5)+
+  geom_segment(aes(x = 0, y = intercept, xend = 9, yend = intercept + slope * 9),
+               data = predicted %>% slice(rand10), colour = "#EA4B68", size = 1.5,
+               alpha = .8) +
+  geom_segment(aes(x = 0, y = m_line[1], xend = 9, yend = m_line[1] + 9 * m_line[2]),
+               colour = "black", size = 2, alpha = 1) +
+  theme(axis.title.x = element_text(vjust = -1),
+        axis.title.y = element_text(vjust = 1)) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18,face = "bold")
+  )
+
+LMM_plot
+```
+
+
+## Datasets
+
+|File | Rows | Columns |
+|:----|:-----|:------|
+|[tomatometer.csv](https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/tomatometer.csv?token=AIFo1JUJrMd9LfEcBY6u9ZhqlCcMaTvGks5csP1AwA%3D%3D) | `r nrow(tom)` | `r ncol(tom)` |
+|[schools.csv](https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/schools.csv?token=AZQb9mdlio2aNiTgfaddDHxpENKWm3Hhks5cmQ9jwA%3D%3D) | `r nrow(schools)` | `r ncol(schools)` |
+|[cancer_remission.csv](https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/cancer_remission.csv?token=AZQb9ic1yv1-UdOtMITu0HyaW1xRMdV9ks5cmQ-bwA%3D%3D) | `r nrow(cr)` | `r ncol(cr)` |
+
+Der *tomatometer.csv* Datensatz enthält Tomatometerbewertungen von 200 Ratern, die je 15 Filme, einmal im nüchternen und einmal im betrunkenen Zustand bewertet haben.
+
+Der *schools.csv* Datensatz enthält Selbsteinschätzungen von 1200 Schülern aus unterschiedlichen Klassen von 6 Schulen, auf den Facetten Extraversion, Offenheit für Neues, Verträglichkeit und einem social score.
+
+Der *cancer_remission.csv* Datensatz enthält Daten zur Remission von Lungenkrebs von Patienten.
+
+#### tomatometer.csv
+
+| Variable | Beschreibung |
+|:-------------|:-------------------------------------|
+| id | Rater id |
+| film | Film id von M1 bis M15 |
+|zustand| Der Zustand, in welchem die Bewertungen durchgeführt wurden (`"nuechtern"`, oder `"betrunken"`) |
+|tomatometer| Tomatometerbewertung von von 0 bis 100|
+
+#### schools.csv
+
+| Variable | Beschreibung |
+|:-------------|:-------------------------------------|
+| id | Schüler id (geschachtelt unter `class`) |
+| extra | Extraversion von 0 bis 100|
+|open| Offenheit von 0 bis 100|
+|agree| Verträglichkeit von 0 bis 100|
+|social| Social |
+|class| Schulklasse (geschachtelt unter `school`; levels `"a"`, `"b"`, `"c"` und `"d"`) |
+|school| Schule (levels `"I"`, `"II"`, `"III"`, `"IV"`) |
+
+#### cancer_remission.csv
+
+| Variable | Beschreibung |
+|:-------------|:-------------------------------------|
+| remission | Ist der Krebs in Remission (0 = Nein, 1 = Ja) |
+| CancerStage | Vier unterschiedliche Krebsstadien (levels `"I"`, `"II"`, `"III"`, `"IV"`) |
+|LengthofStay| Dauer des Spitalaufenthaltes (Wert von 1 bis 10) |
+|Experience| Erfahrung des Arztes (Wert von 7 to 29, wahrscheinlich in Jahren)|
+|DID| Arzt id |
+
+
+## Funktionen
+
+### Pakete
+
+|Paket| Installation|
+|:------|:------|
+|`tidyverse`|`install.packages("tidyverse")`|
+| `lme4` | `install.packages("lme4")` |
+| `performance` | `install.packages("performance")` |
+| `parameters` | `install.packages("parameters")` |
+| `pbkrtest` | `install.packages("pbkrtest")` |
+
+### Funktionen
+
+| Funktion| Paket | Beschreibung |
+|:---|:------|:---------------------------------------------|
+|     `lmer`|`lme4`| Rechne ein lineares gemischtes Modell | 
+|     `glmer`|`lme4`| Rechne ein generalisiertes gemischtes Modell | 
+|     `fixef`|`lme4`| Extrahiere Koeffizienten der festen Effekte | 
+|     `ranef`|`lme4`| Extrahiere Koeffizienten der zufälligen Effekte | 
+|     `anova`|`stats`| Funktion um einen likelihood ratio test zu rechnen | 
+|     `confint`|`stats`| Berechne Konfidenzintervalle | 
+|     `deviance`|`stats`| Extrahiere *deviances* | 
+|     `qchisq`|`stats`| "Quantile" Funktion der $\chi^2$ Verteilung um kritische $\chi^2$ Werte zu berechnen | 
+|     `PBmodcomp`|`pbkrtest`| Parametrischer Bootstrap zur Berechnung von p-Werten  | 
+|     `check_convergence`|`performance`| Teste, ob ein Modell konvergiert ist. | 
+|     `p_value`|`parameters`| Berechne p-Werte für feste Effekte von gemischten Modellen mit unterschiedlichen Methoden  | 
+|     `r2`|`performance`| Berechne Bestimmtheitsmass $R^2$ | 
+|     `icc`|`performance`| Berechne Intraklassenkorrelation | 
+
+
+## Quellen
+
+### Vignetten
+
+[easystats Webseite](https://easystats.github.io/blog/posts/)
+
+
+[lme4 vignette](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf)
+
+### Texte (Englisch)
+
+Eine gute, nicht-technische Einführung in gemischte Modelle: Buchkapitel [**An introduction to linear mixed modeling in experimental psychology**](http://davidkellen.org/wp-content/uploads/2017/04/introduction-mixed-models.pdf) von **Henrik Singmann** und **David Kellen**.
+
+Eine technischere Einführung bieted das Kapitel zu gemischten Modellen in [**Analysis of Longitudinal and Cluster-Correlated Data**](https://projecteuclid.org/euclid.cbms/1462106081) von **Nan Laird**.
+
+Ein frei erhältliches Tutorial über gemischte Modelle gibt es [hier](https://www.ssc.wisc.edu/sscc/pubs/MM/MM_Introduction.html).
+
+Eine Einführung in das Bestimmtheitsmass und die Intraklassenkorrelation im Zusammenhang mit gemischten Modellen bietet der Artikel
+[The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded](https://royalsocietypublishing.org/doi/10.1098/rsif.2017.0213) von **Shinichi Nakagawa**, **Paul Johnson**, und **Holger Schielzeth**.
+
+Eine eher technische Einführung in gemischte Modelle mit `lme4` bietet der Artikel [**Fitting Linear Mixed-Effects Models Using lme4**](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf) von **Douglas Bates**, **Martin Mächler**, **Benjamin Bolker**, und **Steven Walker**.
+
+Ein Klassiker zur Regressionsanalyse, inklusive gemischten Modelle: das Buch [**Data Analysis Using Regression and Multilevel/Hierarchical Models**](https://www.cambridge.org/ch/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models?format=PB&isbn=9780521686891) von **Andrew Gelman** und **Jennifer Hill**.
+
+Ein weiteres, hervorragendes Buch über Regressionsanalyse bietet das Buch [**Statistical Rethinking**](https://xcelab.net/rm/statistical-rethinking/) von **Richard McElreath**.
+

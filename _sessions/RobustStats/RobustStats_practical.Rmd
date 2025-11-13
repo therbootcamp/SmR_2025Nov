@@ -1,0 +1,562 @@
+---
+title: "Robuste Statistik"
+author: "<table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'><col width='10%'><col width='10%'>
+  <tr style='border:none'>
+    <td style='display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none' nowrap>
+      <font style='font-style:normal'>Statistik mit R</font><br>
+      <a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+        <i class='fas fa-clock' style='font-size:.9em;' ></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <i class='fas fa-home' style='font-size:.9em;'></i>
+      </a>
+      <a href='mailto:therbootcamp@gmail.com'>
+        <i class='fas fa-envelope' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+        <i class='fab fa-linkedin' style='font-size: .9em;'></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <font style='font-style:normal'>The R Bootcamp</font>
+      </a>
+    </td>
+    <td style='width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none'>
+      <img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+    </td>
+  </tr></table>"
+output:
+  html_document:
+    css: practical.css
+    self_contained: no
+---
+
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(comment = NA, 
+                      fig.width = 6, 
+                      fig.height = 6,
+                      fig.align = 'center',
+                      echo = TRUE, 
+                      eval = TRUE, 
+                      warning = FALSE)
+
+options(digits = 3)
+
+# Load packages
+library(tidyverse)
+
+# Load packages
+#wein <- read_csv("_sessions/LinearModelsIII/1_Data/wein.csv")
+#bigmart <- read_csv("_sessions/LinearModelsIII/1_Data/bigmart.csv")
+#avocado <- read_csv("TheRBootcamp/1_Data/avocado.csv")
+#avocado_cali <- read_csv("TheRBootcamp/1_Data/avocado_cali.csv")
+
+```
+
+<p align="center" width="100%">
+  <img src="image/avocado_small.png" alt="Trulli" style="width:100%">
+  <br>
+  <font style="font-size:10px">from <a href="http://seeksaurav.blogspot.com/2013/01/week-8.html">seeksaurav.blogspot.com</a></font>
+</p>
+
+
+# {.tabset}
+
+## Überblick
+
+Am Ende des Practicals wirst du wissen...
+
+1. Wie du die Annahmen der Regression überprüfst. 
+2. Wie du etablierte nicht-parametrische Statistiken implementierst und interpretierst.
+3. Wie du Bootstrap Analysen rechnest. 
+
+## Aufgaben
+
+### A - Setup
+
+1. Öffne dein `TheRBootcamp` R project. 
+
+2. Öffne ein neues R Skript. Schreibe deinen Namen, das Datum und "Robuste Statistik Practical" als Kommentare an den Anfang des Skripts.
+
+```{r, eval = FALSE, echo = TRUE}
+## NAME
+## DATUM
+## Robuste Statistik Practical
+```
+
+3. Speichere das neue Skript unter dem Namen `robuste_statistik_practical.R` im `2_Code` Ordner.
+
+4. Lade die nötigen Pakete. Siehe unten. 
+
+```{r, echo = T}
+# Lade die nötigen Pakete
+library(tidyverse)
+library(lubridate)
+library(lme4)
+library(boot)
+library(quantreg)
+library(Rfit)
+
+```
+
+5. Verwende die `read_csv()` Funktion um `avocado` und `avocado_cali` einzulesen.
+
+```{r, echo = T, message = F}
+# Lade die Daten
+avocado <- read_csv(file = "1_Data/avocado.csv")
+avocado_cali <- read_csv(file = "1_Data/avocado_cali.csv")
+```
+
+6. Printe die Datensätze. 
+
+7. Verwende `names(XX)`, `summary(XX)`, und `View(XX)` um einen weiteren Überblick über die Daten zu bekommen.
+
+8. Wiederum, führe den Code unten aus um sicherzustellen, dass alle `character` Variablen als Faktoren vorliegen, was den statistischen Modellen hilft kategoriale Variablen richtig zu interpretieren. 
+
+```{r, echo = TRUE}
+# Konvertiere alle character zu factor
+avocado <- avocado %>% mutate_if(is.character, factor)
+avocado_cali <- avocado_cali %>% mutate_if(is.character, factor)
+```
+
+### B - Annahmenverletzungen
+
+1. In diesem Abschnitt geht es um die Evaluation der Annahmen der Regression anhand des `avocado_cali` Datensatzes, welcher Verkaufsdaten für Avocados in Kalifornien über die letzten drei Jahre enthält. Das Ziel ist es zunächst `Verkaufsvolumen` über `Preis` vorherzusagen mit einer normalen Regression (`lm`) vorherzusagen.
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis
+cali_lm <- lm(formula = YY ~ XX, 
+               data = ZZ)
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis
+cali_lm <- lm(formula = Verkaufsvolumen ~ Preis, 
+               data = avocado_cali)
+```
+
+2. Betrachte die `summary()` des Modells. Ist `Preis` ein guter Prädiktor für `Verkaufsvolumen`? Achte auch auf `R-squared`.
+
+```{r}
+summary(cali_lm)
+```
+
+3. `Preis` ist ein signifikanter Prädiktor mit einem sehr extremen <i>t</i>-Wert. Zudem weist `R-squared` einen hohen Wert von `62.8%` erklärte Varianz auf. Bedeutet dies nun, dass das Modell, welches einen linearen Zusammenhang annimmt, gut den Zusammenhang von `Preis` und `Verkaufsvolumen` beschreibt? Verwende den Code unten um die Daten und die Regression zu plotten. 
+
+```{r, echo = TRUE, eval = FALSE}
+# Plotte Modell und Daten
+ggplot(avocado_cali, aes(Preis, Verkaufsvolumen)) +
+  geom_point() + geom_smooth(method = 'lm')
+
+```
+
+4. Irgendwie nicht so gut, oder? Überprüfe dies indem du mit dem Code unten die Residuen gegen die gefitteten (vorhergesagten) Werte plottest. 
+
+```{r, echo = TRUE}
+# Residualplot
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()
+```
+
+5. Trotz des guten `R-squared` Werts liegen offensichtliche Verletzungen der Annahmen vor: Linearität, Normalität, und Homoskedastizität scheinen nicht zu halten. Ein Grund für diese Verletzungen sind fehlende Variablen. Ergänze das Modell um einen weiteren Prädiktor, nämlich `Typ`, welcher die Art der Avocado kodiert und plotte erneut Residuen gegen gefittete Werte. Speichere das Modell als `cali_lm`.
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(formula = XX ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()
+
+```
+
+6. Das hat geholfen! Aber die Sache sieht immer noch nicht ganz rund aus. Ein weiteres Problem existiert in der sehr schiefen Verteilung von `Verkaufsvolumen`. Es gibt nun mehrere Wege damit umzugehen. 1) Transformation von `Verkaufsvolumen` z.B. mit `log()`, 2) Verwendung der alternativen Variable `Verkaufsvolumen_index`, oder 3) die Modellierung mit einer passenden Verteilung. Probiere alle drei aus. Beginne mit 1), der Transformation. Überprüfe zunächst mit dem Template wie sich die Schiefe darstellt und wie sie sich durch `log()` verändert. 
+
+```{r, echo = TRUE}
+# Histogramm Verkaufsvolumen
+ggplot(avocado_cali, aes(Verkaufsvolumen)) + geom_histogram()
+ggplot(avocado_cali, aes(log(Verkaufsvolumen))) + geom_histogram()
+```
+
+7. Sieht besser aus, oder? Zumindest etwas symmetrischer. Rechne nun eine Regression mit `log(Verkaufsvolumen)` als Kriterium und kreiere den typischen Residualplot. 
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(formula = log(XX) ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(log(Verkaufsvolumen) ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()
+
+```
+
+8. Die Punkte streuen nun etwas gleichmässiger um die Null-Gerade. Ganz ideal ist das Bild aber immer noch nicht, denn offensichtlich ist die Varianz der Residuen im unteren Bereich höher als im oberen Bereich. Ergo ist Homoskedastizität verletzt. Rechne nun eine Regression mit `Verkaufsvolumen_index` (ohne `log()`) und überprüfe, ob das vielleicht die verbleibenden Probleme löst. 
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(formula = XX ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis & Typ
+cali_lm <- lm(Verkaufsvolumen_index ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()
+
+```
+
+9. Vielleicht ist jetzt die Varianz etwas ausgeglichener, ideal sieht es aber immer noch nicht aus. Ganz perfekt ist das aber immer noch nicht. Du kannst dies mit dem Code unten, welcher die Standardabweichung separat für die beiden Punktwolken bestimmt, überprüfen. 
+
+```{r, echo = TRUE}
+# Regression Verkausvolumen auf Preis & Typ
+tapply(resid(cali_lm), fitted(cali_lm) > 7, sd)
+```
+
+10. Versuche nun als letztes die Poisson Verteilung mit `Verkaufszahlen` (einer Häufigkeitsvariable) als Kriterium. Achtung: Die Warnungen könnt ihr ignorieren. 
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis & Typ
+cali_glm <- glm(formula = XX ~ XX + XX, data = XX, family = 'XX')
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis & Typ
+cali_glm <- glm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali, family = 'poisson')
+ggplot(mapping = aes(fitted(cali_glm), resid(cali_glm))) + geom_point()
+
+```
+
+11. Man könnte annehmen dies hätte die Angelegenheit weiter verschlechtert. Tatsächlich ist dies aber nicht so. Die Poisson-Regression hat andere Annahmen, als die normale Regression. Die normale Regression nimmt an, dass die Varianz konstant um die Regressionsgerade verteilt ist, die Poisson-Regression dagegen, dass die Varianz mit zunehmendem vorhergesagtem Wert ansteigt. Dies entspricht in diesem Fall exakt dem beobachteten Plot, womit wir belegt hätten, dass man Häufigkeitsverteilungen vielleicht doch am besten mit der davor vorgesehenen Verteilung modelliert. 
+
+### C - Nicht-parametrische Tests
+
+1. In diesem Abschnitt analysierst du die Veränderung im `Verkausvolumen` über die Jahre 2016 und 2017. Führe zunächst den Code unten aus um zwei vergleichbare Datensätze für die beiden Jahre zu kreieren. 
+```{r, echo = TRUE}
+# Jahr 2016
+avocado_cali_2016 <- avocado_cali %>% 
+  filter(year(Datum) == 2016)
+
+# Jajr 2017 mit Wochen gematched
+avocado_cali_2017 <- avocado_cali %>% 
+  filter(year(Datum) == 2017, 
+         week(Datum) %in% week(avocado_cali_2016$Datum))
+``` 
+
+2. Vergleiche nun mit einem `t.test()` das `Verkaufsvolumen` und den `Verkaufsvolumen_index` zwischen den beiden Jahren. Setze dabei `paired = TRUE` um zu berücksichtigen, dass es sich hier um abhängige Daten handelt. Siehe Template.
+
+```{r, echo = TRUE, eval = FALSE}
+# Verkaufsvolumen 2016 vs 2017
+t.test(avocado_cali_2016$XX,
+       avocado_cali_2017$XX, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+t.test(avocado_cali_2016$XX,
+       avocado_cali_2017$XX, paired = TRUE)
+
+``` 
+
+```{r}
+# Verkaufsvolumen 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen,
+       avocado_cali_2017$Verkaufsvolumen, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen_index,
+       avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)
+``` 
+
+3. `Verkaufsvolumen` zeigte keinen signifikanten Unterschied, `Verkaufsvolumen_index` dagegen schon. Dies ist wiederum auf die Schiefe in `Verkaufsvolumen` zurückzuführen. Vergleiche nun wie sich ein robuster `wilcox.test()` in den beiden Fällen schlägt. 
+
+```{r, echo = TRUE, eval = FALSE}
+# Verkaufsvolumen 2016 vs 2017
+wilcox.test(avocado_cali_2016$XX,
+            avocado_cali_2017$XX, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+wilcox.test(avocado_cali_2016$XX,
+            avocado_cali_2017$XX, paired = TRUE)
+``` 
+
+```{r}
+# Verkaufsvolumen 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen,
+            avocado_cali_2017$Verkaufsvolumen, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen_index,
+            avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)
+``` 
+
+4. Nun ist in beiden Fällen der Unterschied signifikant, was in der Tat für einen robusten Unterschied spricht. Ein einfacher weg dies noch weiter zu überprüfen ist der Vorzeichentest. Nutze das Template unten, um den Unterschied auch noch mit diesem Test zu überprüfen.  
+
+```{r, echo = TRUE, eval = FALSE}
+# Verkaufsvolumen 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs <- avocado_cali_2017$XX > avocado_cali_2016$XX
+n_plus <- sum(signs)
+n <- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs <- avocado_cali_2017$XX > avocado_cali_2016$XX
+n_plus <- sum(signs)
+n <- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)
+
+``` 
+
+```{r}
+# Verkaufsvolumen 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs <- avocado_cali_2017$Verkaufsvolumen > avocado_cali_2016$Verkaufsvolumen
+n_plus <- sum(signs)
+n <- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs <- avocado_cali_2017$Verkaufsvolumen_index > avocado_cali_2016$Verkaufsvolumen_index
+n_plus <- sum(signs)
+n <- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)
+``` 
+
+5. Auch hier zwei signifikante Ergebnisse. Nun kannst du langsam tatsächlich davon ausgehen, dass der Verkauf im Jahre 2017 gegenüber 2016 leicht zurück gegangen ist.
+
+### D - Robust Regression
+
+1. Begib dich noch einmal zurück zur Vorhersage des `Verkaufsvolumen` durch `Preis` und `Typ`. Ein weiterer Weg gegenüber den bisher eingeschlagenen um mit potentiellen Verletzungen der Regression umzugehen sind robuste Regressionen. Rechne zunächst noch einmal das ursprüngliche Modell mit einer normalen Regression.
+
+```{r, echo = TRUE, eval = FALSE}
+# Regression Verkausvolumen auf Preis
+cali_lm <- lm(formula = YY ~ XX + XX, 
+               data = ZZ)
+```
+
+```{r}
+# Regression Verkausvolumen auf Preis
+cali_lm <- lm(formula = Verkaufsvolumen ~ Preis + Typ, 
+               data = avocado_cali)
+```
+
+2. Nun verwende das Template unten um zwei alternative Modelle zu rechnen. Eine Quantil-basierte Regression mit `rq()` (`quantreg` Paket) und eine Rang-basierte Regression mit `rfit()` (`Rfit` Paket).
+
+```{r, echo = TRUE, eval = FALSE}
+# Quantil-basierte Regression
+cali_rq <- rq(formula = YY ~ XX + XX, 
+              data = ZZ)
+
+# Rang-basierte Regression
+cali_rfit <- rfit(formula = YY ~ XX + XX, 
+                   data = ZZ)
+```
+
+```{r}
+# Quantil-basierte Regression
+cali_rq <- rq(formula = Verkaufsvolumen ~ Preis + Typ, 
+              data = avocado_cali)
+
+# Rang-basierte Regression
+cali_rfit <- rfit(formula = Verkaufsvolumen ~ Preis + Typ, 
+                  data = avocado_cali)
+```
+
+3. Vergleiche die `summary()` der drei Modelle. Welche Unterschiede und Gemeinsamkeiten fallen dir auf?
+
+```{r}
+# regular regression
+summary(cali_lm)
+
+# quantile regression
+summary(cali_rq)
+
+# rank-based regression
+summary(cali_rfit)
+```
+
+4. Die Summaries sind zunächst einmal nicht konsistent im Aufbau. Die Quantilregression liefert nur Konfidenzintervalle, was wir in der nächsten Session behandeln werden, entsprechend können wir keine p- oder t-Werte vergleichen. Du kannst aber zumindest die Gewichte vergleichen. Hier solltest du erkannt haben, dass die Gewichte der beiden robusten Regression deutlich näher aneinander sind und insbesondere das Gewicht des Preises als kleiner einschätzen, als dies die normale Regression tut. Dies ist ein Indiz dafür, dass der Einfluss des Preises ggf. von der normalen Regression überschätzt wurde. 
+
+### E - Bootstrap
+
+1. Der Bootstrap ist ein kaum zu überschätzendes Tool in der Statistik, dass praktisch jeden statistischen Test ersetzen kann. Verwende ihn um Standardfehler für übliche Regression von `Verkaufsvolumen` auf `Preis` und `Typ` zu bestimmen. Dazu haben wir für dich schon die bootstrap Funktion geschrieben die wir im nächsten Schritt in die `boot`-Funktion stecken können. Versuche zunächst jedoch nachzuvollziehen was unsere `boot_lm` Funktion tut. 
+
+```{r, echo = TRUE}
+# Bootstrap Funktion für lm
+boot_lm <- function(data, indices, formula){
+  data <- data[indices,] # Bootstrap sample
+  data_lm <- lm(formula = formula, 
+                data = data)
+  coefficients(data_lm)
+  }
+```
+
+2. Nun können wir die Funktion verwenden um wiederholt Regressionen für Bootstrap samples der Daten zu bestimmen. Siehe 
+
+```{r, echo = TRUE, eval = F}
+# Lasse Bootstrap laufen
+cali_boot<- boot(data = XX,               # Der Datensatz
+                 statistic = XX,          # Die Funktion
+                 formula = XX ~ XX + XX,  # Die Modellgleichung
+                 R = 1000)                # Die Anzahl der Ziehungen
+```
+
+```{r}
+# Lasse Bootstrap laufen
+cali_boot<- boot(data = avocado_cali,              
+                 statistic = boot_lm,          
+                 formula = Verkaufsvolumen ~ Preis + Typ, 
+                 R = 1000)                
+```
+
+3. Printe das `cali_boot` und evaluiere das Ergebnis. Die Spalte `original` enthält die Gewichte für den gesamten Datensatz. Die Spalte `bias` den Unterschied zwischen dem Mittel der Gewichte über die Bootstrap Samples und der Spalte `original`. Diese sollte möglichst klein sein. Die Spalte `std. error` enthält das Ergebnis von Interesse: den über Bootstrap geschätzten Standardfehler der Gewichte. 
+
+```{r, echo = TRUE}
+# Zeige Bootstrap Ergebnisse
+cali_boot
+```
+
+4. Das Ergebnis des Bootstrap kannst du nun einfach über eine z-Verteilung testen a la `z = b / se`, d.h., das Gewicht geteilt durch den Standardfehler folgt der z-Verteilung. Der Code unten sieht die relevanten Werte aus dem Objekt und berechnet die <i>z</i>-Werte für Intercept und die zwei Gewichte. 
+
+```{r, echo = TRUE}
+# Berechne z-Werte
+cali_boot$t0[1] / sd(cali_boot$t[,1])
+cali_boot$t0[2] / sd(cali_boot$t[,2])
+cali_boot$t0[3] / sd(cali_boot$t[,3])
+```
+
+5. Zum Abschluss vergleiche die durch Bootstrap ermittelten <i>z</i>-Werte mit den <i>t</i>-Werten aus der normalen Regression. Wisse dass zumindest theoretisch t-Werte mit vielen Freiheitsgraden praktisch identisch mit <i>z</i>-Werte seien sollten. Da in den Standardfehler der normalen Regression jedoch Annahmen einfliessen, müssen die Werte nicht identisch sein. 
+
+```{r, echo = TRUE}
+# Normale Regression
+summary(lm(Verkaufsvolumen ~ Preis + Typ, avocado_cali))
+```
+
+
+## Beispiele
+
+```{r, eval = FALSE, echo = TRUE}
+
+library(tidyverse)
+
+# Normale regression ----------------
+
+# Modell
+m <- lm(formula = hwy ~ displ, 
+        data = mpg)
+
+# Evaluiere Modell
+summary(m)     # Summary
+fitted(m)      # gefittete Werte
+resid(m)       # Residuen
+
+# Residualplot
+plot(fitted(m), resid(m))
+
+# non-parametric tests ----------------
+
+#  Teile Daten
+mpg_suv     <- mpg %>% filter(class == 'suv')
+mpg_compact <- mpg %>% filter(class == 'compact')
+
+# Wilcoxon
+wilcoxon.test(mpg_suv$hwy, mpg_compact$hwy)
+
+# Robuste Regression ----------------
+
+library(quantreg)
+library(Rfit)
+
+# Quantil Regression
+m_q  <- rq(hwy ~ displ, data = mpg)
+
+# Rang Regression
+m_rb <- rfit(hwy ~ displ, data = mpg)
+
+```
+
+
+## Datensätze
+
+|File | Zeilen | Spalten |
+|:----|:-----|:------|
+|[avocado.csv](https://therbootcamp.github.io/SmR_2020Mai/1_Data/avocado.csv) | 17573 | 16 |
+|[avocado_cali.csv](https://therbootcamp.github.io/SwR_2020Mai/1_Data/avocado_cali.csv) | 338 | 16 |
+
+Die Datensätze entstammen der [Hass](https://en.wikipedia.org/wiki/Hass_avocado) Avocado Board Webseite und enthalten wochenweise Avocado Verkaufsvolumina von April 2015 bis Mai 2018 für verschiedene Regionen der USA. Der kleinere Datensatz enthält nur die Daten für Kalifornien.   
+
+#### avocado.csv & avocado_cali.csv
+
+| Name | Description |
+|:-------------|:-------------------------------------|
+| `Verkaufsvolumen` | Das totale Verkaufsvolumen für Avocados in einer Woche. |
+| `Verkaufsvolumen_index` | Ein Index von 0 bis 10 der das Verkaufsvolumen repräsentiert.  |
+| `Preis` | Der durchschnittliche Preis einer Avocado. |
+| `Typ` | Der Typ der Avocado: "conventional" oder "organic". |
+| `Temparatur` | Die regionale Temperatur. |
+| `Temperatur_USA` | Die landesweite Temperatur |
+| `Luftfeuchtigkeit` | Die regionale Luftfeuchtigkeit. |
+| `Luftfeuchtigkeit_USA` | Die landesweite Luftfeuchtigkeit_USA. |
+| `Niederschlag` | Der regionale Niederschlag. |
+| `Niederschlag_USA` | Der landesweite Niederschlag. |
+| `Jahr` | Jahr. |
+| `Jahreszeit` | Jahreszeit. |
+| `Datum` | Datum. |
+| `Region` | Region. |
+| `Längengrad` | Längengrad. |
+| `Breitengrad` | Breitengrad. |
+
+## Funktionen
+
+### Pakete
+
+|Package| Installation|
+|:------|:------|
+|`tidyverse`|`install.packages("tidyverse")`|
+|`lubridate`|`install.packages("lubridate")`|
+|`quantreg`|`install.packages("quantreg")`|
+|`boot`|`install.packages("boot")`|
+|`Rfit`|`install.packages("Rfit")`|
+|`lme4`|`install.packages("lme4")`|
+|`rsq`|`install.packages("rsq")`|
+
+
+### Funktionen
+
+| Function| Package | Description |
+|:---|:------|:---------------------------------------------|
+| `lm`, `glm`|`stats`| Regressionsmodelle. | 
+| `summary` |`base`| Modellergebnisse | 
+| `fitted`, `resid` |`stats`| Extrahiere gefittete Werte und Residuen. | 
+| `rq` |`quantreg`| Quantil-Regression. | 
+| `rfit` |`Rfit`| Rangregression. | 
+| `wilcox.test` |`stats`| Wilcoxon-Test. |
+| `pbinom` |`stats`| Kumulative Binomialverteilung (für den Vorzeichentest). |
+
+## Resourcen
+
+### Vignetten
+
+[Regression assumptions](https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/Berry1993.pdf), 
+[Robust regression](https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/FoxWeisberg2013.pdf), 
+[Rank-based regression with Rfit](https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/KlokeMcKean2012.pdf)
+[Bootstrap](https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/FoxWeisberg2013.pdf)
+[Variance inflation](https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/Stine1995.pdf)
+

@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Robuste Statistik</title>
+
+<script src="RobustStats_practical_files/header-attrs-2.13/header-attrs.js"></script>
+<script src="RobustStats_practical_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="RobustStats_practical_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="RobustStats_practical_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="RobustStats_practical_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="RobustStats_practical_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="RobustStats_practical_files/navigation-1.1/tabsets.js"></script>
+<link href="RobustStats_practical_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="RobustStats_practical_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="practical.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Robuste Statistik</h1>
+<h4 class="author"><table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'>
+<col width='10%'>
+<col width='10%'>
+<tr style="border:none">
+<td style="display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none" nowrap>
+<font style='font-style:normal'>Statistik mit R</font><br>
+<a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+<i class='fas fa-clock' style='font-size:.9em;' ></i> </a>
+<a href='https://therbootcamp.github.io'>
+<i class='fas fa-home' style='font-size:.9em;'></i> </a>
+<a href='mailto:therbootcamp@gmail.com'>
+<i class='fas fa-envelope' style='font-size: .9em;'></i> </a>
+<a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+<i class='fab fa-linkedin' style='font-size: .9em;'></i> </a>
+<a href='https://therbootcamp.github.io'>
+<font style='font-style:normal'>The R Bootcamp</font> </a>
+</td>
+<td style="width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none">
+<img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+</td>
+</tr>
+</table></h4>
+
+</div>
+
+
+<p align="center" width="100%">
+<img src="image/avocado_small.png" alt="Trulli" style="width:100%"> <br>
+<font style="font-size:10px">from
+<a href="http://seeksaurav.blogspot.com/2013/01/week-8.html">seeksaurav.blogspot.com</a></font>
+</p>
+<div id="section" class="section level1 tabset">
+<h1 class="tabset"></h1>
+<div id="überblick" class="section level2">
+<h2>Überblick</h2>
+<p>Am Ende des Practicals wirst du wissen…</p>
+<ol style="list-style-type: decimal">
+<li>Wie du die Annahmen der Regression überprüfst.</li>
+<li>Wie du etablierte nicht-parametrische Statistiken implementierst und
+interpretierst.</li>
+<li>Wie du Bootstrap Analysen rechnest.</li>
+</ol>
+</div>
+<div id="aufgaben" class="section level2">
+<h2>Aufgaben</h2>
+<div id="a---setup" class="section level3">
+<h3>A - Setup</h3>
+<ol style="list-style-type: decimal">
+<li><p>Öffne dein <code>TheRBootcamp</code> R project.</p></li>
+<li><p>Öffne ein neues R Skript. Schreibe deinen Namen, das Datum und
+“Robuste Statistik Practical” als Kommentare an den Anfang des
+Skripts.</p></li>
+</ol>
+<pre class="r"><code>## NAME
+## DATUM
+## Robuste Statistik Practical</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Speichere das neue Skript unter dem Namen
+<code>robuste_statistik_practical.R</code> im <code>2_Code</code>
+Ordner.</p></li>
+<li><p>Lade die nötigen Pakete. Siehe unten.</p></li>
+</ol>
+<pre class="r"><code># Lade die nötigen Pakete
+library(tidyverse)
+library(lubridate)</code></pre>
+<pre><code>
+Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    date, intersect, setdiff, union</code></pre>
+<pre class="r"><code>library(lme4)</code></pre>
+<pre><code>Loading required package: Matrix</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack</code></pre>
+<pre class="r"><code>library(boot)
+library(quantreg)</code></pre>
+<pre><code>Loading required package: SparseM</code></pre>
+<pre><code>
+Attaching package: &#39;SparseM&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:base&#39;:
+
+    backsolve</code></pre>
+<pre class="r"><code>library(Rfit)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Verwende die <code>read_csv()</code> Funktion um
+<code>avocado</code> und <code>avocado_cali</code> einzulesen.</li>
+</ol>
+<pre class="r"><code># Lade die Daten
+avocado &lt;- read_csv(file = &quot;1_Data/avocado.csv&quot;)
+avocado_cali &lt;- read_csv(file = &quot;1_Data/avocado_cali.csv&quot;)</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Printe die Datensätze.</p></li>
+<li><p>Verwende <code>names(XX)</code>, <code>summary(XX)</code>, und
+<code>View(XX)</code> um einen weiteren Überblick über die Daten zu
+bekommen.</p></li>
+<li><p>Wiederum, führe den Code unten aus um sicherzustellen, dass alle
+<code>character</code> Variablen als Faktoren vorliegen, was den
+statistischen Modellen hilft kategoriale Variablen richtig zu
+interpretieren.</p></li>
+</ol>
+<pre class="r"><code># Konvertiere alle character zu factor
+avocado &lt;- avocado %&gt;% mutate_if(is.character, factor)
+avocado_cali &lt;- avocado_cali %&gt;% mutate_if(is.character, factor)</code></pre>
+</div>
+<div id="b---annahmenverletzungen" class="section level3">
+<h3>B - Annahmenverletzungen</h3>
+<ol style="list-style-type: decimal">
+<li>In diesem Abschnitt geht es um die Evaluation der Annahmen der
+Regression anhand des <code>avocado_cali</code> Datensatzes, welcher
+Verkaufsdaten für Avocados in Kalifornien über die letzten drei Jahre
+enthält. Das Ziel ist es zunächst <code>Verkaufsvolumen</code> über
+<code>Preis</code> vorherzusagen mit einer normalen Regression
+(<code>lm</code>) vorherzusagen.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = YY ~ XX, 
+               data = ZZ)</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = Verkaufsvolumen ~ Preis, 
+               data = avocado_cali)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Betrachte die <code>summary()</code> des Modells. Ist
+<code>Preis</code> ein guter Prädiktor für <code>Verkaufsvolumen</code>?
+Achte auch auf <code>R-squared</code>.</li>
+</ol>
+<pre class="r"><code>summary(cali_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-4692333 -1486900   351468  1342770  4276676 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 11577703     371529    31.2   &lt;2e-16 ***
+Preis       -6115691     256440   -23.9   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1840000 on 336 degrees of freedom
+Multiple R-squared:  0.629, Adjusted R-squared:  0.628 
+F-statistic:  569 on 1 and 336 DF,  p-value: &lt;2e-16</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><code>Preis</code> ist ein signifikanter Prädiktor mit einem sehr
+extremen <i>t</i>-Wert. Zudem weist <code>R-squared</code> einen hohen
+Wert von <code>62.8%</code> erklärte Varianz auf. Bedeutet dies nun,
+dass das Modell, welches einen linearen Zusammenhang annimmt, gut den
+Zusammenhang von <code>Preis</code> und <code>Verkaufsvolumen</code>
+beschreibt? Verwende den Code unten um die Daten und die Regression zu
+plotten.</li>
+</ol>
+<pre class="r"><code># Plotte Modell und Daten
+ggplot(avocado_cali, aes(Preis, Verkaufsvolumen)) +
+  geom_point() + geom_smooth(method = &#39;lm&#39;)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Irgendwie nicht so gut, oder? Überprüfe dies indem du mit dem Code
+unten die Residuen gegen die gefitteten (vorhergesagten) Werte
+plottest.</li>
+</ol>
+<pre class="r"><code># Residualplot
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Trotz des guten <code>R-squared</code> Werts liegen offensichtliche
+Verletzungen der Annahmen vor: Linearität, Normalität, und
+Homoskedastizität scheinen nicht zu halten. Ein Grund für diese
+Verletzungen sind fehlende Variablen. Ergänze das Modell um einen
+weiteren Prädiktor, nämlich <code>Typ</code>, welcher die Art der
+Avocado kodiert und plotte erneut Residuen gegen gefittete Werte.
+Speichere das Modell als <code>cali_lm</code>.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(formula = XX ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Das hat geholfen! Aber die Sache sieht immer noch nicht ganz rund
+aus. Ein weiteres Problem existiert in der sehr schiefen Verteilung von
+<code>Verkaufsvolumen</code>. Es gibt nun mehrere Wege damit umzugehen.
+1) Transformation von <code>Verkaufsvolumen</code> z.B. mit
+<code>log()</code>, 2) Verwendung der alternativen Variable
+<code>Verkaufsvolumen_index</code>, oder 3) die Modellierung mit einer
+passenden Verteilung. Probiere alle drei aus. Beginne mit 1), der
+Transformation. Überprüfe zunächst mit dem Template wie sich die Schiefe
+darstellt und wie sie sich durch <code>log()</code> verändert.</li>
+</ol>
+<pre class="r"><code># Histogramm Verkaufsvolumen
+ggplot(avocado_cali, aes(Verkaufsvolumen)) + geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(avocado_cali, aes(log(Verkaufsvolumen))) + geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-12-2.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="7" style="list-style-type: decimal">
+<li>Sieht besser aus, oder? Zumindest etwas symmetrischer. Rechne nun
+eine Regression mit <code>log(Verkaufsvolumen)</code> als Kriterium und
+kreiere den typischen Residualplot.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(formula = log(XX) ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(log(Verkaufsvolumen) ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="8" style="list-style-type: decimal">
+<li>Die Punkte streuen nun etwas gleichmässiger um die Null-Gerade. Ganz
+ideal ist das Bild aber immer noch nicht, denn offensichtlich ist die
+Varianz der Residuen im unteren Bereich höher als im oberen Bereich.
+Ergo ist Homoskedastizität verletzt. Rechne nun eine Regression mit
+<code>Verkaufsvolumen_index</code> (ohne <code>log()</code>) und
+überprüfe, ob das vielleicht die verbleibenden Probleme löst.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(formula = XX ~ XX + XX, data = XX)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(Verkaufsvolumen_index ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="9" style="list-style-type: decimal">
+<li>Vielleicht ist jetzt die Varianz etwas ausgeglichener, ideal sieht
+es aber immer noch nicht aus. Ganz perfekt ist das aber immer noch
+nicht. Du kannst dies mit dem Code unten, welcher die Standardabweichung
+separat für die beiden Punktwolken bestimmt, überprüfen.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+tapply(resid(cali_lm), fitted(cali_lm) &gt; 7, sd)</code></pre>
+<pre><code>FALSE  TRUE 
+0.229 0.178 </code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li>Versuche nun als letztes die Poisson Verteilung mit
+<code>Verkaufszahlen</code> (einer Häufigkeitsvariable) als Kriterium.
+Achtung: Die Warnungen könnt ihr ignorieren.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_glm &lt;- glm(formula = XX ~ XX + XX, data = XX, family = &#39;XX&#39;)
+ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_glm &lt;- glm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali, family = &#39;poisson&#39;)
+ggplot(mapping = aes(fitted(cali_glm), resid(cali_glm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
+<ol start="11" style="list-style-type: decimal">
+<li>Man könnte annehmen dies hätte die Angelegenheit weiter
+verschlechtert. Tatsächlich ist dies aber nicht so. Die
+Poisson-Regression hat andere Annahmen, als die normale Regression. Die
+normale Regression nimmt an, dass die Varianz konstant um die
+Regressionsgerade verteilt ist, die Poisson-Regression dagegen, dass die
+Varianz mit zunehmendem vorhergesagtem Wert ansteigt. Dies entspricht in
+diesem Fall exakt dem beobachteten Plot, womit wir belegt hätten, dass
+man Häufigkeitsverteilungen vielleicht doch am besten mit der davor
+vorgesehenen Verteilung modelliert.</li>
+</ol>
+</div>
+<div id="c---nicht-parametrische-tests" class="section level3">
+<h3>C - Nicht-parametrische Tests</h3>
+<ol style="list-style-type: decimal">
+<li>In diesem Abschnitt analysierst du die Veränderung im
+<code>Verkausvolumen</code> über die Jahre 2016 und 2017. Führe zunächst
+den Code unten aus um zwei vergleichbare Datensätze für die beiden Jahre
+zu kreieren.</li>
+</ol>
+<pre class="r"><code># Jahr 2016
+avocado_cali_2016 &lt;- avocado_cali %&gt;% 
+  filter(year(Datum) == 2016)
+
+# Jajr 2017 mit Wochen gematched
+avocado_cali_2017 &lt;- avocado_cali %&gt;% 
+  filter(year(Datum) == 2017, 
+         week(Datum) %in% week(avocado_cali_2016$Datum))</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Vergleiche nun mit einem <code>t.test()</code> das
+<code>Verkaufsvolumen</code> und den <code>Verkaufsvolumen_index</code>
+zwischen den beiden Jahren. Setze dabei <code>paired = TRUE</code> um zu
+berücksichtigen, dass es sich hier um abhängige Daten handelt. Siehe
+Template.</li>
+</ol>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+t.test(avocado_cali_2016$XX,
+       avocado_cali_2017$XX, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+t.test(avocado_cali_2016$XX,
+       avocado_cali_2017$XX, paired = TRUE)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen,
+       avocado_cali_2017$Verkaufsvolumen, paired = TRUE)</code></pre>
+<pre><code>
+    Paired t-test
+
+data:  avocado_cali_2016$Verkaufsvolumen and avocado_cali_2017$Verkaufsvolumen
+t = 2, df = 103, p-value = 0.05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  -3290 307840
+sample estimates:
+mean of the differences 
+                 152275 </code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen_index,
+       avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)</code></pre>
+<pre><code>
+    Paired t-test
+
+data:  avocado_cali_2016$Verkaufsvolumen_index and avocado_cali_2017$Verkaufsvolumen_index
+t = 2, df = 103, p-value = 0.03
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.0056 0.0965
+sample estimates:
+mean of the differences 
+                  0.051 </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><code>Verkaufsvolumen</code> zeigte keinen signifikanten
+Unterschied, <code>Verkaufsvolumen_index</code> dagegen schon. Dies ist
+wiederum auf die Schiefe in <code>Verkaufsvolumen</code> zurückzuführen.
+Vergleiche nun wie sich ein robuster <code>wilcox.test()</code> in den
+beiden Fällen schlägt.</li>
+</ol>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+wilcox.test(avocado_cali_2016$XX,
+            avocado_cali_2017$XX, paired = TRUE)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+wilcox.test(avocado_cali_2016$XX,
+            avocado_cali_2017$XX, paired = TRUE)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen,
+            avocado_cali_2017$Verkaufsvolumen, paired = TRUE)</code></pre>
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  avocado_cali_2016$Verkaufsvolumen and avocado_cali_2017$Verkaufsvolumen
+V = 3491, p-value = 0.01
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen_index,
+            avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)</code></pre>
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  avocado_cali_2016$Verkaufsvolumen_index and avocado_cali_2017$Verkaufsvolumen_index
+V = 3474, p-value = 0.02
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Nun ist in beiden Fällen der Unterschied signifikant, was in der Tat
+für einen robusten Unterschied spricht. Ein einfacher weg dies noch
+weiter zu überprüfen ist der Vorzeichentest. Nutze das Template unten,
+um den Unterschied auch noch mit diesem Test zu überprüfen.</li>
+</ol>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$XX &gt; avocado_cali_2016$XX
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)
+
+# Verkaufsvolumen-Index 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$XX &gt; avocado_cali_2016$XX
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$Verkaufsvolumen &gt; avocado_cali_2016$Verkaufsvolumen
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre><code>[1] 0.0475</code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$Verkaufsvolumen_index &gt; avocado_cali_2016$Verkaufsvolumen_index
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre><code>[1] 0.0475</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Auch hier zwei signifikante Ergebnisse. Nun kannst du langsam
+tatsächlich davon ausgehen, dass der Verkauf im Jahre 2017 gegenüber
+2016 leicht zurück gegangen ist.</li>
+</ol>
+</div>
+<div id="d---robust-regression" class="section level3">
+<h3>D - Robust Regression</h3>
+<ol style="list-style-type: decimal">
+<li>Begib dich noch einmal zurück zur Vorhersage des
+<code>Verkaufsvolumen</code> durch <code>Preis</code> und
+<code>Typ</code>. Ein weiterer Weg gegenüber den bisher eingeschlagenen
+um mit potentiellen Verletzungen der Regression umzugehen sind robuste
+Regressionen. Rechne zunächst noch einmal das ursprüngliche Modell mit
+einer normalen Regression.</li>
+</ol>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = YY ~ XX + XX, 
+               data = ZZ)</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = Verkaufsvolumen ~ Preis + Typ, 
+               data = avocado_cali)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Nun verwende das Template unten um zwei alternative Modelle zu
+rechnen. Eine Quantil-basierte Regression mit <code>rq()</code>
+(<code>quantreg</code> Paket) und eine Rang-basierte Regression mit
+<code>rfit()</code> (<code>Rfit</code> Paket).</li>
+</ol>
+<pre class="r"><code># Quantil-basierte Regression
+cali_rq &lt;- rq(formula = YY ~ XX + XX, 
+              data = ZZ)
+
+# Rang-basierte Regression
+cali_rfit &lt;- rfit(formula = YY ~ XX + XX, 
+                   data = ZZ)</code></pre>
+<pre class="r"><code># Quantil-basierte Regression
+cali_rq &lt;- rq(formula = Verkaufsvolumen ~ Preis + Typ, 
+              data = avocado_cali)
+
+# Rang-basierte Regression
+cali_rfit &lt;- rfit(formula = Verkaufsvolumen ~ Preis + Typ, 
+                  data = avocado_cali)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Vergleiche die <code>summary()</code> der drei Modelle. Welche
+Unterschiede und Gemeinsamkeiten fallen dir auf?</li>
+</ol>
+<pre class="r"><code># regular regression
+summary(cali_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2029523  -338620   -65747   347099  4692280 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  7418161     181045   40.97  &lt; 2e-16 ***
+Preis       -1338574     155354   -8.62  2.8e-16 ***
+Typorganic  -5012181     121165  -41.37  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 745000 on 335 degrees of freedom
+Multiple R-squared:  0.939, Adjusted R-squared:  0.939 
+F-statistic: 2.59e+03 on 2 and 335 DF,  p-value: &lt;2e-16</code></pre>
+<pre class="r"><code># quantile regression
+summary(cali_rq)</code></pre>
+<pre><code>
+Call: rq(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+tau: [1] 0.5
+
+Coefficients:
+            coefficients lower bd   upper bd  
+(Intercept)   6.06e+06     5.68e+06  1.80e+308
+Preis        -1.54e+05    -3.16e+05  -4.18e+04
+Typorganic   -5.64e+06    -6.39e+06  -5.41e+06</code></pre>
+<pre class="r"><code># rank-based regression
+summary(cali_rfit)</code></pre>
+<pre><code>Call:
+rfit.default(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Coefficients:
+            Estimate Std. Error t.value p.value    
+(Intercept)  6364261      79959   79.59 &lt; 2e-16 ***
+Preis        -455900      68628   -6.64 1.2e-10 ***
+Typorganic  -5453944      53525 -101.89 &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Multiple R-squared (Robust): 0.93 
+Reduction in Dispersion Test: 2231 p-value: 0 </code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Die Summaries sind zunächst einmal nicht konsistent im Aufbau. Die
+Quantilregression liefert nur Konfidenzintervalle, was wir in der
+nächsten Session behandeln werden, entsprechend können wir keine p- oder
+t-Werte vergleichen. Du kannst aber zumindest die Gewichte vergleichen.
+Hier solltest du erkannt haben, dass die Gewichte der beiden robusten
+Regression deutlich näher aneinander sind und insbesondere das Gewicht
+des Preises als kleiner einschätzen, als dies die normale Regression
+tut. Dies ist ein Indiz dafür, dass der Einfluss des Preises ggf. von
+der normalen Regression überschätzt wurde.</li>
+</ol>
+</div>
+<div id="e---bootstrap" class="section level3">
+<h3>E - Bootstrap</h3>
+<ol style="list-style-type: decimal">
+<li>Der Bootstrap ist ein kaum zu überschätzendes Tool in der Statistik,
+dass praktisch jeden statistischen Test ersetzen kann. Verwende ihn um
+Standardfehler für übliche Regression von <code>Verkaufsvolumen</code>
+auf <code>Preis</code> und <code>Typ</code> zu bestimmen. Dazu haben wir
+für dich schon die bootstrap Funktion geschrieben die wir im nächsten
+Schritt in die <code>boot</code>-Funktion stecken können. Versuche
+zunächst jedoch nachzuvollziehen was unsere <code>boot_lm</code>
+Funktion tut.</li>
+</ol>
+<pre class="r"><code># Bootstrap Funktion für lm
+boot_lm &lt;- function(data, indices, formula){
+  data &lt;- data[indices,] # Bootstrap sample
+  data_lm &lt;- lm(formula = formula, 
+                data = data)
+  coefficients(data_lm)
+  }</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Nun können wir die Funktion verwenden um wiederholt Regressionen für
+Bootstrap samples der Daten zu bestimmen. Siehe</li>
+</ol>
+<pre class="r"><code># Lasse Bootstrap laufen
+cali_boot&lt;- boot(data = XX,               # Der Datensatz
+                 statistic = XX,          # Die Funktion
+                 formula = XX ~ XX + XX,  # Die Modellgleichung
+                 R = 1000)                # Die Anzahl der Ziehungen</code></pre>
+<pre class="r"><code># Lasse Bootstrap laufen
+cali_boot&lt;- boot(data = avocado_cali,              
+                 statistic = boot_lm,          
+                 formula = Verkaufsvolumen ~ Preis + Typ, 
+                 R = 1000)                </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Printe das <code>cali_boot</code> und evaluiere das Ergebnis. Die
+Spalte <code>original</code> enthält die Gewichte für den gesamten
+Datensatz. Die Spalte <code>bias</code> den Unterschied zwischen dem
+Mittel der Gewichte über die Bootstrap Samples und der Spalte
+<code>original</code>. Diese sollte möglichst klein sein. Die Spalte
+<code>std. error</code> enthält das Ergebnis von Interesse: den über
+Bootstrap geschätzten Standardfehler der Gewichte.</li>
+</ol>
+<pre class="r"><code># Zeige Bootstrap Ergebnisse
+cali_boot</code></pre>
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = avocado_cali, statistic = boot_lm, R = 1000, formula = Verkaufsvolumen ~ 
+    Preis + Typ)
+
+
+Bootstrap Statistics :
+    original  bias    std. error
+t1*  7418161  -10142      267313
+t2* -1338574    7983      211733
+t3* -5012181   -3101      121897</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Das Ergebnis des Bootstrap kannst du nun einfach über eine
+z-Verteilung testen a la <code>z = b / se</code>, d.h., das Gewicht
+geteilt durch den Standardfehler folgt der z-Verteilung. Der Code unten
+sieht die relevanten Werte aus dem Objekt und berechnet die
+<i>z</i>-Werte für Intercept und die zwei Gewichte.</li>
+</ol>
+<pre class="r"><code># Berechne z-Werte
+cali_boot$t0[1] / sd(cali_boot$t[,1])</code></pre>
+<pre><code>(Intercept) 
+       27.8 </code></pre>
+<pre class="r"><code>cali_boot$t0[2] / sd(cali_boot$t[,2])</code></pre>
+<pre><code>Preis 
+-6.32 </code></pre>
+<pre class="r"><code>cali_boot$t0[3] / sd(cali_boot$t[,3])</code></pre>
+<pre><code>Typorganic 
+     -41.1 </code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Zum Abschluss vergleiche die durch Bootstrap ermittelten
+<i>z</i>-Werte mit den <i>t</i>-Werten aus der normalen Regression.
+Wisse dass zumindest theoretisch t-Werte mit vielen Freiheitsgraden
+praktisch identisch mit <i>z</i>-Werte seien sollten. Da in den
+Standardfehler der normalen Regression jedoch Annahmen einfliessen,
+müssen die Werte nicht identisch sein.</li>
+</ol>
+<pre class="r"><code># Normale Regression
+summary(lm(Verkaufsvolumen ~ Preis + Typ, avocado_cali))</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2029523  -338620   -65747   347099  4692280 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  7418161     181045   40.97  &lt; 2e-16 ***
+Preis       -1338574     155354   -8.62  2.8e-16 ***
+Typorganic  -5012181     121165  -41.37  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 745000 on 335 degrees of freedom
+Multiple R-squared:  0.939, Adjusted R-squared:  0.939 
+F-statistic: 2.59e+03 on 2 and 335 DF,  p-value: &lt;2e-16</code></pre>
+</div>
+</div>
+<div id="beispiele" class="section level2">
+<h2>Beispiele</h2>
+<pre class="r"><code>library(tidyverse)
+
+# Normale regression ----------------
+
+# Modell
+m &lt;- lm(formula = hwy ~ displ, 
+        data = mpg)
+
+# Evaluiere Modell
+summary(m)     # Summary
+fitted(m)      # gefittete Werte
+resid(m)       # Residuen
+
+# Residualplot
+plot(fitted(m), resid(m))
+
+# non-parametric tests ----------------
+
+#  Teile Daten
+mpg_suv     &lt;- mpg %&gt;% filter(class == &#39;suv&#39;)
+mpg_compact &lt;- mpg %&gt;% filter(class == &#39;compact&#39;)
+
+# Wilcoxon
+wilcoxon.test(mpg_suv$hwy, mpg_compact$hwy)
+
+# Robuste Regression ----------------
+
+library(quantreg)
+library(Rfit)
+
+# Quantil Regression
+m_q  &lt;- rq(hwy ~ displ, data = mpg)
+
+# Rang Regression
+m_rb &lt;- rfit(hwy ~ displ, data = mpg)</code></pre>
+</div>
+<div id="datensätze" class="section level2">
+<h2>Datensätze</h2>
+<table>
+<colgroup>
+<col width="27%" />
+<col width="33%" />
+<col width="38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">File</th>
+<th align="left">Zeilen</th>
+<th align="left">Spalten</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a
+href="https://therbootcamp.github.io/SmR_2020Mai/1_Data/avocado.csv">avocado.csv</a></td>
+<td align="left">17573</td>
+<td align="left">16</td>
+</tr>
+<tr class="even">
+<td align="left"><a
+href="https://therbootcamp.github.io/SwR_2020Mai/1_Data/avocado_cali.csv">avocado_cali.csv</a></td>
+<td align="left">338</td>
+<td align="left">16</td>
+</tr>
+</tbody>
+</table>
+<p>Die Datensätze entstammen der <a
+href="https://en.wikipedia.org/wiki/Hass_avocado">Hass</a> Avocado Board
+Webseite und enthalten wochenweise Avocado Verkaufsvolumina von April
+2015 bis Mai 2018 für verschiedene Regionen der USA. Der kleinere
+Datensatz enthält nur die Daten für Kalifornien.</p>
+<div id="avocado.csv-avocado_cali.csv" class="section level4">
+<h4>avocado.csv &amp; avocado_cali.csv</h4>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>Verkaufsvolumen</code></td>
+<td align="left">Das totale Verkaufsvolumen für Avocados in einer
+Woche.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Verkaufsvolumen_index</code></td>
+<td align="left">Ein Index von 0 bis 10 der das Verkaufsvolumen
+repräsentiert.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Preis</code></td>
+<td align="left">Der durchschnittliche Preis einer Avocado.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Typ</code></td>
+<td align="left">Der Typ der Avocado: “conventional” oder
+“organic”.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Temparatur</code></td>
+<td align="left">Die regionale Temperatur.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Temperatur_USA</code></td>
+<td align="left">Die landesweite Temperatur</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Luftfeuchtigkeit</code></td>
+<td align="left">Die regionale Luftfeuchtigkeit.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Luftfeuchtigkeit_USA</code></td>
+<td align="left">Die landesweite Luftfeuchtigkeit_USA.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Niederschlag</code></td>
+<td align="left">Der regionale Niederschlag.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Niederschlag_USA</code></td>
+<td align="left">Der landesweite Niederschlag.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Jahr</code></td>
+<td align="left">Jahr.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Jahreszeit</code></td>
+<td align="left">Jahreszeit.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Datum</code></td>
+<td align="left">Datum.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Region</code></td>
+<td align="left">Region.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Längengrad</code></td>
+<td align="left">Längengrad.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>Breitengrad</code></td>
+<td align="left">Breitengrad.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="funktionen" class="section level2">
+<h2>Funktionen</h2>
+<div id="pakete" class="section level3">
+<h3>Pakete</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Package</th>
+<th align="left">Installation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>tidyverse</code></td>
+<td align="left"><code>install.packages("tidyverse")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>lubridate</code></td>
+<td align="left"><code>install.packages("lubridate")</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>quantreg</code></td>
+<td align="left"><code>install.packages("quantreg")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>boot</code></td>
+<td align="left"><code>install.packages("boot")</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Rfit</code></td>
+<td align="left"><code>install.packages("Rfit")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>lme4</code></td>
+<td align="left"><code>install.packages("lme4")</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>rsq</code></td>
+<td align="left"><code>install.packages("rsq")</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="funktionen-1" class="section level3">
+<h3>Funktionen</h3>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="12%" />
+<col width="80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Function</th>
+<th align="left">Package</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>lm</code>, <code>glm</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Regressionsmodelle.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>summary</code></td>
+<td align="left"><code>base</code></td>
+<td align="left">Modellergebnisse</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>fitted</code>, <code>resid</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Extrahiere gefittete Werte und Residuen.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>rq</code></td>
+<td align="left"><code>quantreg</code></td>
+<td align="left">Quantil-Regression.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>rfit</code></td>
+<td align="left"><code>Rfit</code></td>
+<td align="left">Rangregression.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>wilcox.test</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Wilcoxon-Test.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>pbinom</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Kumulative Binomialverteilung (für den
+Vorzeichentest).</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="resourcen" class="section level2">
+<h2>Resourcen</h2>
+<div id="vignetten" class="section level3">
+<h3>Vignetten</h3>
+<p><a
+href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/Berry1993.pdf">Regression
+assumptions</a>, <a
+href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/FoxWeisberg2013.pdf">Robust
+regression</a>, <a
+href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/KlokeMcKean2012.pdf">Rank-based
+regression with Rfit</a> <a
+href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/FoxWeisberg2013.pdf">Bootstrap</a>
+<a
+href="https://therbootcamp.github.io/SwR_2019Apr/_sessions/RobustStats/literature/Stine1995.pdf">Variance
+inflation</a></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

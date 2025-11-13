@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Gemischte Modelle</title>
+
+<script src="GemischteModelle_practical_files/header-attrs-2.10/header-attrs.js"></script>
+<script src="GemischteModelle_practical_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="GemischteModelle_practical_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="GemischteModelle_practical_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="GemischteModelle_practical_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="GemischteModelle_practical_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="GemischteModelle_practical_files/navigation-1.1/tabsets.js"></script>
+<link href="GemischteModelle_practical_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="GemischteModelle_practical_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="practical.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Gemischte Modelle</h1>
+<h4 class="author"><table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'>
+<col width='10%'>
+<col width='10%'>
+<tr style="border:none">
+<td style="display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none" nowrap>
+<font style='font-style:normal'>Statistik mit R</font><br> <a href='https://therbootcamp.github.io/SmR_2021Oct/'> <i class='fas fa-clock' style='font-size:.9em;' ></i> </a> <a href='https://therbootcamp.github.io'> <i class='fas fa-home' style='font-size:.9em;'></i> </a> <a href='mailto:therbootcamp@gmail.com'> <i class='fas fa-envelope' style='font-size: .9em;'></i> </a> <a href='https://www.linkedin.com/company/basel-r-bootcamp/'> <i class='fab fa-linkedin' style='font-size: .9em;'></i> </a> <a href='https://therbootcamp.github.io'> <font style='font-style:normal'>The R Bootcamp</font> </a>
+</td>
+<td style="width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none">
+<img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+</td>
+</tr>
+</table></h4>
+
+</div>
+
+
+<p align="center" width="100%">
+<img src="image/rottentomatoes.png" alt="Trulli" style="width:100%"> <br> <font style="font-size:10px">from <a href="https://www.rottentomatoes.com/">rottentomatoes.com</a></font>
+</p>
+<div id="section" class="section level1 tabset">
+<h1 class="tabset"></h1>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Am Ende dieses Practicals wirst du wissen, wie du:</p>
+<ol style="list-style-type: decimal">
+<li>gemischte Modelle in R berechnen kannst.</li>
+<li>p-Werte für feste Effekte extrahieren kannst.</li>
+<li>die richtige Struktur der zufälligen Effekte auswählen kannst.</li>
+<li>gekreuzte und hierarchische zufällige Effekte spezifizieren kannst.</li>
+<li>Varianzkomponenten extrahieren kannst und die Intraklassenkorrelation (ICC) berechnen kannst.</li>
+<li>dein gemischtes Modell visualisieren kannst.</li>
+<li>ein generalisiertes gemischtes Modell berechnen kannst.</li>
+</ol>
+</div>
+<div id="aufgaben" class="section level2">
+<h2>Aufgaben</h2>
+<div id="a---setup" class="section level3">
+<h3>A - Setup</h3>
+<ol style="list-style-type: decimal">
+<li><p>Öffne dein <code>TheRBootcamp</code> R Project.</p></li>
+<li><p>Öffne ein neues R Skript. Am Anfang des Skripts, schreibe deinen Namen und das Datum als Kommentar und speichere das Skript als <code>GemischteModelle_Practical.R</code> in deinem <code>2_Code</code> Ordner.</p></li>
+<li><p>Lade mit <code>library()</code> die <code>tidyverse</code>, <code>lme4</code>, <code>performance</code>, und <code>parameters</code> Pakete.</p></li>
+</ol>
+<pre class="r"><code># Lade benötigte Pakete
+library(tidyverse)
+library(lme4)
+library(performance)
+library(parameters)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Unter Verwendung des folgenden Codes, lese die <code>tomatometer.csv</code> und <code>schools.csv</code> Datensätze ein und speichere sie unter den Namen <code>tom</code> und <code>schools</code>.</li>
+</ol>
+<pre class="r"><code># Lese tomatometer.csv aus dem 1_Data Ordner
+tom &lt;- read_csv(file = &quot;1_Data/tomatometer.csv&quot;)
+
+# Lese school.csv aus dem 1_Data Ordner
+schools &lt;- read_csv(file = &quot;1_Data/schools.csv&quot;)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Printe die Datensätze.</p></li>
+<li><p>Verwende <code>names(XX)</code>, <code>summary(XX)</code>, und <code>View(XX)</code> um einen weiteren Überblick über die Daten zu bekommen.</p></li>
+<li><p>Wiederum, führe den Code unten aus um sicherzustellen, dass alle <code>character</code> Variablen als Faktoren vorliegen, was den statistischen Modellen hilft kategoriale Variablen richtig zu interpretieren.</p></li>
+</ol>
+<pre class="r"><code># Konvertiere alle character zu factor
+tom &lt;- tom %&gt;% mutate_if(is.character, factor)
+schools &lt;- schools %&gt;% mutate_if(is.character, factor)</code></pre>
+</div>
+<div id="b---rechnen-eines-linearen-gemischten-modells" class="section level3">
+<h3>B - Rechnen Eines Linearen Gemischten Modells</h3>
+<p>Im ersten Teil dieses Practicals arbeitest du mit dem <code>tom</code> Datensatz aus den Folien um die Wirkung des <code>zustand</code>s einer Person (<code>nuechtern</code> vs. <code>betrunken</code>) auf ihre <code>tomatometer</code>-Bewertung zu analysieren.</p>
+<ol style="list-style-type: decimal">
+<li>Rechne ein Modell mit nur festen Effekten, in welchem du <code>tomatometers</code> mit dem <code>zustand</code> vorhersagst. Speichere das Ergebnis als <code>FE_mod</code> und schaue dir das Ergebnis an.</li>
+</ol>
+<pre class="r"><code># Verwende lm, da lmer nur mit mindestens einem zufälligen Effekt funktioniert
+FE_mod &lt;- glm(formula = XXX ~ XXX, 
+              data = XXX)
+
+# Inspiziere die Resultate
+summary(XXX)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Im Moment wird <code>"betrunken"</code> als Referenzkategorie verwendet, sodass der intercept den Mittelwert des Zustands <code>"betrunken"</code> angibt und der slope die Differenz der Mittelwerte der Bewertungen im Zustand <code>"betrunken"</code> und <code>"nuechtern"</code> angibt. Um ein intuitiveres Modell mit <code>"nuechtern"</code> als Referenzkategorie zu erhalten, können wir die Variable <code>zustand</code> erneut in einen Faktor umwandeln und dabei diesmal die Abfolge der Levels bestimmen. Verwende dafür den untenstehenden Code.</li>
+</ol>
+<pre class="r"><code># Wandle die zustand variable in einen Faktor um, mit nuechtern als erstes Level
+tom &lt;- tom %&gt;%
+  mutate(zustand = factor(zustand, levels = c(&quot;nuechtern&quot;, &quot;betrunken&quot;)))</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Rechne erneut das Modell der Aufgabe B1.</p></li>
+<li><p>Vergleiche die Outputs der Aufgaben B1 und B3. Wie haben sich die Koeffizienten verändert? Weshalb?</p></li>
+<li><p>Rechne ein gemischtes Modell mit Random Intercepts über die <code>id</code> der Rater. Zufällige Effekte werden in Klammern in der Modell-<code>formula</code> spezifiziert. Ein Modell mit nur Random Intercepts trägt allein eine <code>1</code> for dem Gruppierungsfaktor. Das <code>REML = FALSE</code> im untenstehenden Code sagt R, dass das Model mit Maximum Likelihood (ML), statt mit Restricted Maximum Likelihood (REML) gefitted werden soll. Dies ist für die späteren Modellvergleiche wichtig, soll uns aber im Detail nicht weiter beschäftigen.</p></li>
+</ol>
+<pre class="r"><code># Gemischtes Modell mit random intercepts über ids
+subj_RI_mod &lt;- lmer(formula = XXX ~ XXX + # Feste Effekte
+                    (1|XXX),              # zufällige Effekte
+                    data = XXX,           # Daten
+                    REML = FALSE)</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Unter Verwendung der <code>summary()</code> Funktion, vergleiche die Outputs des gemischten Modells und des Modells aus B3.</p></li>
+<li><p>Hat sich der Effekt von <code>zustand</code> verändert? Was hat sich genau am Effekt von <code>zustand</code> auf die Bewertungen geändert?</p></li>
+<li><p>Interessierst du dich wie die geschätzten Fixed und Random Effects aussehen? Du kannst sie mit <code>fixef(XX)</code> und <code>ranef(XX)</code> aus dem Modellobjekt extrahieren. Probiere es aus.</p></li>
+<li><p>Baue dein gemischtes Modell aus Aufgabe B5 aus, indem du Random Slopes für <code>zustand</code> über <code>id</code>s hinzufügst. Füge die <code>zustand</code> Variable auf der Linken Seite der <em>Pipe</em> <code>|</code> in dem Teil der <code>formula</code>, in dem die zufälligen Effekte spezifiziert werden.</p></li>
+</ol>
+<pre class="r"><code># Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids
+subj_RI_RS_mod &lt;- lmer(formula = XXX ~ XXX + # Feste Effekte
+                      (XXX|XXX),             # Zufällige Effekte
+                      data = XXX,            # Daten
+                      REML = FALSE)</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li><p>Vergleiche die Outputs der drei bisherigen Modelle miteinander. Verwende dazu die <code>summary()</code> Funktion. Haben sich die Koeffizienten verändert? Was hat sich verändert?</p></li>
+<li><p>Jeder Film wurde in beiden Zuständen bewertet. Wir haben also nicht nur Abhängigkeiten in den Daten der Rater, sondern auch der Filme. Um für diese Abhängigkeit zu kontrollieren, können wir unser Modell aus der Aufgabe B10 mit weiteren zufälligen Effekten ausbauen. Füge Random Intercepts über <code>film</code> und Random Slopes für <code>zustand</code> über <code>film</code> zum Modell hinzu. Über das zusätzliche Argument <code>control</code> wird ein anderer Optimierungsalgorithmus spezifiert, mithilfe dessen das Modell konvergiert. Die Details sollen uns für den Moment nicht kümmern; wir freuen uns einfach, dass das Modell konvergiert.</p></li>
+</ol>
+<pre class="r"><code># Gemischtes Modell mit random intercepts über ids und random slopes für zustand
+# über ids, sowie random intercepts über film und random slopes für zustand über 
+# film
+max_mod &lt;- lmer(formula = XXX ~ XXX + # Feste Effekte
+               (XXX|XXX) + (XXX|XXX), # Zufällige Effekte
+               data = XXX,            # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = &quot;bobyqa&quot;)) # Optimierungsalgorithmus</code></pre>
+<ol start="12" style="list-style-type: decimal">
+<li><p>Mit der <code>check_convergence()</code> Funktion des <code>performance</code> Paket können wir überprüfen, ob ein Modell konvergiert ist. Wenn die Funktion <code>TRUE</code> zurückgibt, ist alles in Ordnung. Teste, ob <code>max_mod</code> konvergiert ist.</p></li>
+<li><p><code>max_mod</code> ist das <em>maximale, vom Design gerechtfertigten Modell</em>. Was heisst das? Weshalb macht es Sinn, dieses Modell zu spezifizieren?</p></li>
+<li><p>Vergleiche mit <code>summary()</code> die Resultate der unterschiedlich Komplexen Modelle, die du bisher gerechnet hast.</p></li>
+<li><p>Was hat sich mit der zunehmend komplexen Struktur der zufälligen Effekte verändert?</p></li>
+</ol>
+</div>
+<div id="c---r2" class="section level3">
+<h3>C - <span class="math inline">\(R^2\)</span></h3>
+<p>Beim rechnen von statistischen Modellen sind wir häufig daran interessiert, einen wie grossen Anteil diese erklären können. In linearen (gemischten) Modellen, wird dies durch das Bestimmtheitsmass <span class="math inline">\(R^2\)</span> angegeben; for generalisierte (gemischte) Modelle, können wir Pseudo-<span class="math inline">\(R^2\)</span> Werte berechnen.</p>
+<ol style="list-style-type: decimal">
+<li><p>Verwende die <code>r2()</code> Funktion aus dem <code>performance</code> Paket, um den <span class="math inline">\(R^2\)</span> Werte des maximalen Modells zu berechnen.</p></li>
+<li><p>Was bedeutet der Output der vorherigen Aufgabe? Was ist das <em>marginal <span class="math inline">\(R^2\)</span></em> und was ist das <em>conditional <span class="math inline">\(R^2\)</span></em>?</p></li>
+<li><p>Vergleiche die <span class="math inline">\(R^2\)</span> Werte von <code>max_mod</code> mit denen der weniger komplexen Modelle. Sind die Veränderungen gross? Welche <span class="math inline">\(R^2\)</span>-Werte haben sich verändert?</p></li>
+</ol>
+</div>
+<div id="d---visualisierung" class="section level3">
+<h3>D - Visualisierung</h3>
+<p>Häufig ist es hilfreich, unser Modell zu visualisieren. Führe den untenstehenden Code aus, um aus <code>max_mod</code> Koeffizienten zu extrahieren und zu visualieren. Da Plotting kein Schwerpunkt dieses Kurses ist, gehen wir hier aber nicht weiter ins Detail. Falls du Fragen zum Code hast, kannst du uns gerne rufen.</p>
+<ol style="list-style-type: decimal">
+<li>Visualisiere mit dem untenstehenden Code dein <code>max_mod</code>.</li>
+</ol>
+<pre class="r"><code># Extrahiere feste Effekte
+m_line &lt;- fixef(max_mod)
+
+# Extrahiere zufällige Effekte
+ranefs &lt;- ranef(max_mod)
+predicted &lt;- tibble(
+  intercept = ranefs$id[,1] + fixef(max_mod)[1],
+  slope = ranefs$id[,2] + fixef(max_mod)[2])
+
+# Ziehe 15 zufällige Rater um separate Linien für diese zu plotten
+rand15 &lt;- sample(1:nrow(predicted), 15)
+
+LMM_plot &lt;- ggplot(tom, aes(zustand, tomatometer)) +
+  geom_point(colour= &quot;#606061&quot;, alpha = .15, size = 2.5)+
+  geom_segment(aes(x = 1, y = intercept, xend = 2, yend = intercept + slope),
+               data = predicted %&gt;% slice(rand15), colour = &quot;#EA4B68&quot;, size = 1.5,
+               alpha = .8) +
+  geom_segment(aes(x = 1, y = m_line[1], xend = 2, yend = sum(m_line)),
+               colour = &quot;black&quot;, size = 2, alpha = 1) +
+  theme(axis.title.x = element_text(vjust = -1),
+        axis.title.y = element_text(vjust = 1)) +
+  theme_bw() +
+  coord_cartesian(ylim= c(0, 100)) +
+  theme(
+    strip.text = element_text(size = 12, face = &quot;bold&quot;),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18,face = &quot;bold&quot;)
+  )
+
+LMM_plot</code></pre>
+</div>
+<div id="e---p-werte-für-feste-effekte-berechnen" class="section level3">
+<h3>E - p-Werte für Feste Effekte Berechnen</h3>
+<p>Wie du sicherlich festgestellt hast, enthält der <code>lmer()</code> output keine p-Werte. Das liegt nicht and der Faulheit der Autoren von <code>lme4</code>, sondern daran, dass es noch immer eine Diskussion darum gibt, wie p-Werte für gemischte Modelle am besten berechnet werden sollten. Es gibt jedoch mehrere Möglichkeiten zu testen, ob eine Variable ein signifikanter Prädiktor unserer abhängigen Variable ist. Wir werden uns nun einige davon anschauen.</p>
+<div id="likelihood-ratio-test" class="section level4">
+<h4>Likelihood Ratio Test</h4>
+<p>Eine Möglichkeit p-Werte zu erhalten, besteht darin, einen Likelihood Ratio Test (<a href="https://en.wikipedia.org/wiki/Likelihood-ratio_test">LRT</a>) durchzuführen. Dafür wird ein Modell einmal mit und einmal ohne den gewünschten festen Effekt gerechnet, wobei alles Andere gleich gehalten wird. Die beiden Modelle werden dann mit dem LRT verglichen (siehe Link oben für Details). Dieser Test funktioniert allerdings nur dann korrekt, wenn die Modelle mit Maximum Likelihood (ML) und nicht mit Restricted Maximum Likelihood (REML) Schätzung gerechnet wurden. Deshalb haben wir immer <code>REML = FALSE</code> verwendet.</p>
+<ol style="list-style-type: decimal">
+<li>Rechne zuerst ein Modell, in welchem nur die Intercepts (fester Effekt und zufällige Effekte) als Prädiktoren von <code>tomatometer</code> geschätzt werden.</li>
+</ol>
+<pre class="r"><code># Modell mit nur Intercepts als Prädiktoren von Tomatometer
+IO_mod &lt;- lmer(formula = XXX ~ 1 +  # 1 heisst, dass nur der Intercept geschätzt wird
+              (1|XXX) + (1|XXX),    # Zufällige Effekte
+              data = XXX,           # Daten
+              REML = FALSE)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Inspiziere den output mit <code>summary()</code>.</p></li>
+<li><p>Rechne nun dasselbe Modell wie gerade eben, aber füge die Variable <code>zustand</code> als festen Effekt hinzu. Speichere das Modell als <code>RI_mod</code>. Damit das Modell konvergiert verwenden wir wiederum einen anderen Optimierungsalgorithmus.</p></li>
+</ol>
+<pre class="r"><code># Modell mit zustand als Prädiktor und Random Intercepts für id und film
+RI_mod &lt;- lmer(formula = XXX ~ XXX +  # Feste Effekte
+              (1|XXX) + (1|XXX),      # Zufällige Effekte
+              data = XXX,             # Daten
+              REML = FALSE,
+              control = lmerControl(optimizer = &quot;bobyqa&quot;)) # Optimierungsalgorithmus</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Überprüfe mit der <code>check_convergence()</code> Funktion ob <code>RI_mod</code> konvergiert ist.</p></li>
+<li><p>Führe mit der <code>anova()</code> Funktion einen LRT durch, indem du beide Modellouputs als Argumente spezifizierst. Ist der Unterschied signifikant? What heisst das?</p></li>
+</ol>
+<pre class="r"><code># Rechne einen LRT
+anova(XXX, XXX)</code></pre>
+</div>
+<div id="konfidenzintervall" class="section level4">
+<h4>Konfidenzintervall</h4>
+<p>Diese Methode berechnet keinen p-Wert, sondern die Konfidenzintervalle um die Parameter. Dann testen wir, ob 0 in den Konfidenzintervallen enthalten ist. Falls nicht, betrachten wir die jeweiligen Zusammenhänge als signifikant.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Zur Berechnung von Konfidenzintervallen verwenden wir die <code>confint()</code> Funktion des <code>lme4</code> Pakets. Berechne damit die Konfidenzintervalle von <code>RI_mod</code> und speichere den Output als <code>ci_mod</code>. <strong>Achtung</strong>: Das Berechnen der Konfidenzintervalle dauert eine Weile.</li>
+</ol>
+<pre class="r"><code># Berechne Konfidenzintervalle für die festen Effekte
+ci_mod &lt;- confint(XXX)</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Printe das <code>ci_mod</code> Objekt. Unterstützen die Konfidenzintervalle die Konklusion die du aus dem LRT und den t-Werten gezogen hast?</li>
+</ol>
+</div>
+<div id="weitere-tests" class="section level4">
+<h4>Weitere Tests</h4>
+<ol start="8" style="list-style-type: decimal">
+<li>Weitere Möglichkeiten p-Werte zu erhalten sind das Anschauen der t-Werte (t &gt; 2 kann als Signifikanz interpretiert werden) oder einen <a href="https://en.wikipedia.org/wiki/Wald_test">Wald test</a> mit der <code>p_value()</code> Funktion des <code>parameters</code> Pakets. Berechne mit <code>p_value()</code> die p-Werte von <code>RI_mod</code>.</li>
+</ol>
+<pre class="r"><code># Berechne p-Werte für die festen Effekte
+p_value(XXX)</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>Statt einem Wald test wird auch die <a href="https://www.jstatsoft.org/article/view/v059i09">Kenward-Roger Approximation</a> empfohlen. Um die p-Werte mit dieser Methode zu berechnen, können wir in der <code>p_value()</code> Funktion <code>method = "kenward"</code> setzen. Da dies aber sehr lange dauern kann, musst du diese Aufgabe nicht ausführen.</li>
+</ol>
+<pre class="r"><code># Berechne p-Werte für die festen Effekte
+p_value(RI_mod, method = &quot;kenward&quot;)</code></pre>
+</div>
+</div>
+<div id="f---signifikanz-von-zufälligen-effekten-modellselektion" class="section level3">
+<h3>F - Signifikanz von Zufälligen Effekten (Modellselektion)</h3>
+<p>Vielleicht erinnerst du dich and das <em>keep it maximal</em> Prinzip, welches besagt, dass wir immer das maximale Modell spezifizieren sollen (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3881361/">Barr, Levy, Scheepers, &amp; Tily, 2013</a>). Nun ist es aber so, dass das maximale Model einen Powerverlust bedeuten kann. Daher kann es sinnvoll sein, eine Datengetriebene Auswahl der Struktur der zufälligen Effekte durchzuführen (<a href="https://www.sciencedirect.com/science/article/pii/S0749596X17300013">Matuschek, Kliegl, Vasishth, Baayen, &amp; Bates, 2017</a>). Um es mit den Worten von Matuschek und Kollegen auszudrücken (frei übersetzt): “[Ein] sparsames gemischtes Modell […], welches nur Varianzkomponenten beinhaltet, die von den Daten gestützt werden, verbessert die Balance zwischen Typ I Fehler und Power” (p. 305). Um diese Balance zu finden, werden wir LRTs durchführen.</p>
+<p>Bei diesen LRTs sollten wir nicht das normale 5% <span class="math inline">\(\alpha\)</span>-Niveau verwenden. Eine Begründung finden wir wiederum in <a href="https://www.sciencedirect.com/science/article/pii/S0749596X17300013">Matuschek und Kollegen (2017; p. 308; wiederum frei übersetzt)</a>:</p>
+<blockquote>
+<p>Im Kontext der Modellauswahl ist es wichtig dem Reflex zu widerstehen, <span class="math inline">\(\alpha_{LRT} = 0.05\)</span> zu wählen. <span class="math inline">\(\alpha_{LRT}\)</span> kann nicht wie üblich als den “erwarteten Modellselektions Typ I Fehlerrate” interpretiert werden, sondern als relatives Gewicht von Modellkomplexität und Goodness-Of-Fit. Zum Beispiel, die Wahl von <span class="math inline">\(\alpha_{LRT} = 0\)</span> impliziert eine unendlich starke Bestrafung für Modellkomplexität und daher würde immer das minimale Modell gewählt, ungeachtet der von den Daten gelieferten Evidenz. Die Wahl von <span class="math inline">\(\alpha_{LRT} = 1\)</span> impliziert eine unendlich starke Bestrafung für Goodness-Of-Fit und das maximale Modell würde daher immer gewählt. Ein <span class="math inline">\(\alpha_{LRT} = 0.05\)</span> könnte daher eine unverhälnissmässig starke Bestrafung der Modellkomplexität bedeuten und dadurch ein reduziertes [also weniger komplexes] Modell wählen, selbst wenn die Daten ein komplexeres Modell favorisieren würden.</p>
+</blockquote>
+<p>Wir folgen in dieser Übung dem Vorschlag von Matuschek und Kollegen und verwenden <span class="math inline">\(\alpha_{LRT} = 0.2\)</span>. Da die <code>anova()</code> Funktion <span class="math inline">\(\alpha = 0.05\)</span> verwendet, müssen wir diesen Test selber implementieren.</p>
+<ol style="list-style-type: decimal">
+<li>Zunächst müssen wir das Modell anpassen, dessen Komplexität im Vergleich zum maximalen Modell eine Stufe niedriger ist. Überlegen dir, welches Modell das wäre, und notiere dir die Antwort als Kommentar in deinem Skript. Nicht schummeln, indem du die nächste Aufgabe ansiehst!</li>
+</ol>
+<pre class="r"><code>#  Dies ist nur ein Platzhalter, um den Platz bis zur nächsten Aufgabe zu vergrößern, um es für dich leichter zu machen, nicht zu schummeln. 
+# Hier gibt es nichts zu sehen...
+# Nur eine kleine Nebenbemerkung (was eigentlich sehr interessant ist, so dass du
+# vielleicht weiterlesen möchtest, auch wenn dies dem Zweck dieses Teils
+# widerspricht, dich daran zu hindern dir zuerst die Antworten ansehen; also
+# erwäge, zuerst die Aufgabe zu erledigen und erst dann diese schrecklich
+# interessante Nebenbemerkung zu lesen):
+#     Wusstest du, dass der Grund, warum R den Pfeil &quot;&lt;-&quot; als Zuordnungsoperator
+#     verwendet ist, weil R auf der Programmiersprache S basiert, welche wiederum
+#     auf APL basiert?
+#     Nun wurde APL offenbar auf einer bestimmten Tastatur entworfen, die eine
+#     &quot;&lt;-&quot; Taste hatte. Zudem gab es kein &quot;==&quot; um die Gleichheit von Objekten zu
+#     testen. Also Gleichheit wurde mit &quot;=&quot; getestet und &quot;&lt;-&quot; wurde als
+#     Zuweisungsoperator gewählt (Informationen aus diesem Blogpost:
+#     https://colinfay.me/r-assignment/).</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Die Antwort auf die letzte Frage ist, dass du die Korrelation zwischen den zufälligen Effekten, also zwischen den Random Intercepts und den Random Slopes, auf Null setzst. Verwende dazu den doppelten Balken “<code>||</code>” in der Syntax, in der die zufälligen Effekte spezifiziert werden, also <code>(Datenmatrix||Gruppierungsvariable)</code>. Fitte dieses Modell.</li>
+</ol>
+<pre class="r"><code># Eingeschränktes gemischtes Modell, mit random Intercepts über, und Random Slopes
+# für zustand über id und film
+con_mod &lt;- lmer(formula = XXX ~ XXX +   # Feste Effekte
+               (XXX||XXX) + (XXX||XXX), # Zufällige Effekte
+               data = XXX,              # Daten
+               REML = FALSE,
+               control = lmerControl(optimizer = &quot;bobyqa&quot;)) # Optimierungsalgorithmus</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Überprüfe mit <code>check_convergence()</code> ob das Modell konvergiert ist.</p></li>
+<li><p>Dieses Modell ist nicht konvergiert. Das kann passieren und es ist nicht immer einfach herauszufinden, weshalb ein Modell nicht konvergiert. Eine weiterführende Möglichkeit ist, Bayesianische Methoden mit MCMC sampling zu verwenden (zum Beispiel mit dem <code>rstanarm</code> Paket), und zu schauen ob dieses Modell konvergiert. Wir beschränken uns hier aber auf frequentistische Analysen und werden hier daher nicht weiter forschen. In der Praxis kann es aber durchaus Sinn machen, weiter zu untersuchen, ob man das Modell mit einer anderen Methode zum konvergieren bringt. Um die Übung fortsetzen zu können, tun wir für den Moment so, als ob das Modell konvergiert wäre.</p></li>
+<li><p>Jetzt ist es an der Zeit, den LRT vorzubereiten. Der Unterschied in der <em>deviance</em> (definiert als -2 * die LogLikelihood) zweier Modelle ist approximativ <span class="math inline">\(\chi^2\)</span>-verteilt. Dadurch können wir die Signifikanz eines Unterschiedes testen, indem wir überprüfen, ob der erhaltene <span class="math inline">\(\chi^2\)</span> Wert grösser als ein bestimmter kritischer Wert ist. Wir verwenden unser <span class="math inline">\(\alpha_{LRT}\)</span> um den kritischen Wert zu erfahren. Führe dazu folgenden Code aus.</p></li>
+</ol>
+<pre class="r"><code>alpha &lt;- .2 # bestimme das alpha-Niveau
+kW &lt;- qchisq(1 - alpha, df = 2) # bestimme den kritischen Wert, ab dem ein Unterschied
+                                # als signifikant zu betrachten ist. Wir haben zwei 
+                                # Freiheitsgrade, da das eingeschränkte Modell zwei
+                                # Freiheitsgrade mehr als das maximale Modell hat
+                                # (da zwei Parameter, die Kovarianzen, weniger geschätzt werden)</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Nun können wir den Unterschied der <em>deviances</em> der Modelle berechnen, indem wir die <em>deviance</em> des maximalen Modells von derjenigen des eingeschränkten Modells subtrahieren. Extrahiere die <em>deviances</em> der beiden Modelle mihilfe der <code>deviance()</code> Funktion und speichere das Resultat als <code>d_diff</code>.</li>
+</ol>
+<pre class="r"><code>d_diff &lt;- deviance(XXX) - deviance(XXX)</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li><p>Teste, ob der Unterschied in der <em>deviance</em> gross genug ist, um gemäss dem von uns gewählten <span class="math inline">\(\alpha_{LRT}\)</span> als signifikant zu gelten. <strong>Tipp:</strong> Teste ob <code>d_diff</code> grösser ist, als der kritische Wert <code>kW</code>.</p></li>
+<li><p>Das Resultat der vorherigen Aufgabe war <code>FALSE</code>. Was heisst das? Würdest du jetzt mit dem maximalen Modell weiterarbeiten? Was würde es bedeuten, wenn das Resultat <code>TRUE</code> gewesen wäre; wie würden dann deine nächsten Schritte aussehen?</p></li>
+</ol>
+</div>
+<div id="x---herausforderungen" class="section level3">
+<h3>X - Herausforderungen</h3>
+<div id="mehr-zu-p-werten-für-feste-effekte-parametrisches-bootstrapping" class="section level4">
+<h4>Mehr zu p-Werten für feste Effekte: Parametrisches Bootstrapping</h4>
+<p>Ein weiterer Signifikanztest für feste Effekte ist das parametrische Bootstrapping. Dieses ist insbesondere dann sinnvoll anzuwenden, wenn sich der p-Wert am Rande des Alpha-Niveaus befindet. Beim parametrischen Bootstrapping werden aus den bestehenden Daten wiederholt Stichproben mit Zurücklegen gezogen (resampling mit Zurücklegen) und das Modell an jeder dieser Stichproben gerechnet. Damit erhalten wir eine empirische Verteilung des interessierenden Parameters oder Effekts. Der Nachteil dieser Methode ist, dass sie ziemlich lange dauern kann.</p>
+<ol style="list-style-type: decimal">
+<li>Für lineare gemischte Modelle (angewendet mit <code>lmer()</code>) kannst du die <code>PBmodcomp()</code> Funktion des <code>pbkrtest</code> Pakets nutzen. Schaue dir die Hilfe-Funktion von <code>PBmodcomp()</code> so an:</li>
+</ol>
+<pre class="r"><code>?PBmodcomp</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Benutze nun die <code>PBmodcomp()</code> Funktion um p-Werte für das Modell zu erhalten. Du wirst dazu ein weniger komplexes Modell spezifizieren müssen, gegen welches getestet werden soll. Benutze dazu <code>IO_mod</code>. Da dieses Vorgehen ziemlich lange dauern kann, benutze hier nur 50 Simulationen (setze diese Zahl höher, wenn du tatsächliche Analysen durchführst).</li>
+</ol>
+<pre class="r"><code># Führe parametrisches Bootstrapping durch
+pb_mod &lt;- PBmodcomp(largeModel = XXX, 
+                    smallModel = XXX, 
+                    nsim = XXX)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Lasse dir das <code>pb_mod</code> Objekt anzeigen und schaue dir die Resultate an. Unterscheiden sich die Resultate von denen der anderen Tests die du zuvor angewendet hast? Ist der mit parametrischem Bootstrappen ermittelte p-Wert vergleichbar mit demjenigen des Likelihood Ratio Tests?</li>
+</ol>
+</div>
+<div id="intra-klassen-korrelation-icc" class="section level4">
+<h4>Intra-Klassen Korrelation (ICC)</h4>
+<p>Die intra-Klassen Korrelation (ICC) ist “der Anteil der durch die in der Population vorhandenen Gruppenstruktur erklärten Varianz” (Hox, 2002, S. 15). Es wird berechnet, indem die Zwischengruppenvarianz durch die Summe der Innergruppen- und der Zwischengruppenvarianz (d.h., die totale Varianz) geteilt wird.</p>
+<ol style="list-style-type: decimal">
+<li><p>Berechne die ICC des Maximalmodells mit der <code>icc()</code> Funktion aus dem <code>performance</code> Paket.</p></li>
+<li><p>Oft wird ein ICC basierend auf dem reinen Intercepts-Modell mit Random Intercepts berechnet. In Aufgabe C1 hast du dieses Modell bereits gerechnet und unter <code>IO_mod</code> abgespeichert. Berechne nun die ICC für dieses Modell.</p></li>
+<li><p>Jetzt mache dasselbe für das Modell <code>RI_mod</code>, welches vom Modell <code>IO_mod</code>, welches du gerade benutzt hast, nur dadurch abweicht, dass es feste Effekte enthält.</p></li>
+<li><p>Vergleiche die Ergebnisse der beiden letzten Aufgaben. Hat sich etwas verändert? Überlege dir, was diese Änderungen zu bedeuten haben.</p></li>
+</ol>
+</div>
+<div id="gekreuzte-versus-geschachtelte-zufällige-effekte" class="section level4">
+<h4>Gekreuzte versus geschachtelte zufällige Effekte</h4>
+<p>Bisher haben wir uns ausschliesslich mit gekreuzten zufälligen Effekten beschäftigt. Nun werden wir uns auch Daten mit <em>geschachtelten zufälligen Effekten</em> anschauen, wo jedes Level eines geschachtelten Faktors nur innerhalb eines einzigen Levels eines übergeordneten Faktors auftritt. Ein beliebtes Beispiel dafür ist der Fall von Klassen innerhalb von Schulen. Jede Klasse ist nur Teil einer einzigen Schule, deshalb sind hier die Klassen geschachtelt innerhalb der Schulen.</p>
+<p>Um herauszufinden, ob zufällige Effekte gekreuzt oder geschachtelt sind, musst du normalerweise etwas über das Studiendesign wissen, da die Struktur oft nicht einfach aus den Faktor-Levels ersichtlich ist. In unserem Beispiel der Klassen geschachtelt in Schulen wäre ein potentiell problemantischer Fall beispielsweise die Bezeichnung der Klassen durch Nummerierung <em>innerhalb</em> der Schulen statt über alle Schulen hinweg. Zum Beispiel enthielte Schule 1 Klassen 1 bis 10 und Schule 2 Klassen 1 bis 6. Natürlich ist dann Klasse 1 der Schule 1 nicht dieselbe wie Klasse 1 der Schule 2. Was jedoch für dich offensichtich erscheinen mag, ist nicht offensichtlich für R. R weiss nichts über die Konzepte von Schulen und Klassen, deshalb muss du ihm sagen, ob die Faktoren geschachtelt sind oder nicht, indem du die entsprechende Syntax in der Formel verwendest. Jetzt stelle dir den Fall vor, wo Klassen in Schulen geschachtelt sind, nun aber über alle Schulen hinweg nummeriert sind, also von 1 bis zur totalen Anzahl an Klassen im Datensatz. Somit hat jede Klasse eine eindeutige Bezeichnung. Ist dies der Fall, spielt es keine Rolle wie du die Struktur spezifizierst.</p>
+<ol style="list-style-type: decimal">
+<li>Für diese Aufgaben arbeitest du mit dem <code>school</code> Datensatz, welchen du bereits in Abschnitt A geladen hast. Erstelle unter Verwendung der <code>table()</code> Funktion eine Kreuztabelle von Schulen und Klassen.</li>
+</ol>
+<pre class="r"><code>table(XXX, XXX)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Rechne ein gemischtes Modell mit Random Intercepts für Klassen geschachtelt in Schulen, in welchem Extraversion (<code>extra</code>) mit Offenheit (<code>open</code>) und der sozialen Bewertung (<code>social</code>) vorhergesagt wird. Speichere das Modell als <code>hier_mod</code>. <strong>Tipp</strong>: Die geschachtelte Struktur der zufälligen Effekte wird mit folgender Syntax spezifiziert: <code>(1|higher_level_variable/lower_level_variable)</code>.</p></li>
+<li><p>Ist das Modell konvergiert? Überprüfe dies mit <code>check_convergence()</code>.</p></li>
+<li><p>Schaue dir die Ergebnisse des Modells mit <code>summary()</code> an.</p></li>
+<li><p>Rechne nun dasselbe Modell nochmals, jedoch diesmal mit gekreuzten random intercepts, wie in den vorherigen Abschnitten, anstelle der geschachtelten random intercepts. Speichere das Modell als <code>cross_mod</code>.</p></li>
+<li><p>Überprüfe, ob das Modell konvergiert ist.</p></li>
+<li><p>Schaue dir die Ergebnisse mit der <code>summary()</code> Funktion an.</p></li>
+<li><p>Haben sich die Resultate im Vergleich zu denjenigen mit geschachtelten zufälligen Effekten verändert?</p></li>
+</ol>
+</div>
+<div id="mehr-zur-auswahl-zufälliger-effekte" class="section level4">
+<h4>Mehr zur Auswahl zufälliger Effekte</h4>
+<ol style="list-style-type: decimal">
+<li><p>In Aufgabe D6 hast du herausgefunden, dass das eingeschränkte Modell, in welchem die Korrelationen zwischen den zufälligen Effekten auf Null gesetzt werden, nicht signifikant schlechter war als das maximale Modell. Wenn du also eine konfirmatorische Hypothese testen würdest, solltest du dieses Modell anstelle des maximalen Modells annehmen. Wir haben in dieser Aufgabe die Rückwärtselimination aber nicht weitergeführt. Dies wollen wir hier nachholen. Rechne nun ein Modell mit Random Intercepts und Slopes über die Rater, jedoch ohne Korrelationen dazwischen, und mit Random Intercepts über die Filme.</p></li>
+<li><p>Führe nun das Vorgehen aus Abschnitt D durch um herauszufinden welches der beiden Modelle beibehalten werden sollte. <strong>Hinweis</strong>: Das Argument <code>df</code> in der <code>qchisq()</code> Funktion wird hier auf <code>df = 1</code> gesetzt, da diese beiden Modelle sich um nur einen Freiheitsgrad unterscheiden.</p></li>
+<li><p>Zu welcher Schlussfolgerung bist du gelangt? Welches Modell sollten wir beibehalten?</p></li>
+</ol>
+</div>
+<div id="generalisierte-lineare-gemischte-modelle" class="section level4">
+<h4>Generalisierte lineare gemischte Modelle</h4>
+<ol style="list-style-type: decimal">
+<li><p>Nun werden wir uns generalisierte lineare gemischte Modelle anschauen. Lade dazu den Datensatz <code>cancer_remission.csv</code> und speichere ihn unter <code>cr</code>.</p></li>
+<li><p>Schaue dir die Daten an. Es handelt sich um einen Teil von simulierten Daten von <a href="https://stats.idre.ucla.edu/">UCLA Institute for Digital Research and Education Search</a>.</p></li>
+<li><p>Sage die Krebsremissionsrate (<code>remission</code>) durch das Krebsstadium (<code>CancerStage</code>), die Dauer des Patientenaufenthalts (<code>LengthofStay</code>), die Erfahrung des Arztes (<code>Experience</code>), und durch random intercepts über die Ärzte (<code>DID</code>) vorher. Benutze dazu die <code>glmer</code> Funktion mit <code>family = binomial</code>. Benutze auch hier, wie schon in früheren Aufgaben, den “bobyqa” Optimizer.</p></li>
+</ol>
+<pre class="r"><code>cr_mod &lt;- glmer(formula = XXX ~ XXX + XXX + XXX +
+                (1 | XXX),
+                data = XXX,
+                family = binomial, # Damit sagst du glmer, dass es eine logistische Regression rechnen soll
+                control = glmerControl(optimizer = &quot;bobyqa&quot;))</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Ist das Modell konvergiert?</p></li>
+<li><p>Schaue dir die Ergebnisse an.</p></li>
+<li><p>Extrahiere den <span class="math inline">\(R^2\)</span> Wert für dieses Modell mit der <code>r2()</code>.</p></li>
+</ol>
+<p><strong>Hinweis</strong>: Generalisierte lineare gemischte Modelle zu rechnen und zu interpretieren kann ziemlich anspruchsvoll sein und uns fehlt hier die Zeit, diese detaillierter zu behandeln. Falls du mehr darüber wissen möchtest, kannst du dir dieses <a href="https://stats.idre.ucla.edu/other/mult-pkg/introduction-to-generalized-linear-mixed-models/">Tutorial</a> oder die Referenzen unter Ressourcen genauer anschauen.</p>
+</div>
+</div>
+</div>
+<div id="beispiele" class="section level2">
+<h2>Beispiele</h2>
+<pre class="r"><code># Lade Pakete
+library(lme4)
+library(parameters)
+library(pbkrtest)
+library(performance)
+
+# schaue die sleepstudy daten aus dem lme4 Paket
+head(sleepstudy)
+
+# Hilfeseite des sleepstudy Datensatzes
+?sleepstudy
+
+# Modell mit nur festen Effekten, zur Vorhersage von Reaktionszeiten mit der Anzahl
+# Tage an Schlafentzug als Prädiktor
+sleep_FE &lt;- glm(formula = Reaction ~ Days, data = sleepstudy)
+
+# Modelloutput
+summary(sleep_FE)
+
+# gemischtes Modell mit nur Random Intercepts über Teilnehmende
+sleep_IO &lt;- lmer(formula = Reaction ~ 1 + (1|Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# Modelloutput
+summary(sleep_IO)
+
+# gemischtes Modell mit Schlafentzug als Prädiktor und Random Intercepts über
+# Teilnehmende
+sleep_RI &lt;- lmer(formula = Reaction ~ Days + (1|Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# Modelloutput
+summary(sleep_RI)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_RI)
+
+# berechne p-Werte für die festen Effekte mit Kenward-Roger Approximation
+p_value(sleep_RI, method = &quot;kenward&quot;)
+
+# alternativ, berechne p-Werte mit der anova() Funktion
+anova(sleep_IO, sleep_RI)
+
+# gemischtes Modell mit Random Intercepts und Random Slopes für Schlafentzug über
+# Teilnehmende, ohne die Kovarianz zwischen Random Intercepts und Random Slopes zu
+# schätzen
+sleep_nc &lt;- lmer(formula = Reaction ~ Days + (Days||Subject),
+                 data = sleepstudy,
+                 REML = FALSE)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_nc)
+
+# Modelloutput
+summary(sleep_nc)
+
+# maximales Modell
+sleep_max &lt;- lmer(formula = Reaction ~ Days + (Days|Subject),
+                  data = sleepstudy,
+                  REML = FALSE)
+
+# überprüfe ob das Modell konvergiert ist
+check_convergence(sleep_max)
+
+# Modelloutput
+summary(sleep_max)
+
+### Auswahl der zufälligen Effekte
+
+# setze alpha auf .2
+alpha &lt;- .2
+
+# berechne kritischen Wert ab welchem die Differenz signifikant ist
+kW &lt;- qchisq(1 - alpha, df = 1)
+
+# berechne die Differenz zwischen den deviances
+d_diff &lt;- deviance(sleep_nc) - deviance(sleep_max)
+
+# teste ob die Differenz grösser als der kritische Wert ist
+d_diff &gt; kW
+
+# die Kovarianz bringt keinen grossen Zusatznutzen. Wie sieht es mit den
+# Random Slopes aus?
+d_diff &lt;- deviance(sleep_RI) - deviance(sleep_nc)
+
+# teste ob die Differenz grösser als der kritische Wert ist
+d_diff &gt; kW # -&gt; behalte Random Intercepts und verwende sleep_nc
+
+# berechne Bestimmteitsmass
+r2(sleep_nc)
+
+# berechne Intraklassenkorrelation
+icc(sleep_nc, adjusted = TRUE)
+
+### Visualisierung
+
+# extrahiere feste Effekte
+m_line &lt;- fixef(sleep_nc)
+
+# extrahiere zufällige Effekte
+ranefs &lt;- ranef(sleep_nc)
+predicted &lt;- tibble(
+  intercept = ranefs$Subject[,1] + fixef(sleep_nc)[1],
+  slope = ranefs$Subject[,2] + fixef(sleep_nc)[2])
+
+# ziehe 10 Teilnehmende um ihre Trajektorien zu plotten
+rand10 &lt;- sample(1:nrow(predicted), 10)
+
+LMM_plot &lt;- ggplot(sleepstudy, aes(Days, Reaction)) +
+  geom_point(colour= &quot;#606061&quot;, alpha = .15, size = 2.5)+
+  geom_segment(aes(x = 0, y = intercept, xend = 9, yend = intercept + slope * 9),
+               data = predicted %&gt;% slice(rand10), colour = &quot;#EA4B68&quot;, size = 1.5,
+               alpha = .8) +
+  geom_segment(aes(x = 0, y = m_line[1], xend = 9, yend = m_line[1] + 9 * m_line[2]),
+               colour = &quot;black&quot;, size = 2, alpha = 1) +
+  theme(axis.title.x = element_text(vjust = -1),
+        axis.title.y = element_text(vjust = 1)) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12, face = &quot;bold&quot;),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18,face = &quot;bold&quot;)
+  )
+
+LMM_plot</code></pre>
+</div>
+<div id="datasets" class="section level2">
+<h2>Datasets</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">File</th>
+<th align="left">Rows</th>
+<th align="left">Columns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/tomatometer.csv?token=AIFo1JUJrMd9LfEcBY6u9ZhqlCcMaTvGks5csP1AwA%3D%3D">tomatometer.csv</a></td>
+<td align="left">5995</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/schools.csv?token=AZQb9mdlio2aNiTgfaddDHxpENKWm3Hhks5cmQ9jwA%3D%3D">schools.csv</a></td>
+<td align="left">1200</td>
+<td align="left">7</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://raw.githubusercontent.com/therbootcamp/SwR_2020Mai/master/1_Data/cancer_remission.csv?token=AZQb9ic1yv1-UdOtMITu0HyaW1xRMdV9ks5cmQ-bwA%3D%3D">cancer_remission.csv</a></td>
+<td align="left">8525</td>
+<td align="left">5</td>
+</tr>
+</tbody>
+</table>
+<p>Der <em>tomatometer.csv</em> Datensatz enthält Tomatometerbewertungen von 200 Ratern, die je 15 Filme, einmal im nüchternen und einmal im betrunkenen Zustand bewertet haben.</p>
+<p>Der <em>schools.csv</em> Datensatz enthält Selbsteinschätzungen von 1200 Schülern aus unterschiedlichen Klassen von 6 Schulen, auf den Facetten Extraversion, Offenheit für Neues, Verträglichkeit und einem social score.</p>
+<p>Der <em>cancer_remission.csv</em> Datensatz enthält Daten zur Remission von Lungenkrebs von Patienten.</p>
+<div id="tomatometer.csv" class="section level4">
+<h4>tomatometer.csv</h4>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">Rater id</td>
+</tr>
+<tr class="even">
+<td align="left">film</td>
+<td align="left">Film id von M1 bis M15</td>
+</tr>
+<tr class="odd">
+<td align="left">zustand</td>
+<td align="left">Der Zustand, in welchem die Bewertungen durchgeführt wurden (<code>"nuechtern"</code>, oder <code>"betrunken"</code>)</td>
+</tr>
+<tr class="even">
+<td align="left">tomatometer</td>
+<td align="left">Tomatometerbewertung von von 0 bis 100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="schools.csv" class="section level4">
+<h4>schools.csv</h4>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">Schüler id (geschachtelt unter <code>class</code>)</td>
+</tr>
+<tr class="even">
+<td align="left">extra</td>
+<td align="left">Extraversion von 0 bis 100</td>
+</tr>
+<tr class="odd">
+<td align="left">open</td>
+<td align="left">Offenheit von 0 bis 100</td>
+</tr>
+<tr class="even">
+<td align="left">agree</td>
+<td align="left">Verträglichkeit von 0 bis 100</td>
+</tr>
+<tr class="odd">
+<td align="left">social</td>
+<td align="left">Social</td>
+</tr>
+<tr class="even">
+<td align="left">class</td>
+<td align="left">Schulklasse (geschachtelt unter <code>school</code>; levels <code>"a"</code>, <code>"b"</code>, <code>"c"</code> und <code>"d"</code>)</td>
+</tr>
+<tr class="odd">
+<td align="left">school</td>
+<td align="left">Schule (levels <code>"I"</code>, <code>"II"</code>, <code>"III"</code>, <code>"IV"</code>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cancer_remission.csv" class="section level4">
+<h4>cancer_remission.csv</h4>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">remission</td>
+<td align="left">Ist der Krebs in Remission (0 = Nein, 1 = Ja)</td>
+</tr>
+<tr class="even">
+<td align="left">CancerStage</td>
+<td align="left">Vier unterschiedliche Krebsstadien (levels <code>"I"</code>, <code>"II"</code>, <code>"III"</code>, <code>"IV"</code>)</td>
+</tr>
+<tr class="odd">
+<td align="left">LengthofStay</td>
+<td align="left">Dauer des Spitalaufenthaltes (Wert von 1 bis 10)</td>
+</tr>
+<tr class="even">
+<td align="left">Experience</td>
+<td align="left">Erfahrung des Arztes (Wert von 7 to 29, wahrscheinlich in Jahren)</td>
+</tr>
+<tr class="odd">
+<td align="left">DID</td>
+<td align="left">Arzt id</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="funktionen" class="section level2">
+<h2>Funktionen</h2>
+<div id="pakete" class="section level3">
+<h3>Pakete</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Paket</th>
+<th align="left">Installation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>tidyverse</code></td>
+<td align="left"><code>install.packages("tidyverse")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>lme4</code></td>
+<td align="left"><code>install.packages("lme4")</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>performance</code></td>
+<td align="left"><code>install.packages("performance")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>parameters</code></td>
+<td align="left"><code>install.packages("parameters")</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>pbkrtest</code></td>
+<td align="left"><code>install.packages("pbkrtest")</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="funktionen-1" class="section level3">
+<h3>Funktionen</h3>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="12%" />
+<col width="80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Funktion</th>
+<th align="left">Paket</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>lmer</code></td>
+<td align="left"><code>lme4</code></td>
+<td align="left">Rechne ein lineares gemischtes Modell</td>
+</tr>
+<tr class="even">
+<td align="left"><code>glmer</code></td>
+<td align="left"><code>lme4</code></td>
+<td align="left">Rechne ein generalisiertes gemischtes Modell</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>fixef</code></td>
+<td align="left"><code>lme4</code></td>
+<td align="left">Extrahiere Koeffizienten der festen Effekte</td>
+</tr>
+<tr class="even">
+<td align="left"><code>ranef</code></td>
+<td align="left"><code>lme4</code></td>
+<td align="left">Extrahiere Koeffizienten der zufälligen Effekte</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>anova</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Funktion um einen likelihood ratio test zu rechnen</td>
+</tr>
+<tr class="even">
+<td align="left"><code>confint</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Berechne Konfidenzintervalle</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>deviance</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Extrahiere <em>deviances</em></td>
+</tr>
+<tr class="even">
+<td align="left"><code>qchisq</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">“Quantile” Funktion der <span class="math inline">\(\chi^2\)</span> Verteilung um kritische <span class="math inline">\(\chi^2\)</span> Werte zu berechnen</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>PBmodcomp</code></td>
+<td align="left"><code>pbkrtest</code></td>
+<td align="left">Parametrischer Bootstrap zur Berechnung von p-Werten</td>
+</tr>
+<tr class="even">
+<td align="left"><code>check_convergence</code></td>
+<td align="left"><code>performance</code></td>
+<td align="left">Teste, ob ein Modell konvergiert ist.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>p_value</code></td>
+<td align="left"><code>parameters</code></td>
+<td align="left">Berechne p-Werte für feste Effekte von gemischten Modellen mit unterschiedlichen Methoden</td>
+</tr>
+<tr class="even">
+<td align="left"><code>r2</code></td>
+<td align="left"><code>performance</code></td>
+<td align="left">Berechne Bestimmtheitsmass <span class="math inline">\(R^2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>icc</code></td>
+<td align="left"><code>performance</code></td>
+<td align="left">Berechne Intraklassenkorrelation</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="quellen" class="section level2">
+<h2>Quellen</h2>
+<div id="vignetten" class="section level3">
+<h3>Vignetten</h3>
+<p><a href="https://easystats.github.io/blog/posts/">easystats Webseite</a></p>
+<p><a href="https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf">lme4 vignette</a></p>
+</div>
+<div id="texte-englisch" class="section level3">
+<h3>Texte (Englisch)</h3>
+<p>Eine gute, nicht-technische Einführung in gemischte Modelle: Buchkapitel <a href="http://davidkellen.org/wp-content/uploads/2017/04/introduction-mixed-models.pdf"><strong>An introduction to linear mixed modeling in experimental psychology</strong></a> von <strong>Henrik Singmann</strong> und <strong>David Kellen</strong>.</p>
+<p>Eine technischere Einführung bieted das Kapitel zu gemischten Modellen in <a href="https://projecteuclid.org/euclid.cbms/1462106081"><strong>Analysis of Longitudinal and Cluster-Correlated Data</strong></a> von <strong>Nan Laird</strong>.</p>
+<p>Ein frei erhältliches Tutorial über gemischte Modelle gibt es <a href="https://www.ssc.wisc.edu/sscc/pubs/MM/MM_Introduction.html">hier</a>.</p>
+<p>Eine Einführung in das Bestimmtheitsmass und die Intraklassenkorrelation im Zusammenhang mit gemischten Modellen bietet der Artikel <a href="https://royalsocietypublishing.org/doi/10.1098/rsif.2017.0213">The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded</a> von <strong>Shinichi Nakagawa</strong>, <strong>Paul Johnson</strong>, und <strong>Holger Schielzeth</strong>.</p>
+<p>Eine eher technische Einführung in gemischte Modelle mit <code>lme4</code> bietet der Artikel <a href="https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf"><strong>Fitting Linear Mixed-Effects Models Using lme4</strong></a> von <strong>Douglas Bates</strong>, <strong>Martin Mächler</strong>, <strong>Benjamin Bolker</strong>, und <strong>Steven Walker</strong>.</p>
+<p>Ein Klassiker zur Regressionsanalyse, inklusive gemischten Modelle: das Buch <a href="https://www.cambridge.org/ch/academic/subjects/statistics-probability/statistical-theory-and-methods/data-analysis-using-regression-and-multilevelhierarchical-models?format=PB&amp;isbn=9780521686891"><strong>Data Analysis Using Regression and Multilevel/Hierarchical Models</strong></a> von <strong>Andrew Gelman</strong> und <strong>Jennifer Hill</strong>.</p>
+<p>Ein weiteres, hervorragendes Buch über Regressionsanalyse bietet das Buch <a href="https://xcelab.net/rm/statistical-rethinking/"><strong>Statistical Rethinking</strong></a> von <strong>Richard McElreath</strong>.</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

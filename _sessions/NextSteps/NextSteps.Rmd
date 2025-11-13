@@ -1,0 +1,414 @@
+---
+title: "Ausblick"
+
+output:
+  xaringan::moon_reader:
+    css: ["default", "baselrbootcamp.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+    pandoc_args: '../_header/_header.yaml'
+    includes:
+      before_body: '../_header/_before.html'
+---
+
+---
+
+
+```{r, eval = TRUE, echo = FALSE, warning=F,message=F}
+# Code to knit slides
+
+```
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(width = 110)
+options(digits = 4)
+
+# Load packages
+require(tidyverse)
+require(boot)
+
+print2 <- function(x, nlines=10,...) {
+   cat(head(capture.output(print(x,...)), nlines), sep="\n")}
+
+
+# get color palette functions
+source("../../_materials/palette/therbootcamp_palettes.R")
+colors = baselrbootcamp_colors
+
+knitr::opts_chunk$set(dpi = 300, echo = FALSE, warning = FALSE, fig.align = 'center', message= FALSE)
+
+```
+
+
+.pull-left45[
+<br><br><br><br><br>
+#  Hallo Statistiker mit R!
+
+In 2 Tagen seid ihr weit gekommen.
+
+]
+
+.pull-right4[
+
+<img src="https://therbootcamp.github.io/SmR_2021Oct/_sessions/Welcome/image/schedule.png" height="580" align="center">
+]
+
+---
+
+
+<table style="cellspacing:0; cellpadding:0; border:none; padding-top:50px" width=90%>
+  <col width="42%">
+  <col width="5%">
+  <col width="42%">
+  <tr>
+  <td bgcolor="white" align="center">
+    <img src="image/box_fit.png" height = 300px style="border-radius:50px"><br>
+    <font style="font-size:10px"> from <a href="https://anomaly.io/about/">nomaly.io</a>
+  </td>
+  <td bgcolor="white" align="center">
+  </td>
+  <td bgcolor="white" align="center">
+    <img src="image/tukey_fit.png" height = 300px style="border-radius:50px"><br>
+    <font style="font-size:10px"> from <a     href="https://artsandculture.google.com/entity/m025r9k">artsandculture.google.com</a>
+  </td>  
+</tr>
+
+<tr>
+  <td bgcolor="white" align="center" width="50%">
+     <br><font style="font-size:22px"><high>"All models are wrong, but some are useful."</high></font>
+  </td>
+  <td bgcolor="white" align="center">
+  </td>
+  <td bgcolor="white" align="center">
+     <br><font style="font-size:22px"><high>"An approximate answer to the right problem is worth a good deal more than an exact answer to an approximate problem."</high></font><br><br>
+    
+  </td>  
+</tr>
+
+<tr>
+  <td bgcolor="white" align="center">
+     <font style="font-size:22px">George E. P. Box</font><br>
+     <font style="font-size:14px">1919-2013</font>
+  </td>
+  <td>
+  </td>
+  <td bgcolor="white" align="center">
+    <font style="font-size:22px">John W. Tukey</font><br>
+     <font style="font-size:14px">1915-2000</font>
+  </td>  
+</tr>
+
+</table>
+
+---
+
+
+<table style="cellspacing:0; cellpadding:0; border:none; padding-top:50px" width=90%>
+  <col width="42%">
+  <col width="5%">
+  <col width="42%">
+  <tr>
+  <td bgcolor="white" align="center">
+    <img src="image/fisher_fit.png" height = 300px style="border-radius:50px"><br>
+    <font style="font-size:10px"> from <a href="https://www.hamhigh.co.uk/news/heritage/">hamhigh.co.uk</a>
+  </td>
+  <td bgcolor="white" align="center">
+  </td>
+  <td bgcolor="white" align="center">
+    <img src="image/rutherford_fit.png" height = 300px style="border-radius:50px"><br>
+    <font style="font-size:10px"> from <a href="https://de.wikipedia.org/wiki/Ernest_Rutherford">wikipedia.org</a>
+  </td>  
+</tr>
+
+<tr>
+  <td bgcolor="white" align="center" width="50%">
+     <br><font style="font-size:22px"><high>"To call in the statistician after the experiment is done may be no more than asking him to perform a post-mortem examination: he may be able to say what the experiment died of."</high></font>
+  </td>
+  <td bgcolor="white" align="center">
+  </td>
+  <td bgcolor="white" align="center">
+     <br><font style="font-size:22px"><high>"If your experiment needs statistics, you ought to have done a better experiment."</high></font><br><br>
+    
+  </td>  
+</tr>
+
+<tr>
+  <td bgcolor="white" align="center">
+     <font style="font-size:22px">Ronald A. Fisher</font><br>
+     <font style="font-size:14px">1890-1962</font>
+  </td>
+  <td>
+  </td>
+  <td bgcolor="white" align="center">
+    <font style="font-size:22px">Ernest Rutherford</font><br>
+     <font style="font-size:14px">1871-1937</font>
+  </td>  
+</tr>
+
+</table>
+
+---
+
+# Nächste Schritte
+
+.pull-left5[
+<font size = 4><i>
+<font size = 6>
+1. Anwenden<br>
+2. Bücher<br>
+3. Webseiten<br>
+4. Hilfe & Consulting<br>
+5. Weiterführende Kurse<br>
+]
+
+</font>
+<br>
+
+.pull-right5[
+<p align="center"><img border="0" alt="W3Schools" src="http://www.theunmanageableemployee.com/wp-content/uploads/2011/07/5cs-stones-cropped-11052730.jpg?w=112"></p>
+]
+
+---
+
+# Bücher  
+
+Hier ist eine unvollständige Liste guter Bücher über R lose geordnet nach vorausgesetzter Erfahrung.<br><br>
+
+<table width="80%" style="cellspacing:0; cellpadding:0; border:none;">
+
+  <tr>    
+
+  <td> 
+  <a href="http://r4ds.had.co.nz/"><img border="0" alt="W3Schools" src="http://r4ds.had.co.nz/cover.png" height="180"></a>
+  </td>
+
+  <td>
+  <a href="https://covers.oreillystatic.com/images/0636920028574/cat.gif"><img border="0" alt="W3Schools" src="https://covers.oreillystatic.com/images/0636920028574/cat.gif" height="180"></a>
+  </td>
+
+  <td> 
+  <a href="https://ggplot2-book.org/"><img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/31uoy-qmhEL._SX331_BO1,204,203,200_.jpg" height="180"></a>
+  </td>
+
+  <td>
+  <a href="https://www.springer.com/de/book/9783540799979"><img border="0" alt="W3Schools" src="https://exlibris.azureedge.net/covers/9783/5407/9997/9/9783540799979xxl.webp" height="180" ></a>
+  </td>
+  
+  <td>
+  <a href="https://bookdown.org/ndphillips/YaRrr/"><img border="0" alt="W3Schools" src="https://bookdown.org/ndphillips/YaRrr/images/YaRrr_Cover.jpg" height="180" ></a>
+  </td>
+  
+  <td>
+  <a href="https://www.orellfuessli.ch/shop/home/artikeldetails/ID35367941.html?ProvID=10917736&gclid=Cj0KCQiAg_HhBRDNARIsAGHLV5238Q26gQmFttHRnYGjcAhz4CslStb-3qBegvuZS5gnCpWSLNlQvF0aAgfOEALw_wcB"><img border="0" alt="W3Schools" src="https://assets.thalia.media/img/35367941-00-00.jpg" height="180" ></a>
+  </td>
+  
+  </tr>
+  
+
+  <tr style="background-color:#ffffff">
+
+  <td>
+  <a href="http://appliedpredictivemodeling.com/"><img border="0" alt="W3Schools" src="http://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51157487e4b0b8b2ffe16829/1509217882069/?format=1500w" height="180" ></a>
+  </td>
+  
+  <td>
+  <a href="http://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf"><img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/41EaH4W9LVL._SX332_BO1,204,203,200_.jpg" height="180" ></a>
+  </td>
+  
+  <td>
+  <a href="https://www.manning.com/books/deep-learning-with-r"><img border="0" alt="W3Schools" src="https://images-na.ssl-images-amazon.com/images/I/51h5d4dYaoL._SX396_BO1,204,203,200_.jpg" height="180" ></a>
+  </td>
+
+
+  <td>
+  <a href="https://csgillespie.github.io/efficientR/"><img border="0" alt="W3Schools" src="https://csgillespie.github.io/efficientR/figures/f0_web.png" height="180" ></a>
+  </td>
+
+  <td>
+  <a href="www.rcpp.org/"><img border="0" alt="W3Schools" src="https://images-eu.ssl-images-amazon.com/images/I/41VYyIwwOqL._SY445_QL70_ML2_.jpg" height="180" ></a>
+  </td>
+  
+  
+  <td>
+  <a href="http://adv-r.had.co.nz/"><img border="0" alt="W3Schools" src="https://images.tandf.co.uk/common/jackets/amazon/978146658/9781466586963.jpg" height="180" ></a>
+  </td>
+
+
+  </tr>
+  
+
+
+</table>
+<br>
+
+
+---
+
+.pull-left4[
+
+# Webseiten
+
+Das Netz ist vll. der beste Ort für Informationen über R.
+
+<font size = 4><i>Beginnt eure Suche mit:</i></font>
+
+[Google](www.google.com). Stellt sicher, dass ihr *R* oder *Rproject* mit in eurer Suche habt. 
+
+<br>
+<font size = 4><i>Meistens werdet ihr dann weitergeleitet zu:</i></font>
+
+[R-bloggers](www.r-bloggers.com) informiert euch über die neusten R Entwicklungen. Meldet euch für den Newsletter an.
+
+[Stackoverflow](https://stackoverflow.com/questions/tagged/r) ist eine Seite für R Probleme und Lösungen. Versucht selbst mal ein Problem zu posten. Oft bekommt ihr erstaunlich schnell Antwort.
+
+]
+
+.pull-right5[
+<p align="left" style="padding: 0 0px"><br><br><br><br><br><br><br><br><br>
+    <a href="https://www.google.com/"><img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/google.png" height="100"></a><br><br><br2>
+    <a href="https://www.r-bloggers.com/"><img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/rbloggers.png" height="105" style="margin-bottom:10px"></a><br>
+  <a href="https://stackoverflow.com/"><img border="0" alt="W3Schools" src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/stackoverflow.png" height="105"></a>
+</p>
+]
+
+---
+
+# Support
+
+<table class="tg"  style="cellspacing:0; cellpadding:0; border:none">
+  <col width="22%">
+  <col width="22%">
+  <col width="22%">
+  <tr>
+    <th class="tg-yw4l" valign='top'>
+    <p align="center"><br>
+    <a href="www.dirkwulff.org"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/1.png" height="230" style="border-radius:50%"></a><br>
+    <p align="center">
+    <font size = 5>Dr. Dirk Wulff</font><br><br>
+    <a href="www.dirkwulff.org"><b>dirkwulff.org</b></a><br>
+    <a href="https://github.com/dwulff"><b>github.com/dwulff</b></a><br>
+    <font size=4><i>packages: </i></font> 
+    <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
+    <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://cran.r-project.org/web/packages/memnet/index.html"><b>memnet</b> <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
+    </p>  
+  </th>
+  
+  <th class="tg-yw4l" valign='top'><p align="center"><br>
+    <a href="https://psychologie.unibas.ch/en/persons/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/2.png" height="230" style="border-radius:50%"></a><br>
+    <p align="center">
+    <font size = 5>Markus Steiner</font><br><br>
+    <a href="https://github.com/mdsteiner"><b>github.com/mdsteiner</b></a><br>
+    <font size=4><i>packages: </i></font> 
+    <a href="https://github.com/mdsteiner/ShinyPsych"><b>ShinyPsych</b></a>, <br>
+    <a href="https://github.com/mdsteiner/EFAdiff"><b>EFAdiff</b></a> <br><br>
+    </p>
+  </th>
+  
+  <th class="tg-yw4l" valign='top'>
+    <p align="center">
+    <p align="center"><br>
+    <a href="https://www.schulte-mecklenbeck.com/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/3.png" height="230" style="border-radius:50%"></a><br>
+    <p align="center">
+    <font size = 5>Dr. Michael Schulte-<br>Mecklenbeck</font><br><br>
+    <a href="www.schulte-mecklenbeck.com"><b>schulte-mecklenbeck.com</b></a><br>
+    <a href="https://github.com/schultem"><b>github.com/schultem</b></a><br><br>
+    </p>
+  </th>
+
+
+</tr>
+
+</table>
+
+---
+
+
+# Weiterführende Kurse
+
+
+<table class="tg"  style="cellspacing:0; cellpadding:0; border:none;">
+<tr valign="top">
+  <col width="20%">
+  <col width="20%">
+  <col width="20%">
+  <col width="20%">
+  <col width="20%">
+  <td>
+    <p align="center">
+      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
+      <font style="font-size:20px;weight:700"><br>Einführung in die moderne Datenanalyse mit R</font><br>
+      <br>
+      <img src="https://therbootcamp.github.io/img/courses/0.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
+      <high>tba</high><br><br><br><br>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
+      <font style="font-size:20px;weight:700"><br>Explorative Datenanalyse mit R<br></font><br>
+      <br>
+      <img src="https://therbootcamp.github.io/img/courses/1.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
+      <high>tba</high><br><br><br><br>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
+      <font style="font-size:20px;weight:700"><br>Statistik mit R<br><br></font><br>
+      <br>
+      <img src="https://therbootcamp.github.io/img/courses/2.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
+      <high>tba</high><br><br><br><br>
+      </a>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
+      <font style="font-size:20px;weight:700"><br>Maschinelles Lernen mit R<br></font><br>
+      <br>
+      <img src="https://therbootcamp.github.io/img/courses/3.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
+      <high>tba</high><br><br><br><br>
+      </a>
+    </p>
+  </td>
+  <td>
+    <p align="center">
+      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
+      <font style="font-size:20px;weight:700"><br>Reporting mit R<br><br></font><br>
+      <br>
+      <img src="https://therbootcamp.github.io/img/courses/4.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
+      <high>10. Juni</high><br><br><br><br>
+      </a>
+    </p>
+  </td>
+  </tr>
+
+
+---
+
+.pull-left45[
+# Bitte gebt uns Feedback
+<br><br>
+
+<p align = "center">
+  <img src="image/feedback.png" height=350px></img><br>
+  <font style="font-size:10px">from <a href="https://cdn-images-1.medium.com/max/1600/1*5OZNYAfzDZfM1lwJBZEuHQ.png">medium.com</a></font>
+</p>
+
+]
+
+.pull-right45[
+
+<p align="center"><br><br>
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdhBt00ASatgBonwZhqc_wvCGV3bDLPoArQfWHnxZLJ20KLMA/viewform?embedded=true" width="430" height="550" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe></p>
+]
+
+---
+class: center, middle
+
+# Herzlichen Dank! 

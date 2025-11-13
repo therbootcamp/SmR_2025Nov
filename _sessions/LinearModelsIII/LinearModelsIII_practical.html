@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lineare Modelle III</title>
+
+<script src="LinearModelsIII_practical_files/header-attrs-2.13/header-attrs.js"></script>
+<script src="LinearModelsIII_practical_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="LinearModelsIII_practical_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="LinearModelsIII_practical_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="LinearModelsIII_practical_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="LinearModelsIII_practical_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="LinearModelsIII_practical_files/navigation-1.1/tabsets.js"></script>
+<link href="LinearModelsIII_practical_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="LinearModelsIII_practical_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="practical.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lineare Modelle III</h1>
+<h4 class="author"><table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'>
+<col width='10%'>
+<col width='10%'>
+<tr style="border:none">
+<td style="display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none" nowrap>
+<font style='font-style:normal'>Statistics with R</font><br>
+<a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+<i class='fas fa-clock' style='font-size:.9em;' ></i> </a>
+<a href='https://therbootcamp.github.io'>
+<i class='fas fa-home' style='font-size:.9em;'></i> </a>
+<a href='mailto:therbootcamp@gmail.com'>
+<i class='fas fa-envelope' style='font-size: .9em;'></i> </a>
+<a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+<i class='fab fa-linkedin' style='font-size: .9em;'></i> </a>
+<a href='https://therbootcamp.github.io'>
+<font style='font-style:normal'>The R Bootcamp</font> </a>
+</td>
+<td style="width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none">
+<img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
+</td>
+</tr>
+</table></h4>
+
+</div>
+
+
+<p align="center" width="100%">
+<img src="image/bigmart.png" alt="Trulli" style="width:100%"> <br>
+<font style="font-size:10px">from
+<a href="http://seeksaurav.blogspot.com/2013/01/week-8.html">seeksaurav.blogspot.com</a></font>
+</p>
+<div id="section" class="section level1 tabset">
+<h1 class="tabset"></h1>
+<div id="überblick" class="section level2">
+<h2>Überblick</h2>
+<p>Am Ende des Practicals wirst du wissen…</p>
+<ol style="list-style-type: decimal">
+<li>Wie du eine logistische Regression zur Analyse von binären Kriterien
+implementierst und interpretierst.</li>
+<li>Wie du eine Poisson Regression zur Analyse von Häufigkeiten
+implementierst und interpretierst.</li>
+</ol>
+</div>
+<div id="aufgaben" class="section level2">
+<h2>Aufgaben</h2>
+<div id="a---setup" class="section level3">
+<h3>A - Setup</h3>
+<ol style="list-style-type: decimal">
+<li><p>Öffne dein <code>TheRBootcamp</code> R project.</p></li>
+<li><p>Öffne ein neues R Skript. Schreibe deinen Namen, das Datum und
+“Lineare Modelle III Practical” als Kommentare an den Anfang des
+Skripts.</p></li>
+</ol>
+<pre class="r"><code>## NAME
+## DATUM
+## Lineare Modelle III Practical</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Speichere das neue Skript unter dem Namen
+<code>lineare_modelle_III_practical.R</code> im <code>2_Code</code>
+Ordner.</p></li>
+<li><p>Lade die Pakete <code>tidyverse</code> und
+<code>MASS</code>.</p></li>
+</ol>
+<pre class="r"><code>library(tidyverse)
+library(MASS)</code></pre>
+<pre><code>
+Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
+
+    select</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Verwende die <code>read_csv()</code> Funktion um
+<code>wein.csv</code> und <code>bigmart.csv</code> einzulesen.</li>
+</ol>
+<pre class="r"><code># Lese Daten ein
+wein &lt;- read_csv(file = &quot;1_Data/wein.csv&quot;)
+bigmart &lt;- read_csv(file = &quot;1_Data/bigmart.csv&quot;)</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li><p>Printe die Datensätze.</p></li>
+<li><p>Verwende <code>names(XX)</code>, <code>summary(XX)</code>, und
+<code>View(XX)</code> um einen weiteren Überblick über die Daten zu
+bekommen.</p></li>
+<li><p>Wiederum, führe den Code unten aus um sicherzustellen, dass alle
+<code>character</code> Variablen als Faktoren vorliegen, was den
+statistischen Modellen hilft kategoriale Variablen richtig zu
+interpretieren.</p></li>
+</ol>
+<pre class="r"><code># Konvertiere alle character zu factor
+wein &lt;- wein %&gt;% mutate_if(is.character, factor)
+bigmart &lt;- bigmart %&gt;% mutate_if(is.character, factor)</code></pre>
+</div>
+<div id="b---logistische-regression-wein-redux" class="section level3">
+<h3>B - Logistische Regression: Wein redux</h3>
+<ol style="list-style-type: decimal">
+<li>In diesem Abschnitt geht es darum die Analysen der vergangenen
+Abschnitte umzudrehen und zu untersuchen wie verschiedene Prädiktoren
+das Kriterium <code>Farbe</code> vorhersagen. In anderen Worten, in
+welchen Gesichtspunkten unterscheiden sich weisse und rote Weine
+voneinander. Verwende das Template um in einer Regression
+<code>Farbe</code> durch <code>Alkohol</code>, <code>Dichte</code>, und
+<code>Sulphate</code> vorherzusagen. Achtung: Es tritt ein Fehler auf.
+Siehe nächste Aufgabe.</li>
+</ol>
+<pre class="r"><code># Regression
+wein_lm &lt;- lm(formula = XX ~ XX + XX + XX, 
+              data = wein)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Farbe ist natürlich eine kategoriale Variable. Wir können also nicht
+das Standard-lineare Modell verwenden, sondern müssen auf das
+generalisierte lineare Modell zurückgreifen. Verwende das Template unten
+um eine Regression mit <code>'binomial'</code> Link und Modell zu
+fitten, aka eine logistsiche Regression. Nenne das entstehende Objekt
+<code>wein_glm</code>.</li>
+</ol>
+<pre class="r"><code># Logistische Regression
+wein_glm &lt;- glm(formula = XX ~ XX + XX + XX, 
+                data = XX,
+                family = &#39;XX&#39;)</code></pre>
+<pre class="r"><code># Logistische Regression
+wein_glm &lt;- glm(formula = Farbe ~ Alkohol + Dichte + Sulphate, 
+               data = wein,
+               family = &#39;binomial&#39;)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Printe <code>wein_glm</code>. Was verrät dir der Output?</p></li>
+<li><p>Zu allererst ist dir vielleicht aufgefallen, dass einige der
+Gewichte sehr gross sind. Vor allem der Intercept ist erstaunlich hoch,
+wenn man bedenkt dass Farbe eigentlich nur Werte zwischen 0 und 1
+annehmen kann. Dies hat natürlich mit dem Link-Funktion zu tun. Das
+bedeutet, im generalisierten linearen Modell muss nun auch noch die
+Link-Funktion mitberücksichtigt werden.</p></li>
+<li><p>Weiterhin ist die sicher aufgefallen, dass am Schluss des Outputs
+Ergebnisse angezeigt werden, die bei einem einfachen linearen Modell
+fehlen. Diese Werte haben etwas damit zu, dass nun mit Maximum
+Likelihood gefittet wird. Später mehr dazu.</p></li>
+<li><p>Lasse dir nun die <code>summary()</code> anzeigen. Der Output ist
+sehr ähnlich aufgebaut wie der von <code>lm()</code>. Lenke deine
+Aufmerksamkeit zunächst auf den Teil zu <code>Coefficients</code>.
+Welche Prädiktoren sind signifikant?</p></li>
+<li><p>Alle Prädiktoren tragen signifikant zur Vorhersage der
+<code>Farbe</code> bei. Beachte, dass hier <i>z</i>-Werte anstatt
+<i>t</i>-Werte angegeben sind, was darauf zurückzuführen ist, dass hier
+ein anderes Datenmodell verwendet wird. Schaue dir nun den Schlussteil
+des Outputs an. Analog zur Standard Regression stehen hier Informationen
+über den Gesamtfit des Modells. Zunächst einmal wird die
+<code>Null deviance</code> angegeben. Dies ist die Performanz des
+sogenannten Null-Modells, welches nur einen Intercept verwendet. Dieses
+Modell sagt für jeden Wein schlicht die relative Häufigkeit der
+häufigeren Kategorie voraus. D.h., im Datensatz ist der Anteil weisser
+0.754. Entsprechend sagt ein solches Modell für jeden Wein voraus, dass
+eine Wahrscheinlichkeit von 0.754, dass der Wein weiss ist. Der folgende
+Code zeigt, wie du damit auf die <code>Null deviance</code>
+kommst.</p></li>
+</ol>
+<pre class="r"><code># Wahrscheinlichkeit weiss für Null-Modell
+wsk_weiss &lt;- mean(wein$Farbe == &#39;weiss&#39;)
+
+# Log likelihood Null-Modell
+log_likelihood &lt;- sum(log(wsk_weiss) * sum(wein$Farbe == &#39;weiss&#39;)) +
+                  sum(log(1-wsk_weiss) * sum(wein$Farbe == &#39;rot&#39;))
+
+# Deviance Null-Modell
+-2 * log_likelihood</code></pre>
+<pre><code>[1] 7251</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Analog kannst du die Performanzwert für das <code>wein_glm</code>
+Modell bestimmen, nur musst du hier die eigentlichen vom Modell
+vorhergesagten Werte verwenden, die du mit <code>fitted()</code>
+extrahieren kannst.</li>
+</ol>
+<pre class="r"><code># Wahrscheinlichkeit weiss für wein_glm
+wsk_weiss &lt;- fitted(wein_glm)
+
+# Log likelihood wein_glm
+log_likelihood &lt;- sum(log(wsk_weiss[wein$Farbe == &#39;weiss&#39;])) + 
+                  sum(log(1-wsk_weiss[wein$Farbe == &#39;rot&#39;]))
+
+# Deviance wein_glm
+-2 * log_likelihood</code></pre>
+<pre><code>[1] 4507</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li><p>Die Deviance Werte bzw. die log-Likelihoods lassen sich nur
+schwer absolut beurteilen. Das bedeutet auch, dass nicht ohne weiteres
+klar ist, ob <code>wein_glm</code> tatsächlich gut die
+<code>Farbe</code> erklärt. Bei standard Regression ist das leichter, da
+<code>R-squared</code> notwendigerweise zwischen <code>0</code> und
+<code>1</code> liegt. Um die Interpretation zu erleichtert, bietet R
+daher noch das Akaike Informationskriterium (<code>AIC</code>), welches
+die Deviance in Vergleich zur Anzahl der Parameter setzt, d.h.,
+<code>AIC &lt;- Deviance + 2*k</code>, wobei <code>k</code> die Anzahl
+der Parameter (Regressionsgewichte ist). Wenn das <code>AIC</code>
+niedriger ist als die Null-Deviance, dann kann man klar davon ausgehen,
+dass das Modell (<code>wein_glm</code>) besser ist als das Null-Modell.
+Hier ist dies der Fall, was nicht überraschend ist, da die Prädiktoren
+jeweils sehr starke Effekte aufweisen.</p></li>
+<li><p>Dass starke Effekte vorliegen, lässt sich über sogenannte Odds
+Ratios (OR) darstellen. ORs sind eine übliche Effektstärke in der
+logistischen Regression, die sich leicht aus Regressionsgewichten
+ableiten lässt und zwar gilt <code>OR = exp(b)</code>, wobei
+<code>b</code> das Regressionsgewicht ist. Berechne die ORs für die drei
+im Modell enthaltenen Prädiktoren. Es ist i.d.R. einfacher mit positiven
+Gewichten zu arbeiten, solange man die Richtung in Erinnerung
+behält.</p></li>
+</ol>
+<pre class="r"><code># Odds ratios
+exp(abs(XX))
+exp(abs(XX))
+exp(abs(XX))</code></pre>
+<pre class="r"><code># Odds ratios
+exp(abs(-0.95293))</code></pre>
+<pre><code>[1] 2.59</code></pre>
+<pre class="r"><code>exp(abs(-642.70591))</code></pre>
+<pre><code>[1] 1.33e+279</code></pre>
+<pre class="r"><code>exp(abs(-7.81487))</code></pre>
+<pre><code>[1] 2477</code></pre>
+<ol start="11" style="list-style-type: decimal">
+<li>Die ORs zeigen, dass die odds (<code>p / (1-p)</code>) dafür, dass
+ein Wein rot ist, um das <code>2.59</code> fache steigen, wenn man
+Alkohol um 1 Volumenprozent zunimmt, um das <code>1.33e+279</code> (fast
+unzählbar) fache, wenn Dichte um einen Wert von 1 steigt, und um das
+<code>2477</code> fache, wenn die Sulphatkonzentration um 1 steigt.
+Ziemlich extreme Werte oder? Könnte vielleicht wiederum mit der
+Skalierung zu tun haben. Rechne die logistische Regression erneut,
+diesmal mit skalierten Variablen.</li>
+</ol>
+<pre class="r"><code># Skalierungsfunktion
+skaliere = function(x) (x - mean(x))/sd(x)
+
+# Logistische Regression mit Skalierung
+wein_glm &lt;- glm(formula = XX ~ XX + XX + XX, 
+                data = XX %&gt;% mutate_if(is.numeric, skaliere),
+                family = &#39;XX&#39;)</code></pre>
+<pre class="r"><code># Skalierungsfunktion
+skaliere = function(x) (x - mean(x))/sd(x)
+
+# Logistische Regression
+wein_glm &lt;- glm(formula = Farbe ~ Alkohol + Dichte + Sulphate, 
+                data = wein %&gt;% mutate_if(is.numeric, skaliere),
+               family = &#39;binomial&#39;)</code></pre>
+<ol start="12" style="list-style-type: decimal">
+<li>Nun berechne die ORs noch einmal mit den neuen Gewichten. Sind sie
+immer noch so extrem?</li>
+</ol>
+<pre class="r"><code># Odds ratios
+exp(abs(XX))
+exp(abs(XX))
+exp(abs(XX))</code></pre>
+<pre class="r"><code># Odds ratios
+exp(abs(-1.1366))</code></pre>
+<pre><code>[1] 3.12</code></pre>
+<pre class="r"><code>exp(abs(-1.9273))</code></pre>
+<pre><code>[1] 6.87</code></pre>
+<pre class="r"><code>exp(abs(-1.1629))</code></pre>
+<pre><code>[1] 3.2</code></pre>
+<ol start="13" style="list-style-type: decimal">
+<li>Die ORs sollten sich etwas beruhigt haben. Der Grund für die extreme
+OR für <code>Dichte</code> war, dass die Werte in <code>Dichte</code>
+nur zwischen <code>0.987</code> und <code>1.039</code>, was bedeutet,
+dass eine Veränderung von 1 eine Veränderung weit über den eigentlichen
+Wertebereich der Variablen hinausgeht. Wiederum, wenn es um den
+Vergleich der Gewichte geht und diese leicht interpretierbar werden
+sollen, erwäge zu standardisieren.</li>
+</ol>
+</div>
+<div id="c---poisson-regression-bigmart" class="section level3">
+<h3>C - Poisson Regression: Bigmart</h3>
+<ol style="list-style-type: decimal">
+<li>Nun zum <code>bigmart</code> Datensatz. In diesem Abschnitt geht es
+<code>Verkäufe</code> (Kriterium) auf Basis des maximalen Preis
+(<code>Max_Preis</code>) und der <code>Visibilität</code> vorherzusagen.
+Da es sich beim Kriterium um Häufigkeiten dreht empfiehlt sich eine
+Regression mit <code>family = 'poisson'</code>. Verwende das Template um
+eine solche zu fitten.</li>
+</ol>
+<pre class="r"><code># Poisson Regression
+bigmart_glm &lt;- glm(formula = XX ~ XX + XX, 
+                   data = XX,
+                   family = &#39;XX&#39;)</code></pre>
+<pre class="r"><code># Poisson Regression
+bigmart_glm &lt;- glm(formula = Verkäufe ~ Max_Preis + Visibilität, 
+                   data = bigmart,
+                   family = &#39;poisson&#39;)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Printe zunächst das Modell. Wie interpretierst du den
+Output?</p></li>
+<li><p>Der Output ist genauso aufgebaut wie bei der logistischen
+Regression. Entgegen was man intuitiv meinen könnte zeigt sich das Preis
+einen positiven Einfluss auf die Verkäufe hat und Visibilität einen
+negativen. Die Gewichte der Poisson-Regression sind ebenfalls per
+<code>exp()</code>-Funktion zu transformieren, um sie richtig
+interpretieren zu können. In diesem Fall ist es aber nicht einfach die
+Gewichte separat von einander zu betrachten. Siehe die Beispiele
+unten.</p></li>
+</ol>
+<pre class="r"><code># Interpretation der Gewichte
+exp(6.71409) # Erwartete Häufigkeit wenn Max_Preis = 0 &amp; Visibilität = 0</code></pre>
+<pre><code>[1] 824</code></pre>
+<pre class="r"><code>exp(6.71409 + 0.00715) # Erwartete Häufigkeit wenn Max_Preis = 1 &amp; Visibilität = 0</code></pre>
+<pre><code>[1] 830</code></pre>
+<pre class="r"><code>exp(6.71409 - 2.11849) # Erwartete Häufigkeit wenn Max_Preis = 0 &amp; Visibilität = 1</code></pre>
+<pre><code>[1] 99</code></pre>
+<pre class="r"><code>exp(6.71409 + 0.00715 - 2.11849) # Erwartete Häufigkeit wenn Max_Preis = 1 &amp; Visibilität = 1</code></pre>
+<pre><code>[1] 99.8</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Evaluiere nun die <code>summary()</code>. Was beobachtest
+du?</p></li>
+<li><p>Alle Effekte sind signifikant, trotz des teilweise kleinen
+Einflusses (im Fall von <code>Max_Preis</code>), was sicherlich der
+grossen Stichprobe zu schulden ist. Nichtsdestotrotz, zeigt die
+<code>Residual deviance</code> einen klar niedrigeren Wert als die
+<code>Null deviance</code>. Was sagt dir dies?</p></li>
+</ol>
+</div>
+<div id="d---negative-binomial-regression-bigmart"
+class="section level3">
+<h3>D - Negative binomial Regression: Bigmart</h3>
+<ol style="list-style-type: decimal">
+<li>Heutzutage wird dem Poisson Modell oftmals das Negative Binomial
+Modell vorgezogen, welches eine Verallgemeinerung des ersteren
+darstellt. Verwende die <code>glm.nb()</code> aus dem <code>MASS</code>
+Paket um eine solche Regression mit denselben Variablen wie zuletzt zu
+rechnen. Verwende das Template unten.</li>
+</ol>
+<pre class="r"><code># Lade MASS
+library(MASS)
+
+# Negative Binomial Regression
+bigmart_glm.nb &lt;- glm.nb(formula = XX ~ XX + XX, 
+                         data = XX)</code></pre>
+<pre class="r"><code># Lade MASS
+library(MASS)
+
+# Poisson Regression
+bigmart_glm.nb &lt;- glm.nb(formula = Verkäufe ~ Max_Preis + Visibilität, 
+                      data = bigmart)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Printe das Objekt und vergleiche die Regressionsgewichte mit
+denen der Poisson Regression. Hat sich was verändert?</p></li>
+<li><p>Nein, die Regressionsgewichte sind sehr stabil geblieben. Print
+die <code>summary()</code>. Was beobachtest du?</p></li>
+<li><p>Alle Effekt sind immer noch signifikant. Was sich jedoch geändert
+hat sind die Deviances, was mit einem komplexen zweistufigen
+Fitting-Prozess zu tun hat. Vergleichbar sind aber immer noch AIC und
+der Wert der ganz am Ende angegeben wird, welcher die volle Deviance für
+das Modell ist. Du wirst feststellen, dass beide Werte deutlich besser
+ausfallen, als bei der Poisson Regression, was nahelegt, dass das
+Negative-Binomial Modell tatsächlich geeigneter ist, die Daten zu
+beschreiben.</p></li>
+</ol>
+</div>
+</div>
+<div id="beispiele" class="section level2">
+<h2>Beispiele</h2>
+<pre class="r"><code># Regression mit R
+
+library(tidyverse)
+
+# Model:
+# Sagt der Hubraum (displ) die pro gallone 
+# fahrbaren Meilen voraus?
+hwy_mod &lt;- lm(formula = hwy ~ displ,
+               data = mpg)
+
+# Ergebnisse 
+summary(hwy_mod)
+coef(hwy_mod)
+
+# Gefittete Werte
+hwy_fit &lt;- fitted(hwy_mod)
+hwy_fit
+
+# Residuums 
+hwy_resid &lt;- residuals(hwy_mod)
+hwy_resid</code></pre>
+</div>
+<div id="datensätze" class="section level2">
+<h2>Datensätze</h2>
+<table>
+<colgroup>
+<col width="27%" />
+<col width="33%" />
+<col width="38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Datei</th>
+<th align="left">Zeile</th>
+<th align="left">Spalte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a
+href="https://raw.githubusercontent.com/therbootcamp/SmR_2020Mai/master/1_Data/wein.csv">wein.csv</a></td>
+<td align="left">6497</td>
+<td align="left">13</td>
+</tr>
+</tbody>
+</table>
+<div id="wein.csv" class="section level4">
+<h4>wein.csv</h4>
+<p>Der <code>wein.csv</code> Datensatz enthält aus den Jahren 2004 bis
+2007 des Comissão De Viticultura Da Região Dos Vinhos Verdes, der
+Offiziellen Zertifizierungsagentur des Vinho Verde in Portugal.</p>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Qualität</td>
+<td align="left">Qualitätsurteil über den Weins von 1-9</td>
+</tr>
+<tr class="even">
+<td align="left">Farbe</td>
+<td align="left">Roter oder weisser Wien</td>
+</tr>
+<tr class="odd">
+<td align="left">Gelöste_Säure</td>
+<td align="left">Konzentration der im Wein gelösten Säuren</td>
+</tr>
+<tr class="even">
+<td align="left">Freie_Säure</td>
+<td align="left">Konzentration der verflüchtigbaren Säuren</td>
+</tr>
+<tr class="odd">
+<td align="left">Citronensäure</td>
+<td align="left">Citronensäurekonzentration im Wein</td>
+</tr>
+<tr class="even">
+<td align="left">Restzucker</td>
+<td align="left">Zuckerkonzentration im Wein</td>
+</tr>
+<tr class="odd">
+<td align="left">Chloride</td>
+<td align="left">Chloridkonzentration im Wein</td>
+</tr>
+<tr class="even">
+<td align="left">Freie_Schwefeldioxide</td>
+<td align="left">Konzentration der verflüchtigbaren Schwefeldioxide</td>
+</tr>
+<tr class="odd">
+<td align="left">Gesamt_Schwefeldioxide</td>
+<td align="left">Konzentration der Schwefeldioxide insgesamt</td>
+</tr>
+<tr class="even">
+<td align="left">Dichte</td>
+<td align="left">Dichte des Weins</td>
+</tr>
+<tr class="odd">
+<td align="left">pH_Wert</td>
+<td align="left">pH-Wert des Weins. Je kleiner, desto sauerer.</td>
+</tr>
+<tr class="even">
+<td align="left">Sulphate</td>
+<td align="left">Sulphatkontration im Wein</td>
+</tr>
+<tr class="odd">
+<td align="left">Alkohol</td>
+<td align="left">Alkoholkonzentration im Wein in %</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bigmart.csv" class="section level4">
+<h4>bigmart.csv</h4>
+<p>Der <code>bigmart.csv</code> Datensatz enthält Verkaufszahlen einer
+nationalen Supermarktkette in Nepal aus dem Jahre 2013 für 1559 Produkte
+und 10 verschiedene Supermarktfilialen.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Verkäufe</td>
+<td align="left">Verkaufszahlen</td>
+</tr>
+<tr class="even">
+<td align="left">Gewicht</td>
+<td align="left">Gewicht des Produkts</td>
+</tr>
+<tr class="odd">
+<td align="left">Fettgehalt</td>
+<td align="left">Normal oder niedrig (low-fat)</td>
+</tr>
+<tr class="even">
+<td align="left">Visibilität</td>
+<td align="left">Verkaufsfläche für das Produkt</td>
+</tr>
+<tr class="odd">
+<td align="left">Typ</td>
+<td align="left">Art des Produkts</td>
+</tr>
+<tr class="even">
+<td align="left">Max_Preis</td>
+<td align="left">Maximaler Preis</td>
+</tr>
+<tr class="odd">
+<td align="left">Ladengrösse</td>
+<td align="left">Ladengrösse</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="funktionen" class="section level2">
+<h2>Funktionen</h2>
+<div id="pakete" class="section level3">
+<h3>Pakete</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Package</th>
+<th align="left">Installation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>tidyverse</code></td>
+<td align="left"><code>install.packages("tidyverse")</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>MASS</code></td>
+<td align="left"><code>install.packages("MASS")</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="funktionen-1" class="section level3">
+<h3>Funktionen</h3>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="12%" />
+<col width="80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Function</th>
+<th align="left">Package</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>glm</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Fitte ein generalisiertes lineares Modell</td>
+</tr>
+<tr class="even">
+<td align="left"><code>fitted</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Extrahiere vorhergesagte Werte</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>residuals</code></td>
+<td align="left"><code>stats</code></td>
+<td align="left">Extrahiere Residuen</td>
+</tr>
+<tr class="even">
+<td align="left"><code>gml.nb</code></td>
+<td align="left"><code>MASS</code></td>
+<td align="left">Fit a (generalized) linear model with negative binomial
+links</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="resourcen" class="section level2">
+<h2>Resourcen</h2>
+<div id="books" class="section level3">
+<h3>Books</h3>
+<ul>
+<li><p>Hilfreiche <a
+href="https://cran.r-project.org/web/packages/pscl/vignettes/countreg.pdf">Vignette</a>
+über Regressionen für Häufigkeiten mit R.</p></li>
+<li><p><a
+href="https://www.amazon.com/Discovering-Statistics-Using-Andy-Field/dp/1446200469">Discovering
+Statistics with R</a> von Andy Field ist sehr gut</p></li>
+<li><p><a href="https://bookdown.org/ndphillips/YaRrr/">YaRrr! The
+Pirate’s Guide to R</a> hat hilfreiche und unterhaltsame Kapitel zu
+Statistik mit R.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

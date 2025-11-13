@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lineare Modelle III</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="  Statistik mit R   The R Bootcamp                  " />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="baselrbootcamp.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lineare Modelle III
+### <br> Statistik mit R<br>
+<a href='https://therbootcamp.github.io' style='font-size:1.2em;'> The R
+Bootcamp </a> <br>
+<a href='https://therbootcamp.github.io/SmR_2022Apr/'>
+<i class='fas fa-clock' style='font-size:1.2em;'></i> </a> 
+<a href='https://therbootcamp.github.io'>
+<i class='fas fa-home' style='font-size:1.2em;' ></i> </a> 
+<a href='mailto:therbootcamp@gmail.com'>
+<i class='fas fa-envelope' style='font-size: 1.2em;'></i> </a> 
+<a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+<i class='fab fa-linkedin' style='font-size: 1.2em;'></i> </a>
+### April 2022
+
+---
+
+layout: true
+
+<div class="my-footer">
+  <span style="text-align:center">
+    <span> 
+      <img src="https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png" height=14 style="vertical-align: middle"/>
+    </span>
+    <a href="https://therbootcamp.github.io/">
+      <span style="padding-left:82px"> 
+        <font color="#7E7E7E">
+          www.therbootcamp.com
+        </font>
+      </span>
+    </a>
+    <a href="https://therbootcamp.github.io/">
+      <font color="#7E7E7E">
+       Statistik mit R | April 2022
+      </font>
+    </a>
+    </span>
+  </div> 
+
+---
+
+
+
+
+
+
+
+# Generalisiertes lineares Modell
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Das generalisierte lineare Modell ist &lt;high&gt;das eigentliche schweizer Taschenmesser&lt;/high&gt; der Statistik.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Ermöglicht gegenüber dem allgemeinen Linearen Modell &lt;high&gt;verschiedene Datenmodelle und Link-Funktionen&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right5[
+
+&lt;p align="center"&gt;
+
+&lt;img src="image/swiss.jpg"&gt;
+
+&lt;/p&gt;
+]
+
+---
+
+# Datenmodell
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Gemäss dem Datenmodell der &lt;high&gt;Normalen Linearen Regression&lt;/high&gt; folgen die Kriteriumswerte einer Normalverteilung um den vorhergesagten Wert&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\Large y \sim \mathcal{N}(\hat{y}, \sigma_e)$$`
+&lt;br&gt;
+
+`$$\large p(x|\mu, \sigma) = \frac{1}{\sigma \sqrt 2\pi}e^{-(x-\mu)/2\sigma^2}$$`
+
+]
+
+.pull-right5[
+
+&lt;img src="LinearModelsIII_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+.pull-left4[
+
+# Link-Funktionen
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Link-Funktionen sind &lt;high&gt;Transformationen des Kriteriums&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Gehen i.d.R. Hand in Hand mit &lt;high&gt;alternativen Datenmodellen&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\Large \rho(\mu)=\textbf{X}\boldsymbol{\beta}$$`
+]
+
+.pull-right5[
+
+&lt;br&gt;&lt;br&gt;
+
+&lt;p align="center"&gt;&lt;u&gt;Identität - Normal&lt;/u&gt;&lt;/p&gt;
+
+`$$\Large \rho(\mu)=\mu, \;\;\;\ y \sim \mathcal{N}(\mu,\,\sigma)$$`
+&lt;p align="center" style="padding-top:30px"&gt;&lt;u&gt;Logit - Binomial&lt;/u&gt;&lt;/p&gt;
+
+`$$\Large \rho(\mu)=log \Big(\frac{\mu}{1-\mu}\Big), \;\;\;\ y \sim B(\mu)$$`
+&lt;p align="center" style="padding-top:30px"&gt;&lt;u&gt;Log - Negative binomial&lt;/u&gt;&lt;/p&gt;
+
+$$\Large \rho(\mu)=log (\mu), \;\;\;\ y \sim NB(\mu) $$
+
+&lt;p align="center" style="padding-top:30px"&gt;&lt;u&gt;Log - Poisson&lt;/u&gt;&lt;/p&gt;
+
+`$$\Large \rho(\mu)=log (\mu), \;\;\;\ y\sim Pois(\mu)$$`
+
+]
+
+
+---
+
+# Logistische Regression
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Dient der Vorhersage von &lt;high&gt;dichotomen Variablen&lt;/high&gt;, d.h., Ja/Nein, 1/0, etc.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Basiert auf einem &lt;high&gt;logit-link mit Binomialem Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\Large \hat{y} = p(y = 1) = \frac{1}{1 + e^{-b_0+b_1*x}}$$`
+]
+
+
+.pull-right5[
+
+&lt;img src="LinearModelsIII_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+# Maximum Likelihood
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Maximum Likelihood ist neben Kleinste-Quadrate (OLS) die &lt;high&gt;wichtigste "Loss"-function der Statistik&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;&lt;high&gt;Koinzidiert mit OLS&lt;/high&gt; für nicht-generalisierte Modelle.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\large \mathbf{b} = \underset{\mathbf{b}}{\operatorname{argmax}} L\big(y_i|{\mathbf{b}}\big)$$`
+
+&lt;p align="center" style="padding-bottom:5px;margin-top:0px;padding-top:20px"&gt;&lt;u&gt;Binomialmodell&lt;/u&gt;&lt;/p&gt;
+
+`$$\large L(y_i|\mathbf{b}) = \binom{n}{k} p_{y_i=1}^k(1-p_{y_i=1})^{n-k}$$`
+
+]
+
+.pull-right5[
+
+&lt;img src="LinearModelsIII_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+# `glm()`
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Generalisierte lineare Modelle&lt;/high&gt; können mit &lt;mono&gt;glm()&lt;/mono&gt; spezifiziert werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Argument &lt;mono&gt;family&lt;/mono&gt; bestimmt &lt;high&gt;Link und Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right5[
+
+&lt;p align="center"&gt;
+&lt;img src="image/glm.png"&gt;
+&lt;/p&gt;
+
+]
+
+---
+
+# `glm()`
+
+.pull-left35[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Generalisierte lineare Modelle&lt;/high&gt; können mit &lt;mono&gt;glm()&lt;/mono&gt; spezifiziert werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Argument &lt;mono&gt;family&lt;/mono&gt; bestimmt &lt;high&gt;Link und Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+]
+
+.pull-right55[
+
+
+```r
+# Logistische Regression
+mod &lt;- glm(Europa ~ Besucher, 
+           data = tour, 
+           family = 'binomial')
+mod
+```
+
+```
+## 
+## Call:  glm(formula = Europa ~ Besucher, family = "binomial", data = tour)
+## 
+## Coefficients:
+## (Intercept)     Besucher  
+##   -0.030579     0.000221  
+## 
+## Degrees of Freedom: 70 Total (i.e. Null);  69 Residual
+## Null Deviance:	    98.3 
+## Residual Deviance: 96.9 	AIC: 101
+```
+
+]
+
+---
+
+.pull-left35[
+
+# `glm()`
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Generalisierte lineare Modelle&lt;/high&gt; können mit &lt;mono&gt;glm()&lt;/mono&gt; spezifiziert werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Argument &lt;mono&gt;family&lt;/mono&gt; bestimmt &lt;high&gt;Link und Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\large e^{b_{x}} = OR_{x}$$`
+
+&lt;br&gt;
+
+`$$\large OR_x = \frac{\frac{p_{x+1}}{1-p_{x+1}}}{\frac{p_x}{1-p_x}}$$`
+
+]
+
+.pull-right55[
+
+&lt;br&gt;
+
+
+
+
+```r
+# Logistische Regression
+summary(mod)
+```
+
+```
+## 
+## Call:
+## glm(formula = Europa ~ Besucher, family = "binomial", data = tour)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.797  -1.174   0.844   1.173   1.189  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -0.030579   0.258185   -0.12     0.91
+## Besucher     0.000221   0.000217    1.02     0.31
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 98.300  on 70  degrees of freedom
+## Residual deviance: 96.876  on 69  degrees of freedom
+## AIC: 100.9
+## 
+## Number of Fisher Scoring iterations: 3
+```
+
+]
+
+---
+
+# Poisson-Regression
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Dient der Vorhersage von &lt;high&gt;Häufigkeiten&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Basiert auf einem &lt;high&gt;log-link mit Poisson Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br&gt;
+
+`$$\Large \hat{y} = e^{-b_0+b_1*x}$$`
+
+&lt;p align="center" style="padding-bottom:5px;margin-top:0px;padding-top:30px"&gt;&lt;u&gt;Poisson-Modell&lt;/u&gt;&lt;/p&gt;
+
+`$$\Large L(y_i|b) = \prod_i \frac{\hat{y_i}^{y_i}}{y_{i}!}e^{-\hat{y}}$$`
+]
+
+
+.pull-right5[
+
+&lt;img src="LinearModelsIII_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+# `glm()`
+
+.pull-left35[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Generalisierte lineare Modelle&lt;/high&gt; können mit &lt;mono&gt;glm()&lt;/mono&gt; spezifiziert werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Argument &lt;mono&gt;family&lt;/mono&gt; bestimmt &lt;high&gt;Link und Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right55[
+
+
+```r
+# Poisson Regression
+mod &lt;- glm(Nächte ~ Äquivalenzeinkommen, 
+           data = tour, 
+           family = 'poisson')
+mod
+```
+
+```
+## 
+## Call:  glm(formula = Nächte ~ Äquivalenzeinkommen, family = "poisson", 
+##     data = tour)
+## 
+## Coefficients:
+##         (Intercept)  Äquivalenzeinkommen  
+##            6.02e+00             7.59e-05  
+## 
+## Degrees of Freedom: 33 Total (i.e. Null);  32 Residual
+## Null Deviance:	    117000 
+## Residual Deviance: 104000 	AIC: 104000
+```
+
+]
+
+---
+
+.pull-left35[
+
+# `glm()`
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Generalisierte lineare Modelle&lt;/high&gt; können mit &lt;mono&gt;glm()&lt;/mono&gt; spezifiziert werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Argument &lt;mono&gt;family&lt;/mono&gt; bestimmt &lt;high&gt;Link und Datenmodell&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right55[
+
+
+
+
+```r
+# Poisson Regression
+summary(mod)
+```
+
+```
+## 
+## Call:
+## glm(formula = Nächte ~ Äquivalenzeinkommen, family = "poisson", 
+##     data = tour)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -72.31  -38.90  -24.25   -3.29  215.85  
+## 
+## Coefficients:
+##                     Estimate Std. Error z value
+## (Intercept)         6.02e+00   1.32e-02     454
+## Äquivalenzeinkommen 7.59e-05   6.60e-07     115
+##                     Pr(&gt;|z|)    
+## (Intercept)           &lt;2e-16 ***
+## Äquivalenzeinkommen   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 117456  on 33  degrees of freedom
+## Residual deviance: 103814  on 32  degrees of freedom
+## AIC: 104087
+## 
+## Number of Fisher Scoring iterations: 6
+```
+
+]
+
+
+---
+
+# `glm.nb()`
+
+.pull-left35[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Negativ-Binomialmodelle&lt;/high&gt; sind eine alternative für Häufigkeitsdaten.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Entsprechen einer &lt;high&gt;Generalisierung des Poisson-Modells&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right55[
+
+
+```r
+# Negativ-binomial Regression
+mod &lt;- glm.nb(Nächte ~ Äquivalenzeinkommen, 
+              data = tour)
+mod
+```
+
+```
+## 
+## Call:  glm.nb(formula = Nächte ~ Äquivalenzeinkommen, data = tour, 
+##     init.theta = 0.621467307, link = log)
+## 
+## Coefficients:
+##         (Intercept)  Äquivalenzeinkommen  
+##            4.966653             0.000135  
+## 
+## Degrees of Freedom: 33 Total (i.e. Null);  32 Residual
+## Null Deviance:	    52.9 
+## Residual Deviance: 41.7 	AIC: 547
+```
+
+]
+
+---
+
+.pull-left35[
+
+# `glm.nb()`
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;&lt;high&gt;Negativ-Binomialmodellen&lt;/high&gt; sind eine alternative für Häufigkeitsdaten.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Entsprechen einer &lt;high&gt;Generalisierung des Poisson-Modells&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+.pull-right55[
+
+
+```r
+# Negativ-binomial Regression
+mod &lt;- glm.nb(Nächte ~ Äquivalenzeinkommen, 
+              data = tour)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## glm.nb(formula = Nächte ~ Äquivalenzeinkommen, data = tour, 
+##     init.theta = 0.621467307, link = log)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0292  -1.2143  -0.5210   0.0366   2.2702  
+## 
+## Coefficients:
+##                     Estimate Std. Error z value
+## (Intercept)         4.97e+00   5.40e-01    9.20
+## Äquivalenzeinkommen 1.35e-04   3.21e-05    4.23
+##                     Pr(&gt;|z|)    
+## (Intercept)          &lt; 2e-16 ***
+## Äquivalenzeinkommen  2.4e-05 ***
+## ---
+## Signif. codes:  
+## 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for Negative Binomial(0.6215) family taken to be 1)
+## 
+##     Null deviance: 52.932  on 33  degrees of freedom
+## Residual deviance: 41.729  on 32  degrees of freedom
+## AIC: 547.5
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  0.621 
+##           Std. Err.:  0.127 
+## 
+##  2 x log-likelihood:  -541.464
+```
+
+]
+
+
+---
+
+# `AIC`
+
+.pull-left4[
+
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Generalisierte lineare Modelle können mit dem &lt;high&gt;Akaike Informationskriterium (AIC)&lt;/high&gt; verglichen werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Es drückt den &lt;high&gt;Fit relativ zur Anzahl Parameter&lt;/high&gt; &lt;i&gt;k&lt;/i&gt; aus&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+`$$AIC = -2logL + 2k$$`
+
+]
+
+
+.pull-right5[
+
+
+```r
+# Negativ-binomial Regression
+pois &lt;- glm(Nächte ~ Äquivalenzeinkommen, 
+            data = tour, family = 'poisson')
+
+# Negativ-binomial Regression
+nb &lt;- glm.nb(Nächte ~ Äquivalenzeinkommen, 
+             data = tour)
+
+# Vergleich
+pois$aic
+```
+
+```
+## [1] 104087
+```
+
+```r
+nb$aic
+```
+
+```
+## [1] 547.5
+```
+
+]
+
+---
+
+# `AIC`
+
+.pull-left4[
+
+&lt;ul&gt;
+  &lt;li class="m1"&gt;&lt;span&gt;Generalisierte lineare Modelle können mit dem &lt;high&gt;Akaike Informationskriterium (AIC)&lt;/high&gt; verglichen werden.&lt;/high&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="m2"&gt;&lt;span&gt;Es drückt den &lt;high&gt;Fit relativ zur Anzahl Parameter&lt;/high&gt; &lt;i&gt;k&lt;/i&gt; aus&lt;/high&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+]
+
+
+.pull-right5[
+
+&lt;p align="center"&gt;&lt;font style="size:14px;font-weight:900;color:#EA4B68"&gt;Poisson&lt;/font&gt; vs. &lt;font style="size:14px;font-weight:900;color:#6ABA9A"&gt;Negative-binomial&lt;/font&gt;&lt;/p&gt;
+
+&lt;img src="LinearModelsIII_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+class: middle, center
+
+&lt;h1&gt;&lt;a href="https://therbootcamp.github.io/SmR_2022Apr/_sessions/LinearModelsIII/LinearModelsIII_practical.html"&gt;Practical&lt;/a&gt;&lt;/h1&gt;
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

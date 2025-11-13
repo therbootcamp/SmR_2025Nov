@@ -1,0 +1,71 @@
+---
+title: "Statistik mit R"
+subtitle: ""
+author: "
+      <a href='https://therbootcamp.github.io'>
+        <i class='fas fa-home' style='font-size:1em;'></i>
+      </a>
+      <a href='https://therbootcamp.github.io/SmR_2020Mai/'>
+        <i class='fas fa-clock' style='font-size:1em;' ></i>
+      </a>
+      <a href='mailto:therbootcamp@gmail.com'>
+        <i class='fas fa-envelope' style='font-size: 1em;'></i>
+      </a>
+      <a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
+        <i class='fab fa-linkedin' style='font-size: 1em;'></i>
+      </a>
+      <a href='https://therbootcamp.github.io'>
+        <font style='font-style:normal;font-size:20px;padding-left:5px'>The R Bootcamp</font>
+      </a>
+      <br>
+      <img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style= 'height:16.7px;vertical-align:baseline'/><font style='font-style:normal;font-size:20px;padding-left:9.3px'>Mai 2020</font>
+      "
+output:
+  html_document:
+    css: index.css
+    self_contained: no
+---
+
+<br>
+
+### Downloads
+
+##### [**Projekt**](https://www.dropbox.com/s/hpvzp68n5s29h0b/TheRBootcamp.zip?dl=1)
+
+##### [**Cheatsheets**](https://www.dropbox.com/s/26kjubck26lbwnw/cheatsheets.pdf?dl=1)
+
+##### [**psi_exp1.csv**](https://www.dropbox.com/s/0uwf7lvvotat0dl/psi_exp1.csv?dl=1)
+
+<br>
+
+### Materials
+|  | Tag 1| Tag 2| 
+|:--|:-------------|:-------------|
+|0| Willkommen!<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/Welcome/Welcome.html) | Wiederholung<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/Recap/Recap.html) |
+|1| Einführung in Statistik<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/Intro2Stats/Intro2Stats.html#1)| Gemischte Modelle<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/GemischteModelle/GemischteModelle.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/GemischteModelle/GemischteModelle_practical.html) |
+|2| Lineare Modelle I<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsI/LinearModelsI.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsI/LinearModelsI_practical.html)| Robuste Statistik<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/RobustStats/RobustStats.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/RobustStats/RobustStats_practical.html) |
+|3| Lineare Modelle II<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsII/LinearModelsII.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsII/LinearModelsII_practical.html)  | Neue Statistik <br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/NewStats/NewStats.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/NewStats/NewStats_practical.html) |
+|3| Lineare Modelle III<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsIII/LinearModelsIII.html), [practical](https://therbootcamp.github.io/SmR_2020Mai/_sessions/LinearModelsIII/LinearModelsIII_practical.html)  | Ausblick<br>[slides](https://therbootcamp.github.io/SmR_2020Mai/_sessions/NextSteps/NextSteps.html) |
+<br>
+
+
+<!---
+
+|  | Day 1<br>Fundamentals| Day 2<br>Analysis| Day 3<br>Reporting| 
+|:--|:-------------|:-------------|:-------------|
+|0| Welcome!<br>[slides](_sessions/Welcome/Welcome.html) | Recap I<br>[slides](_sessions/Recap/Recap.html)| Recap II<br>[slides](_sessions/RecapII/RecapII.html)|
+|1| Intro to R<br>[slides](_sessions/IntroToR/IntroToR.html), [source](_sessions/IntroToR/IntroToR_interactive.R) | Statistics I <br>[slides](_sessions/StatisticsI/StatisticsI.html), [practical](_sessions/StatisticsI/StatisticsI_practical.html) | Plotting II <br>[slides](_sessions/PlottingII/PlottingII.html), [practical](_sessions/PlottingII/PlottingII.html) |
+|2|  Data <br>[slides](_sessions/Data/Data.html), [practical](_sessions/Data/Data_practical.html)| Statistics II<br>[slides](_sessions/StatisticsII/Statistics.html), [practical](_sessions/StatisticsII/Statistics_practical.html)| Reporting<br>[slides](_sessions/Reporting/Reporting.html), [practical](_sessions/Reporting/Reporting_practical.html)|
+|3|   Wrangling<br>[slides](_sessions/Wrangling/Wrangling.html), [practical](_sessions/Wrangling/Wrangling_practical.html) | Plotting I<br>[slides](_sessions/PlottingI/Plotting.html), [practical](_sessions/PlottingI/Plotting_practical.html) |Case Studies<br>[Intro](_sessions/CaseStudies/CaseStudies.html)<br>[1: Clinical Trial](_sessions/CaseStudies/Clinical_Data_Case_Study.html)<br>[2: Finance ](_sessions/CaseStudies/Financial_Data_Case_Study.html)|
+|4| |  | Next Steps<br> [slides](_sessions/NextSteps/NextSteps.html) |
+<br>
+
+--->
+
+
+### Schedule
+
+
+<p align="left"><br>
+    <img border="0" alt="Apr2019Schedule" src="https://therbootcamp.github.io/SmR_2020Mai/_sessions/Welcome/image/schedule.png" style="width:410px">
+</p>
