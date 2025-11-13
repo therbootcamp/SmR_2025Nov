@@ -957,6 +957,6 @@ $$ \large \bar{X} \xrightarrow{d} \mathcal{N}(\mu, \frac{\sigma}{\sqrt{n}}) $$
 ---
 class: middle, center
 
-<h1><a href="https://therbootcamp.github.io/SmR_2022Apr/index.html">Agenda</a></h1>
+<h1><a href="https://therbootcamp.github.io/SmR_2025Nov/index.html">Agenda</a></h1>
 
 

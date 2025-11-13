@@ -12,19 +12,15 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Einführung Statistik
-### <br> Statistik mit R<br>
-<a href='https://therbootcamp.github.io' style='font-size:1.2em;'> The R
-Bootcamp </a> <br>
-<a href='https://therbootcamp.github.io/SmR_2022Apr/'>
-<i class='fas fa-clock' style='font-size:1.2em;'></i> </a> 
-<a href='https://therbootcamp.github.io'>
-<i class='fas fa-home' style='font-size:1.2em;' ></i> </a> 
-<a href='mailto:therbootcamp@gmail.com'>
-<i class='fas fa-envelope' style='font-size: 1.2em;'></i> </a> 
-<a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
-<i class='fab fa-linkedin' style='font-size: 1.2em;'></i> </a>
-### April 2022
+]
+.author[
+### <br> Statistik mit R<br> <a href='https://therbootcamp.github.io' style='font-size:1.2em;'> The R Bootcamp </a> <br> <a href='https://therbootcamp.github.io/SmR_2025Nov/'> <i class='fas fa-clock' style='font-size:1.2em;'></i> </a>  <a href='https://therbootcamp.github.io'> <i class='fas fa-home' style='font-size:1.2em;' ></i> </a>  <a href='mailto:baselrbootcamp@gmail.com'> <i class='fas fa-envelope' style='font-size: 1.2em;'></i> </a>  <a href='https://www.linkedin.com/company/basel-r-bootcamp/'> <i class='fab fa-linkedin' style='font-size: 1.2em;'></i> </a>
+]
+.date[
+### November 2025
+]
 
 ---
 
@@ -44,7 +40,7 @@ layout: true
     </a>
     <a href="https://therbootcamp.github.io/">
       <font color="#7E7E7E">
-       Statistik mit R | April 2022
+       Statistik mit R | November 2025
       </font>
     </a>
     </span>
@@ -152,7 +148,7 @@ Von &lt;i&gt;statisticum&lt;/i&gt;, lat., den Staat betreffend.&lt;br&gt;&lt;fon
 
 
 
-```r
+``` r
 immatrikulation %&gt;% 
   filter(Jahr == 2019)
 ```
@@ -160,19 +156,19 @@ immatrikulation %&gt;%
 
 ```
 ## # A tibble: 26 × 3
-##    Kanton          Jahr Immatrikulation…
-##    &lt;chr&gt;          &lt;dbl&gt;            &lt;dbl&gt;
-##  1 Aargau          2019              216
-##  2 Appenzell Aus…  2019                6
-##  3 Appenzell Inn…  2019                6
-##  4 Basel-Landsch…  2019              466
-##  5 Basel-Stadt     2019              360
-##  6 Bern            2019               73
-##  7 Freiburg        2019               12
-##  8 Genf            2019                2
-##  9 Glarus          2019                6
-## 10 Graubünden      2019               24
-## # … with 16 more rows
+##    Kanton         Jahr Immatrikulationen
+##    &lt;chr&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+##  1 Aargau         2019               216
+##  2 Appenzell Au…  2019                 6
+##  3 Appenzell In…  2019                 6
+##  4 Basel-Landsc…  2019               466
+##  5 Basel-Stadt    2019               360
+##  6 Bern           2019                73
+##  7 Freiburg       2019                12
+##  8 Genf           2019                 2
+##  9 Glarus         2019                 6
+## 10 Graubünden     2019                24
+## # ℹ 16 more rows
 ```
 
 ]
@@ -205,7 +201,7 @@ immatrikulation %&gt;%
 
 
 
-```r
+``` r
 immatrikulation %&gt;% 
   filter(Jahr == 2019) %&gt;%
   summarize(
@@ -314,7 +310,7 @@ immatrikulation %&gt;%
 
 
 
-```r
+``` r
 immatrikulation
 ```
 
@@ -333,7 +329,7 @@ immatrikulation
 ##  8 Genf                        6      2
 ##  9 Glarus                      0      6
 ## 10 Graubünden                 29     24
-## # … with 16 more rows
+## # ℹ 16 more rows
 ```
 
 ]
@@ -914,7 +910,7 @@ $$ \large \bar{X} \xrightarrow{d} \mathcal{N}(\mu, \frac{\sigma}{\sqrt{n}}) $$
 ---
 class: middle, center
 
-&lt;h1&gt;&lt;a href="https://therbootcamp.github.io/SmR_2022Apr/index.html"&gt;Agenda&lt;/a&gt;&lt;/h1&gt;
+&lt;h1&gt;&lt;a href="https://therbootcamp.github.io/SmR_2025Nov/index.html"&gt;Agenda&lt;/a&gt;&lt;/h1&gt;
 
 
     </textarea>
@@ -965,6 +961,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

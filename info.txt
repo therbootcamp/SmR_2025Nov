@@ -1,0 +1,3 @@
+Had to run the following to render any RSwissMaps things (not on CRAN anymore):
+
+devtools::install_github("zumbov2/RSwissMaps", subdir = "allinone")
