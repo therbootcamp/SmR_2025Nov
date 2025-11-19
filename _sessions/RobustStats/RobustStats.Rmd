@@ -594,7 +594,7 @@ dbinom(x = n_plus : N,
 # Robuste Regression
 
 <ul>
-  <li class="m1"><span>Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
+  <li class="m1"><span>Die Robustheit von Regression kann durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
 </ul>
 
 <p align = "center">
@@ -682,7 +682,7 @@ dbinom(x = n_plus : N,
 # Robuste Regression
 
 <ul>
-  <li class="m1"><span>Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
+  <li class="m1"><span>Die Robustheit von Regression kann durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
 </ul>
 
 <p align = "center">
@@ -794,7 +794,7 @@ summary(m)
 # Robuste Regression
 
 <ul>
-  <li class="m1"><span>Die Robustheit von Regression kann verbessert durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
+  <li class="m1"><span>Die Robustheit von Regression kann durch alternative Fehlerfunktionen &rho;(e) verbessert werden.</span></li>
 </ul>
 
 <p align = "center">
