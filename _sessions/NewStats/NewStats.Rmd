@@ -95,7 +95,7 @@ knitr::opts_chunk$set(dpi = 300, echo = FALSE, warning = FALSE, fig.align = 'cen
 </ul>
 
 <br><br>
-Siehe vergleichbare Studien in [**Medicine**](https://therbootcamp.github.io/SwR_2019Apr/_sessions/NewStats/literature/Ioannidis2005.pdf), [**Economics**](https://therbootcamp.github.io/SwR_2019Apr/_sessions/NewStats/literature/Camerer2016.pdf), [**Marketing**](https://therbootcamp.github.io/SwR_2019Apr/_sessions/NewStats/literature/Hunter2001.pdf), [**Social sciences**](https://therbootcamp.github.io/SwR_2019Apr/_sessions/NewStats/literature/Camerer2018.pdf). 
+Siehe vergleichbare Studien in [**Medicine**](https://therbootcamp.github.io/SmR_2025Nov/_sessions/NewStats/literature/Ioannidis2005.pdf), [**Economics**](https://therbootcamp.github.io/SmR_2025Nov/_sessions/NewStats/literature/Camerer2016.pdf), [**Marketing**](https://therbootcamp.github.io/SmR_2025Nov/_sessions/NewStats/literature/Hunter2001.pdf), [**Social sciences**](https://therbootcamp.github.io/SmR_2025Nov/_sessions/NewStats/literature/Camerer2018.pdf). 
 
 ]
 
@@ -213,7 +213,7 @@ library(pwr)
 # N für einen grossen Effekt im t-test
 pwr.t.test(sig.level = .05, 
            power = .95, 
-           d = .2) # grosser Effekt
+           d = .2) # kleiner Effekt
 ```
 
 ]
@@ -260,7 +260,7 @@ Ronald Coase
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
 
-<p align="right"><font style="font-size:10px">from <a href="https://fivethirtyeight.com/features/science-isnt-broken/#part1">fivethirtyeight.com</a></font>
+<p align="right"><font style="font-size:10px">from <a href="https://www.youtube.com/watch?v=i60wwZDA1CI">youtube.com</a></font>
 </p>
 
 
@@ -268,8 +268,10 @@ Ronald Coase
 
 
 .pull-right75[
-<br>
-<iframe src="https://projects.fivethirtyeight.com/p-hacking/index.html?initialWidth=1024&amp;childId=phacking&amp;parentTitle=Science%20Isn%E2%80%99t%20Broken%20%7C%20FiveThirtyEight&amp;parentUrl=https%3A%2F%2Ffivethirtyeight.com%2Ffeatures%2Fscience-isnt-broken%2F" width="100%" scrolling="yes" marginheight="0" frameborder="0" height="550px"></iframe>
+<br><br><br><br>
+<iframe width="700" height="400" src="https://www.youtube.com/embed/i60wwZDA1CI" title="The method that can &quot;prove&quot; almost anything - James A. Smith" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<!--<iframe src="https://projects.fivethirtyeight.com/p-hacking/index.html?initialWidth=1024&amp;childId=phacking&amp;parentTitle=Science%20Isn%E2%80%99t%20Broken%20%7C%20FiveThirtyEight&amp;parentUrl=https%3A%2F%2Ffivethirtyeight.com%2Ffeatures%2Fscience-isnt-broken%2F" width="100%" scrolling="yes" marginheight="0" frameborder="0" height="550px"></iframe>-->
 
 ]
 
@@ -753,7 +755,7 @@ print2(boot.ci(boot_res), n = 10)
 # Bayesianische Statistik
 
 <ul>
-  <li class="m1"><span>Bayesianische Statistik war <high>lange unpopular</high>.</span></li>
+  <li class="m1"><span>Bayesianische Statistik war <high>lange unpopulär</high>.</span></li>
   <ul>
     <li><span>Es ist <high>komputational anspruchsvoll</high> <mono>p(D)</mono> zu berechnen.</span></li>
     <li><span>Das Festlegen der Prior ist <high>notwendigerweise subjektiv</high>.</span></li>

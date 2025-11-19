@@ -9,11 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="     Statistik mit R               The R Bootcamp       " />
 
 
 <title>Neue Statistik</title>
 
-<script src="NewStats_practical_files/header-attrs-2.13/header-attrs.js"></script>
+<script src="NewStats_practical_files/header-attrs-2.29/header-attrs.js"></script>
 <script src="NewStats_practical_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="NewStats_practical_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -105,8 +106,8 @@ pre code {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -114,16 +115,9 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -169,11 +163,11 @@ pre code {
 
 
 <h1 class="title toc-ignore">Neue Statistik</h1>
-<h4 class="author"><table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'>
-<col width='10%'>
-<col width='10%'>
-<tr style="border:none">
-<td style="display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none" nowrap>
+<h4 class="author"><table style='table-layout:fixed;width:100%;border:0;padding:0;margin:0'><br />
+<col width='10%'><br />
+<col width='10%'><br />
+<tr style="border:none"><br />
+<td style="display:block;width:100%;text-align:left;vertical-align:bottom;padding:0;margin:0;border:none" nowrap><br />
 <font style='font-style:normal'>Statistik mit R</font><br>
 <a href='https://therbootcamp.github.io/SmR_2022Apr/'>
 <i class='fas fa-clock' style='font-size:.9em;' ></i> </a>
@@ -184,12 +178,12 @@ pre code {
 <a href='https://www.linkedin.com/company/basel-r-bootcamp/'>
 <i class='fab fa-linkedin' style='font-size: .9em;'></i> </a>
 <a href='https://therbootcamp.github.io'>
-<font style='font-style:normal'>The R Bootcamp</font> </a>
-</td>
-<td style="width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none">
-<img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/>
-</td>
-</tr>
+<font style='font-style:normal'>The R Bootcamp</font> </a><br />
+</td><br />
+<td style="width:100%;vertical-align:bottom;text-align:right;padding:0;margin:0;border:none"><br />
+<img src='https://raw.githubusercontent.com/therbootcamp/therbootcamp.github.io/master/_sessions/_image/by-sa.png' style='height:15px;width:80px'/><br />
+</td><br />
+</tr><br />
 </table></h4>
 
 </div>
@@ -251,26 +245,8 @@ Ordner.</p></li>
 <pre class="r"><code># Lade die nötigen Pakete
 library(tidyverse)
 library(pwr)
-library(rstanarm)</code></pre>
-<pre><code>Loading required package: Rcpp</code></pre>
-<pre><code>This is rstanarm version 2.21.1</code></pre>
-<pre><code>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</code></pre>
-<pre><code>- Default priors may change, so it&#39;s safest to specify priors, even if equivalent to the defaults.</code></pre>
-<pre><code>- For execution on a local, multicore CPU with excess RAM we recommend calling</code></pre>
-<pre><code>  options(mc.cores = parallel::detectCores())</code></pre>
-<pre class="r"><code>library(BayesFactor)</code></pre>
-<pre><code>Loading required package: coda</code></pre>
-<pre><code>Loading required package: Matrix</code></pre>
-<pre><code>
-Attaching package: &#39;Matrix&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
-
-    expand, pack, unpack</code></pre>
-<pre><code>************
-Welcome to BayesFactor 0.9.12-4.2. If you have questions, please contact Richard Morey (richarddmorey@gmail.com).
-
-Type BFManual() to open the manual.
-************</code></pre>
+library(rstanarm)
+library(BayesFactor)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Verwende die <code>read_csv()</code> Funktion um <code>psi1</code>,
 die Daten des ersten Experiments, einzulesen.</li>
@@ -325,14 +301,6 @@ Trefferrate_erotic_delta &lt;- mean(XX) - 50
 
 # Berechne d
 d &lt;- Trefferrate_erotic_delta / sd(XX)</code></pre>
-<pre class="r"><code># Extrahiere die Trefferraten für erotic
-Trefferrate_erotic &lt;- psi1 %&gt;% filter(Bedingung == &quot;erotic&quot;) %&gt;% pull(Trefferrate)
-
-# Berechne die Abweichung von H0
-Trefferrate_erotic_delta &lt;- mean(Trefferrate_erotic) - 50
-
-# Berechne d
-d &lt;- Trefferrate_erotic_delta / sd(Trefferrate_erotic)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Ein Cohen’s d von <code>.25</code> wird allgemein als klein, aber
 bedeutsam angesehen. Nimm nun die Perspektive eines rivalisierenden
@@ -348,39 +316,19 @@ stichprobe &lt;- pwr.t.test(d = XX,
                          power = XX, 
                          alternative = &quot;greater&quot;)
 stichprobe</code></pre>
-<pre class="r"><code># N um d=.25, alpha = .05, power = .95
-stichprobe &lt;- pwr.t.test(d = .25, 
-                         sig.level = .05, 
-                         power = .95, 
-                         alternative = &quot;greater&quot;)
-stichprobe</code></pre>
-<pre><code>
-     Two-sample t test power calculation 
-
-              n = 347
-              d = 0.25
-      sig.level = 0.05
-          power = 0.95
-    alternative = greater
-
-NOTE: n is number in *each* group</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>Laut Poweranalyse wäre eine Stichprobe von 347 Individuen nötig.
+<li><p>Laut Poweranalyse wäre eine Stichprobe von 347 Individuen nötig.
 Versuche dies einmal mit der <code>plot.power.htest()</code>-Funktion zu
 visualisieren. Wende sie einfach auf das <code>stichprobe</code>-Objekt
-an.</li>
-</ol>
-<pre class="r"><code># Stichprobe-Visualisierung
-plot.power.htest(stichprobe) </code></pre>
-<p><img src="NewStats_practical_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /></p>
-<ol start="4" style="list-style-type: decimal">
-<li>Mittels des Plots kannst du nun auch evaluieren, wie gross die Power
-von Bem’s ursprünglicher Studie war. In Bem’s <code>'erotic'</code>
-condition waren 100 Beobachtungen. Finde den entsprechenden Punkt auf
-der x-Achse und gehe dann nach oben um die dazugehörige Power zu finden.
-Alternativ kannst du nochmals die <code>pwr.t.test()</code> Funktion
-verwenden und anstatt <code>power</code> die Stichprobengrösse
-<code>n</code> definieren. Siehe Template.</li>
+an.</p></li>
+<li><p>Mittels des Plots kannst du nun auch evaluieren, wie gross die
+Power von Bem’s ursprünglicher Studie war. In Bem’s
+<code>'erotic'</code> condition waren 100 Beobachtungen. Finde den
+entsprechenden Punkt auf der x-Achse und gehe dann nach oben um die
+dazugehörige Power zu finden. Alternativ kannst du nochmals die
+<code>pwr.t.test()</code> Funktion verwenden und anstatt
+<code>power</code> die Stichprobengrösse <code>n</code> definieren.
+Siehe Template.</p></li>
 </ol>
 <pre class="r"><code># Bems post-hoc power
 power &lt;- pwr.t.test(n = XX, 
@@ -388,24 +336,8 @@ power &lt;- pwr.t.test(n = XX,
                     sig.level = .05, 
                     alternative = &quot;greater&quot;)
 power</code></pre>
-<pre class="r"><code># Bems post-hoc power
-power &lt;- pwr.t.test(n = length(Trefferrate_erotic), 
-                    d = .25, 
-                    sig.level = .05, 
-                    alternative = &quot;greater&quot;)
-power</code></pre>
-<pre><code>
-     Two-sample t test power calculation 
-
-              n = 100
-              d = 0.25
-      sig.level = 0.05
-          power = 0.547
-    alternative = greater
-
-NOTE: n is number in *each* group</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li>Die letzte Analyse, das bestimmen der Power für einen gegebenen
+<li><p>Die letzte Analyse, das bestimmen der Power für einen gegebenen
 Effekt und Stichprobengrösse nennt man eine Post-hoc Poweranalyse,
 welche nicht mit einer eigentlichen Poweranalyse verwechselt werden
 darf. In Bem’s Fall war die Power <code>.547</code>, das heisst, dass
@@ -414,48 +346,14 @@ Stärke zu beobachten. Überprüfe nun was gewesen wäre, wenn der Effekt
 klein gewesen wäre, d.h., <code>d = .1</code>. Wiederhole die
 Powerberechnung für Bem’s Stichprobengrösse und berechne die
 Stichprobengrösse die nötig ist für eine
-<code>power = 1-\beta = .95</code>.</li>
-</ol>
-<pre class="r"><code># Bems post-hoc power
-power &lt;- pwr.t.test(n = length(Trefferrate_erotic), 
-                    d = .1, 
-                    sig.level = .05, 
-                    alternative = &quot;greater&quot;)
-power</code></pre>
-<pre><code>
-     Two-sample t test power calculation 
-
-              n = 100
-              d = 0.1
-      sig.level = 0.05
-          power = 0.174
-    alternative = greater
-
-NOTE: n is number in *each* group</code></pre>
-<pre class="r"><code># Sample
-stichprobe &lt;- pwr.t.test(d = .1, 
-                        sig.level = .05, 
-                        power = .95, 
-                        alternative = &quot;greater&quot;)
-stichprobe</code></pre>
-<pre><code>
-     Two-sample t test power calculation 
-
-              n = 2165
-              d = 0.1
-      sig.level = 0.05
-          power = 0.95
-    alternative = greater
-
-NOTE: n is number in *each* group</code></pre>
-<ol start="6" style="list-style-type: decimal">
-<li>Für einen kleinen Effekt, welchen man vielleicht höchstens erwarten
-würde für etwas so ungewöhnliches wie menschliche
+<code>power = 1-\beta = .95</code>.</p></li>
+<li><p>Für einen kleinen Effekt, welchen man vielleicht höchstens
+erwarten würde für etwas so ungewöhnliches wie menschliche
 <em>psi</em>-Fähigkeiten, hatte Bem’s Studie nur eine power von
 <code>17.4%</code> und die Stichprobe die für eine hohe power notwendig
 war lag oberhalb von 2000 Personen. Das bedeutet, dass Bem entweder
 wusste, dass er einen grösseren Effekt beobachten würde oder, dass er
-eher schlechte Studienplanung betrieben hat.</li>
+eher schlechte Studienplanung betrieben hat.</p></li>
 </ol>
 </div>
 <div id="d---konfidenzintervalle" class="section level3">
@@ -476,30 +374,11 @@ psi_ttest &lt;- t.test(XX ~ XX, data = XX, paired = TRUE)
 
 # Testergebnisse
 psi_ttest</code></pre>
-<pre class="r"><code># t.test 
-psi_ttest &lt;- t.test(Trefferrate ~ Bedingung, data = psi1, paired = TRUE)
-
-# Testergebnisse
-psi_ttest</code></pre>
-<pre><code>
-    Paired t-test
-
-data:  Trefferrate by Bedingung
-t = -2, df = 99, p-value = 0.07
-alternative hypothesis: true difference in means is not equal to 0
-95 percent confidence interval:
- -6.839  0.228
-sample estimates:
-mean of the differences 
-                  -3.31 </code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Extrahiere nun das Konfidenzintervalle für den t-Test.</li>
 </ol>
 <pre class="r"><code># Konfidenzintrval
 psi_ttest$conf.int</code></pre>
-<pre><code>[1] -6.839  0.228
-attr(,&quot;conf.level&quot;)
-[1] 0.95</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Das Konfidenezinterval für den Unterschied liegt zwischen zwischen
 <code>-6.84</code> und <code>.23</code>. Das Konfidenzintervalle enthält
@@ -527,9 +406,6 @@ class="math inline">\(\alpha = .05\)</span>. Verwende das Template.</li>
 <pre class="r"><code># Kritische t-Werte
 t_25 &lt;- qt(p = XX, df = XX)
 t_97.5 &lt;- qt(p = XX, df = XX)</code></pre>
-<pre class="r"><code># Kritische t-Werte
-t_.25 &lt;- qt(p = .025, df = df)
-t_97.5 &lt;- qt(p = .975, df = df)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Schaue dir zunächst die beiden <i>t</i>-Werte an. Überrascht, dass
 es die selben Werte sind nur einmal positiv und einmal negativ? Das
@@ -542,9 +418,6 @@ unterschiedlichen Vorzeichen der beiden t-Werte.</li>
 <pre class="r"><code># confidence limits
 delta_lower &lt;- XX + XX * XX
 delta_upper &lt;- XX + XX * XX</code></pre>
-<pre class="r"><code># confidence limits
-delta_lower &lt;- delta + t_.25 * se
-delta_upper &lt;- delta + t_97.5 * se</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li><p>Jetzt kannst du das Konfidenzintervall mit dem aus dem
 <i>t</i>-Wert vergleichen. Ist es identisch?</p></li>
@@ -569,106 +442,6 @@ Verwende <code>rstanarm</code> im Template um die Trefferrate durch
 <pre class="r"><code># Bayesianische Regression
 Trefferrate_bm &lt;- stan_glm(formula = Trefferrate ~ Geschlecht + Stimulus_seeking, 
                            data = psi1 %&gt;% filter(Bedingung == &#39;erotic&#39;))</code></pre>
-<pre><code>
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 1).
-Chain 1: 
-Chain 1: Gradient evaluation took 0.000592 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.92 seconds.
-Chain 1: Adjust your expectations accordingly!
-Chain 1: 
-Chain 1: 
-Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 1: 
-Chain 1:  Elapsed Time: 0.048909 seconds (Warm-up)
-Chain 1:                0.05169 seconds (Sampling)
-Chain 1:                0.100599 seconds (Total)
-Chain 1: 
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
-Chain 2: 
-Chain 2: Gradient evaluation took 2.6e-05 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
-Chain 2: Adjust your expectations accordingly!
-Chain 2: 
-Chain 2: 
-Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 2: 
-Chain 2:  Elapsed Time: 0.062597 seconds (Warm-up)
-Chain 2:                0.053107 seconds (Sampling)
-Chain 2:                0.115704 seconds (Total)
-Chain 2: 
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
-Chain 3: 
-Chain 3: Gradient evaluation took 2.2e-05 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
-Chain 3: Adjust your expectations accordingly!
-Chain 3: 
-Chain 3: 
-Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 3: 
-Chain 3:  Elapsed Time: 0.045849 seconds (Warm-up)
-Chain 3:                0.041927 seconds (Sampling)
-Chain 3:                0.087776 seconds (Total)
-Chain 3: 
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
-Chain 4: 
-Chain 4: Gradient evaluation took 1.5e-05 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
-Chain 4: Adjust your expectations accordingly!
-Chain 4: 
-Chain 4: 
-Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 4: 
-Chain 4:  Elapsed Time: 0.049009 seconds (Warm-up)
-Chain 4:                0.05131 seconds (Sampling)
-Chain 4:                0.100319 seconds (Total)
-Chain 4: </code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Printe das Objekt und betrachte den Output. Er sieht sehr anders
 aus als der Output der normalen Regression. Trotzdem solltest du einen
@@ -690,17 +463,8 @@ Wahrscheinlichkeit liegt, eine Aussage, die für das normale
 Konfidenzintervall nicht getroffene werden kann. Berechne die
 <em>credible intervals</em> mit der <code>posterior_interval()</code>
 Funktion für <code>Trefferrate_bm</code>.</p></li>
-</ol>
-<pre class="r"><code># Bayesian posterior credible interval
-posterior_interval(Trefferrate_bm, prob = .95)</code></pre>
-<pre><code>                   2.5% 97.5%
-(Intercept)      33.134 53.07
-GeschlechtMale   -2.329  7.67
-Stimulus_seeking -0.172  6.78
-sigma            10.895 14.36</code></pre>
-<ol start="4" style="list-style-type: decimal">
-<li>Wenn Null nicht enthalten ist, dann ist die Wahrscheinlichkeit, dass
-ein Effekt Null ist tatsächlich kleiner als 5%.</li>
+<li><p>Wenn Null nicht enthalten ist, dann ist die Wahrscheinlichkeit,
+dass ein Effekt Null ist tatsächlich kleiner als 5%.</p></li>
 </ol>
 </div>
 </div>
