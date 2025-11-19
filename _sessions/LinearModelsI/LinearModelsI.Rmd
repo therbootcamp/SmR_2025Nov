@@ -173,8 +173,8 @@ ggplot(d,
   geom_hline(yintercept=mean(d$Nächte),col='#EA4B68',size=1) +
   geom_vline(xintercept=mean(d$Äquivalenzeinkommen, na.rm=T),col='#EA4B68',size=1) +
   geom_point() +
-  annotate("text",x = mean(d$Äquivalenzeinkommen,na.rm=T)+900,y = 10,label=expression(bar(x)),size=5) +
-  annotate("text",y = mean(d$Nächte,na.rm=T)+600,x = 5000,label=expression(bar(y)),size=5) +
+  annotate("text", x = mean(d$Äquivalenzeinkommen, na.rm=T) + 900, y = 10, label = "bar(x)", parse = TRUE, size = 5) +
+  annotate("text", y = mean(d$Nächte, na.rm = T) + 600, x = 5000, label = "bar(y)", parse = TRUE, size = 5) +
   theme_bw()
 
 ```
