@@ -170,7 +170,7 @@ In 2 Tagen seid ihr weit gekommen.
 <br>
 
 .pull-right5[
-<p align="center"><img border="0" alt="W3Schools" src="http://www.theunmanageableemployee.com/wp-content/uploads/2011/07/5cs-stones-cropped-11052730.jpg?w=112"></p>
+
 ]
 
 ---
@@ -184,7 +184,7 @@ Hier ist eine unvollständige Liste guter Bücher über R lose geordnet nach vor
   <tr>    
 
   <td> 
-  <a href="http://r4ds.had.co.nz/"><img border="0" alt="W3Schools" src="http://r4ds.had.co.nz/cover.png" height="180"></a>
+  <a href="https://r4ds.hadley.nz/"><img border="0" alt="W3Schools" src="https://r4ds.hadley.nz/cover.jpg" height="180"></a>
   </td>
 
   <td>
@@ -204,7 +204,7 @@ Hier ist eine unvollständige Liste guter Bücher über R lose geordnet nach vor
   </td>
   
   <td>
-  <a href="https://www.orellfuessli.ch/shop/home/artikeldetails/ID35367941.html?ProvID=10917736&gclid=Cj0KCQiAg_HhBRDNARIsAGHLV5238Q26gQmFttHRnYGjcAhz4CslStb-3qBegvuZS5gnCpWSLNlQvF0aAgfOEALw_wcB"><img border="0" alt="W3Schools" src="https://assets.thalia.media/img/35367941-00-00.jpg" height="180" ></a>
+  <a href="https://www.amazon.de/dp/1526461366"><img border="0" alt="W3Schools" src="https://profandyfield.com/discoverse/dsur/dsr2_cover_small.jpg" height="180" ></a>
   </td>
   
   </tr>
@@ -278,114 +278,114 @@ Das Netz ist vll. der beste Ort für Informationen über R.
 
 ---
 
-# Support
+<!-- # Support -->
 
-<table class="tg"  style="cellspacing:0; cellpadding:0; border:none">
-  <col width="22%">
-  <col width="22%">
-  <col width="22%">
-  <tr>
-    <th class="tg-yw4l" valign='top'>
-    <p align="center"><br>
-    <a href="www.dirkwulff.org"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/1.png" height="230" style="border-radius:50%"></a><br>
-    <p align="center">
-    <font size = 5>Dr. Dirk Wulff</font><br><br>
-    <a href="www.dirkwulff.org"><b>dirkwulff.org</b></a><br>
-    <a href="https://github.com/dwulff"><b>github.com/dwulff</b></a><br>
-    <font size=4><i>packages: </i></font> 
-    <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br>
-    <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://cran.r-project.org/web/packages/memnet/index.html"><b>memnet</b> <a href="https://github.com/dwulff/choicepp"><b>choicepp</b>
-    </p>  
-  </th>
-  
-  <th class="tg-yw4l" valign='top'><p align="center"><br>
-    <a href="https://psychologie.unibas.ch/en/persons/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/2.png" height="230" style="border-radius:50%"></a><br>
-    <p align="center">
-    <font size = 5>Markus Steiner</font><br><br>
-    <a href="https://github.com/mdsteiner"><b>github.com/mdsteiner</b></a><br>
-    <font size=4><i>packages: </i></font> 
-    <a href="https://github.com/mdsteiner/ShinyPsych"><b>ShinyPsych</b></a>, <br>
-    <a href="https://github.com/mdsteiner/EFAdiff"><b>EFAdiff</b></a> <br><br>
-    </p>
-  </th>
-  
-  <th class="tg-yw4l" valign='top'>
-    <p align="center">
-    <p align="center"><br>
-    <a href="https://www.schulte-mecklenbeck.com/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/3.png" height="230" style="border-radius:50%"></a><br>
-    <p align="center">
-    <font size = 5>Dr. Michael Schulte-<br>Mecklenbeck</font><br><br>
-    <a href="www.schulte-mecklenbeck.com"><b>schulte-mecklenbeck.com</b></a><br>
-    <a href="https://github.com/schultem"><b>github.com/schultem</b></a><br><br>
-    </p>
-  </th>
+<!-- <table class="tg"  style="cellspacing:0; cellpadding:0; border:none"> -->
+<!--   <col width="22%"> -->
+<!--   <col width="22%"> -->
+<!--   <col width="22%"> -->
+<!--   <tr> -->
+<!--     <th class="tg-yw4l" valign='top'> -->
+<!--     <p align="center"><br> -->
+<!--     <a href="www.dirkwulff.org"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/1.png" height="230" style="border-radius:50%"></a><br> -->
+<!--     <p align="center"> -->
+<!--     <font size = 5>Dr. Dirk Wulff</font><br><br> -->
+<!--     <a href="www.dirkwulff.org"><b>dirkwulff.org</b></a><br> -->
+<!--     <a href="https://github.com/dwulff"><b>github.com/dwulff</b></a><br> -->
+<!--     <font size=4><i>packages: </i></font>  -->
+<!--     <a href="https://cran.r-project.org/web/packages/cstab/index.html"><b>cstab</b></a>, <br> -->
+<!--     <a href="https://cran.r-project.org/web/packages/mousetrap/index.html"><b>mousetrap</b></a>, <a href="https://cran.r-project.org/web/packages/memnet/index.html"><b>memnet</b> <a href="https://github.com/dwulff/choicepp"><b>choicepp</b> -->
+<!--     </p>   -->
+<!--   </th> -->
 
+<!--   <th class="tg-yw4l" valign='top'><p align="center"><br> -->
+<!--     <a href="https://psychologie.unibas.ch/en/persons/markus-steiner/about-me/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/2.png" height="230" style="border-radius:50%"></a><br> -->
+<!--     <p align="center"> -->
+<!--     <font size = 5>Markus Steiner</font><br><br> -->
+<!--     <a href="https://github.com/mdsteiner"><b>github.com/mdsteiner</b></a><br> -->
+<!--     <font size=4><i>packages: </i></font>  -->
+<!--     <a href="https://github.com/mdsteiner/ShinyPsych"><b>ShinyPsych</b></a>, <br> -->
+<!--     <a href="https://github.com/mdsteiner/EFAdiff"><b>EFAdiff</b></a> <br><br> -->
+<!--     </p> -->
+<!--   </th> -->
 
-</tr>
-
-</table>
-
----
+<!--   <th class="tg-yw4l" valign='top'> -->
+<!--     <p align="center"> -->
+<!--     <p align="center"><br> -->
+<!--     <a href="https://www.schulte-mecklenbeck.com/"><img border="0" alt="W3Schools" src="https://therbootcamp.github.io/img/team/3.png" height="230" style="border-radius:50%"></a><br> -->
+<!--     <p align="center"> -->
+<!--     <font size = 5>Dr. Michael Schulte-<br>Mecklenbeck</font><br><br> -->
+<!--     <a href="www.schulte-mecklenbeck.com"><b>schulte-mecklenbeck.com</b></a><br> -->
+<!--     <a href="https://github.com/schultem"><b>github.com/schultem</b></a><br><br> -->
+<!--     </p> -->
+<!--   </th> -->
 
 
-# Weiterführende Kurse
+<!-- </tr> -->
+
+<!-- </table> -->
+
+<!-- --- -->
+
+
+# Weitere Kurse
 
 
 <table class="tg"  style="cellspacing:0; cellpadding:0; border:none;">
 <tr valign="top">
-  <col width="20%">
-  <col width="20%">
-  <col width="20%">
-  <col width="20%">
-  <col width="20%">
+  <col width="25%">
+  <col width="25%">
+  <!-- <col width="20%"> -->
+  <!-- <col width="20%"> -->
+  <!-- <col width="20%"> -->
   <td>
     <p align="center">
-      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
-      <font style="font-size:20px;weight:700"><br>Einführung in die moderne Datenanalyse mit R</font><br>
+      <a class="project-link" href="https://advancedstudies.unibas.ch/studienangebot/kurs/einfuehrung-in-die-datenanalyse-mit-r-webinar-300841" align="center">
+      <font style="font-size:20px;weight:700"><br>Einführung in die Datenanalyse mit R</font><br>
       <br>
       <img src="https://therbootcamp.github.io/img/courses/0.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
-      <high>tba</high><br><br><br><br>
+      <high>27. März 26</high><br><br><br><br>
     </p>
   </td>
   <td>
     <p align="center">
-      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
-      <font style="font-size:20px;weight:700"><br>Explorative Datenanalyse mit R<br></font><br>
+      <a class="project-link" href="https://advancedstudies.unibas.ch/studienangebot/kurs/daten-aufbereiten-analysieren-und-visualisieren-mit-r-webinar-272006" align="center">
+      <font style="font-size:20px;weight:700"><br>Daten aufbereiten, analysieren und visualisieren mit R<br></font><br>
       <br>
       <img src="https://therbootcamp.github.io/img/courses/1.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
-      <high>tba</high><br><br><br><br>
+      <high>22. & 23. Mai 26</high><br><br><br><br>
     </p>
   </td>
-  <td>
-    <p align="center">
-      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
-      <font style="font-size:20px;weight:700"><br>Statistik mit R<br><br></font><br>
-      <br>
-      <img src="https://therbootcamp.github.io/img/courses/2.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
-      <high>tba</high><br><br><br><br>
-      </a>
-    </p>
-  </td>
-  <td>
-    <p align="center">
-      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
-      <font style="font-size:20px;weight:700"><br>Maschinelles Lernen mit R<br></font><br>
-      <br>
-      <img src="https://therbootcamp.github.io/img/courses/3.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
-      <high>tba</high><br><br><br><br>
-      </a>
-    </p>
-  </td>
-  <td>
-    <p align="center">
-      <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center">
-      <font style="font-size:20px;weight:700"><br>Reporting mit R<br><br></font><br>
-      <br>
-      <img src="https://therbootcamp.github.io/img/courses/4.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br>
-      <high>10. Juni</high><br><br><br><br>
-      </a>
-    </p>
-  </td>
+  <!-- <td> -->
+  <!--   <p align="center"> -->
+  <!--     <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center"> -->
+  <!--     <font style="font-size:20px;weight:700"><br>Statistik mit R<br><br></font><br> -->
+  <!--     <br> -->
+  <!--     <img src="https://therbootcamp.github.io/img/courses/2.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br> -->
+  <!--     <high>tba</high><br><br><br><br> -->
+  <!--     </a> -->
+  <!--   </p> -->
+  <!-- </td> -->
+  <!-- <td> -->
+  <!--   <p align="center"> -->
+  <!--     <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center"> -->
+  <!--     <font style="font-size:20px;weight:700"><br>Maschinelles Lernen mit R<br></font><br> -->
+  <!--     <br> -->
+  <!--     <img src="https://therbootcamp.github.io/img/courses/3.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br> -->
+  <!--     <high>tba</high><br><br><br><br> -->
+  <!--     </a> -->
+  <!--   </p> -->
+  <!-- </td> -->
+  <!-- <td> -->
+  <!--   <p align="center"> -->
+  <!--     <a class="project-link" href="https://therbootcamp.github.io/#courses" align="center"> -->
+  <!--     <font style="font-size:20px;weight:700"><br>Reporting mit R<br><br></font><br> -->
+  <!--     <br> -->
+  <!--     <img src="https://therbootcamp.github.io/img/courses/4.png" height="180px" style="border-radius:50%;border:10px solid #E9ECEF"></img><br><br> -->
+  <!--     <high>10. Juni</high><br><br><br><br> -->
+  <!--     </a> -->
+  <!--   </p> -->
+  <!-- </td> -->
   </tr>
 
 
