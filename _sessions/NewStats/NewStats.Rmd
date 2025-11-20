@@ -964,5 +964,5 @@ print2(bf_res, 21)
 
 class: middle, center
 
-<h1><a href="https://therbootcamp.github.io/SmR_2022Apr/_sessions/NewStats/NewStats_practical.html">Practical</a></h1>
+<h1><a href="https://therbootcamp.github.io/SmR_2025Nov/_sessions/NewStats/NewStats_practical.html">Practical</a></h1>
 

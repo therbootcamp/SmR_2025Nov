@@ -1378,5 +1378,5 @@ resid(naechte_lm)[1:5]
 
 class: middle, center
 
-<h1><a href="https://therbootcamp.github.io/SmR_2022Apr/_sessions/LinearModelsI/LinearModelsI_practical.html">Practical</a></h1>
+<h1><a href="https://therbootcamp.github.io/SmR_2025Nov/_sessions/LinearModelsI/LinearModelsI_practical.html">Practical</a></h1>
 
