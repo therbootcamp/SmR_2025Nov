@@ -54,10 +54,10 @@ Klicke auf <high>"....running..."</high> auf unserer Website!
 <br><br><br>
 
 
-# Aim
+# Ziel
 
 
->### Das Ziel dieses Kurses ist Euch den kompetenten Umgang mit traditionellen und neueren Methoden der Inferenzstatistik und deren Implementierung in R zu vermitteln
+>### Das Ziel dieses Kurses ist euch den kompetenten Umgang mit traditionellen und neueren Methoden der Inferenzstatistik und deren Implementierung in R zu vermitteln
 
 ]
 
@@ -78,7 +78,7 @@ Klicke auf <high>"....running..."</high> auf unserer Website!
   <li class="m1"><span><high>Workshop</high></span></li>
   <ul class="level">
     <li><span>3 Blöcke zu (Generalisierten) linearen Modellen</span></li>
-    <li><span>1 Block zu gemischten, hierarchischen Modellen</span></li>
+    <!-- <li><span>1 Block zu gemischten, hierarchischen Modellen</span></li> -->
     <li><span>2 Blöcke zu praktischen Überlegungen und neuren Ansätzen</span></li>
   </ul><br>
   <li class="m2"><span><high>Block</high>
@@ -213,11 +213,11 @@ Klicke auf <high>"....running..."</high> auf unserer Website!
 .pull-left5[
 
 <ul>
-  <li class="m1"><span>Wie heisst Du?</span></li>
+  <li class="m1"><span>Wie heisst du?</span></li>
   <li class="m2"><span>Was ist dein Beruf?</span></li>
-  <li class="m3"><span>Hast Du Programmiererfahrung mit R oder anderen Programmiersprachen?</span></li>
-  <li class="m4"><span>Wieviel Erfahrung hast Du mit Statistik?</span></li>
-  <li class="m5"><span>Wieso möchtest Du Statistik (mit R) lernen?</span></li>
+  <li class="m3"><span>Hast du Programmiererfahrung mit R oder anderen Programmiersprachen?</span></li>
+  <li class="m4"><span>Wieviel Erfahrung hast du mit Statistik?</span></li>
+  <li class="m5"><span>Wieso möchtest du Statistik (mit R) lernen?</span></li>
 </ul>
 
 ]
@@ -225,9 +225,8 @@ Klicke auf <high>"....running..."</high> auf unserer Website!
 .pull-right45[
 
 <p align="center">
-<img src="image/vorstellung.jpg" height="360px">
+<img src="image/welcome.png" height="360px">
 <br>
-<font style="font-size:10px">from <a href="www.artofmanliness.com">artofmanliness.com</a></font>
 </p>
 
 ]
