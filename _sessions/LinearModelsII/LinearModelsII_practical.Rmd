@@ -35,8 +35,8 @@ knitr::opts_chunk$set(comment = NA,
                       fig.width = 6, 
                       fig.height = 6,
                       fig.align = 'center',
-                      echo = FALSE, # change to show solution
-                      eval = FALSE, # change to show solution
+                      echo = TRUE, # change to show solution
+                      eval = TRUE, # change to show solution
                       warning = FALSE)
 
 options(digits = 3)

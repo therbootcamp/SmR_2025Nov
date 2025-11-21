@@ -222,8 +222,11 @@ Skripts.</p></li>
 <code>lineare_modelle_practical.R</code> im <code>2_Code</code>
 Ordner.</p></li>
 <li><p>Lade das Paket <code>tidyverse</code>.</p></li>
-<li><p>Verwende die <code>read_csv()</code> Funktion um
-<code>wein.csv</code> einzulesen.</p></li>
+</ol>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Verwende die <code>read_csv()</code> Funktion um
+<code>wein.csv</code> einzulesen.</li>
 </ol>
 <pre class="r"><code># Lese Daten ein
 wein &lt;- read_csv(file = &quot;1_Data/wein.csv&quot;)</code></pre>
@@ -252,17 +255,48 @@ das Objekt <code>wein_lm</code> zu speichern.</li>
 <pre class="r"><code># Einfache Regression
 wein_lm &lt;- lm(formula = XX ~ XX,
               data = XX)</code></pre>
+<pre class="r"><code>wein_lm &lt;- lm(formula = Qualität ~ Restzucker,
+              data = wein)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Printe das Fit-Objekt <code>wein_lm</code>. Welche Informationen
-werden dir angezeigt? Was sagen dir die Werte?</p></li>
-<li><p>Der Default-Output von <code>lm</code>-Objekten ist nicht sehr
+<li>Printe das Fit-Objekt <code>wein_lm</code>. Welche Informationen
+werden dir angezeigt? Was sagen dir die Werte?</li>
+</ol>
+<pre class="r"><code>wein_lm</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker, data = wein)
+
+Coefficients:
+(Intercept)   Restzucker  
+    5.85532     -0.00679  </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Der Default-Output von <code>lm</code>-Objekten ist nicht sehr
 informativ. Er zeigt nur den Code und die Schätzungen für die zwei
 Parameter: den Intercept und das Gewicht für <code>Restzucker</code>.
 Verwende <code>summary()</code> um einen informativeren Output zu
-erhalten.</p></li>
+erhalten.</li>
 </ol>
 <pre class="r"><code># Zeige Ergebnisse
 summary(XX)</code></pre>
+<pre class="r"><code>summary(wein_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker, data = wein)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-2.851 -0.808  0.158  0.229  3.217 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.85532    0.01645  355.89   &lt;2e-16 ***
+Restzucker  -0.00679    0.00228   -2.98   0.0029 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.873 on 6495 degrees of freedom
+Multiple R-squared:  0.00137,   Adjusted R-squared:  0.00121 
+F-statistic: 8.89 on 1 and 6495 DF,  p-value: 0.00287</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Summary zeigt einem ausführliche Ergebnisse in fünf Sektionen:</li>
 </ol>
@@ -303,6 +337,9 @@ könnte der Zusammenhang zum p-Wert im Ergebnis aussehen?</p></li>
 </ol>
 <pre class="r"><code># Berechne Fläche unter t-Wert
 pt(q = XX, df = XX)</code></pre>
+<pre class="r"><code># Berechne Fläche unter t-Wert
+pt(q = -2.982, df = 6495)</code></pre>
+<pre><code>[1] 0.00144</code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li><p>Der ermittelte Wert ist genau die Hälfte des p-Werts. Das hat
 damit zu tun, dass R-automatisch zweiseitig testet, d.h., Abweichungen
@@ -343,21 +380,44 @@ zu speichern.</li>
 <pre class="r"><code># Multiple Regression
 wein_lm &lt;- lm(formula = XX ~ XX + XX + XX + XX,
               data = XX)</code></pre>
+<pre class="r"><code>wein_lm &lt;- lm(formula = Qualität ~ Restzucker + pH_Wert + Alkohol + Sulphate,
+              data = wein)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Printe wiederum das Modell. Wie interpretierst du die Grössen der
+<li>Printe wiederum das Modell. Wie interpretierst du die Grössen der
 Regressionsgewichte. Kannst du aus ihnen ablesen, welcher Prädiktor die
-meiste Bedeutung hat?</p></li>
-<li><p>Rohe Regressionsgewichte lassen nicht darauf schliessen, welche
+meiste Bedeutung hat?</li>
+</ol>
+<pre class="r"><code>wein_lm</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker + pH_Wert + Alkohol + Sulphate, 
+    data = wein)
+
+Coefficients:
+(Intercept)   Restzucker      pH_Wert      Alkohol     Sulphate  
+     1.8422       0.0280      -0.0767       0.3669       0.4171  </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Rohe Regressionsgewichte lassen nicht darauf schliessen, welche
 Bedeutung ein Prädiktor hat, da die Skalierung der Prädiktoren
 unmittelbar mit einfliesst. Wäre z.B. Alkohol in Promille angegeben,
 dann wäre das Gewicht 10x grösser. Dies kannst du leicht mit dem
 Template unten testen. Füge die vier Prädiktoren ein sodass Alkohol
 innerhalb der <code>I()</code> steht und führe das Modell aus. Speichere
-es aber nicht.</p></li>
+es aber nicht.</li>
 </ol>
 <pre class="r"><code># Multiple Regression
 lm(formula = XX ~ XX + XX + I(XX / 10) + XX,
    data = XX)</code></pre>
+<pre class="r"><code>lm(formula = Qualität ~ Restzucker + pH_Wert + I(Alkohol/10) + Sulphate,
+   data = wein)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker + pH_Wert + I(Alkohol/10) + 
+    Sulphate, data = wein)
+
+Coefficients:
+  (Intercept)     Restzucker        pH_Wert  I(Alkohol/10)       Sulphate  
+       1.8422         0.0280        -0.0767         3.6687         0.4171  </code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Rgressionsgewichte müssen immer relativ zur Skalierung
 interpretiert werden. Nichtsdestotrotz ist bereits etwas interessantes
@@ -371,6 +431,31 @@ konditional zu interpretieren, was bei mehreren Prädiktoren schwierig
 werden kann!</p></li>
 <li><p>Schaue dir nun die <code>summary()</code> an. Welche Effekte
 gehen in welche Richtung, welche Effekte sind signifikant?</p></li>
+</ol>
+<pre class="r"><code>summary(wein_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker + pH_Wert + Alkohol + Sulphate, 
+    data = wein)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-3.494 -0.501 -0.035  0.492  3.099 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.84215    0.22155    8.32  &lt; 2e-16 ***
+Restzucker   0.02800    0.00225   12.43  &lt; 2e-16 ***
+pH_Wert     -0.07671    0.06256   -1.23     0.22    
+Alkohol      0.36687    0.00864   42.49  &lt; 2e-16 ***
+Sulphate     0.41713    0.06646    6.28  3.7e-10 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.772 on 6492 degrees of freedom
+Multiple R-squared:  0.219, Adjusted R-squared:  0.219 
+F-statistic:  456 on 4 and 6492 DF,  p-value: &lt;2e-16</code></pre>
+<ol start="7" style="list-style-type: decimal">
 <li><p>Alkohol, Sulphate, und Restzucker hängen alle drei signifikant
 positiv mit der Qualität zusammen, der pH-Wert dagegen negativ, jedoch
 nicht signifikant. Auf Basis der Summary, kannst du jetzt ausmachen,
@@ -417,6 +502,9 @@ Template unten, um ein entsprechendes lineares Modell zu rechnen und als
 <pre class="r"><code># Multiple Regression aller Prädiktoren ausser Farbe
 wein_lm &lt;- lm(formula = XX ~ . - XX,
               data = XX)</code></pre>
+<pre class="r"><code># Multiple Regression aller Prädiktoren ausser Farbe
+wein_lm &lt;- lm(formula = Qualität ~ . - Farbe,
+              data = wein)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Evaluiert die Summary des Modells.</li>
 </ol>
@@ -439,6 +527,16 @@ Restzucker verändert.</li>
 <pre class="r"><code># Multiple Regression aller Prädiktoren ausser Farbe
 wein_lm &lt;- lm(formula = XX ~ Restzucker + XX,
               data = XX)</code></pre>
+<pre class="r"><code># Multiple Regression aller Prädiktoren ausser Farbe
+lm(formula = Qualität ~ Restzucker + Alkohol,
+   data = wein)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Restzucker + Alkohol, data = wein)
+
+Coefficients:
+(Intercept)   Restzucker      Alkohol  
+     1.8754       0.0259       0.3624  </code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Der Schlüssel zur letzten Aufgabe steckt in
 <code>cor(wein %&gt;% select(-Farbe))['Restzucker',]</code> und in

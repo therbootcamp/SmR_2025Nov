@@ -224,8 +224,11 @@ Skripts.</p></li>
 <code>lineare_modelle_II_practical.R</code> im <code>2_Code</code>
 Ordner.</p></li>
 <li><p>Lade das Paket <code>tidyverse</code>.</p></li>
-<li><p>Verwende die <code>read_csv()</code> Funktion um wiederum
-<code>wein.csv</code> einzulesen.</p></li>
+</ol>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Verwende die <code>read_csv()</code> Funktion um wiederum
+<code>wein.csv</code> einzulesen.</li>
 </ol>
 <pre class="r"><code># Lese Daten ein
 wein &lt;- read_csv(file = &quot;1_Data/wein.csv&quot;)</code></pre>
@@ -258,6 +261,19 @@ das Ergebnis nicht zu speichern.</li>
 </ol>
 <pre class="r"><code># t-test
 t.test(x = XX, y = XX)</code></pre>
+<pre class="r"><code># t-test
+t.test(x = weiss, y = rot)</code></pre>
+<pre><code>
+    Welch Two Sample t-test
+
+data:  weiss and rot
+t = 10, df = 2951, p-value &lt;2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.195 0.289
+sample estimates:
+mean of x mean of y 
+     5.88      5.64 </code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Was verrät dir der Output des <i>t</i>-Tests über den Unterschied
 weisser und roter Weine in der wahrgenommenen Qualität? Die Antwort
@@ -272,6 +288,9 @@ Regression zu erzielen. Prädiziere hierzu <code>Qualität</code> durch
 <pre class="r"><code># Regression
 wein_lm &lt;- lm(formula = XX ~ XX, 
               data = XX)</code></pre>
+<pre class="r"><code># Regression
+wein_lm &lt;- lm(formula = Qualität ~ Farbe, 
+              data = wein)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li><p>Printe zunächst einmal das Objekt und betrachte die
 Regressionsgewichte. Kommt dir die eine oder andere Zahl bekannt
@@ -285,18 +304,53 @@ d.h., <code>'rot' &lt; 'weiss'</code>.</p></li>
 <li><p>Lasse dir jetzt die <code>summary()</code> für das Modell
 ausgeben und vergleiche Freiheitsgrade, <i>t</i>- und p-Wert mit denen
 aus dem <i>t</i>-Test.</p></li>
-<li><p>Die Werte im t-Test stimmen trotz der gleichen Schätzwerte für
-die Gewichte nicht ganz überein. Dies liegt daran, dass die
+</ol>
+<pre class="r"><code># summary
+summary(wein_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Farbe, data = wein)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-2.878 -0.878  0.122  0.364  3.122 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.6360     0.0217  259.92   &lt;2e-16 ***
+Farbeweiss    0.2419     0.0250    9.69   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.867 on 6495 degrees of freedom
+Multiple R-squared:  0.0142,    Adjusted R-squared:  0.0141 
+F-statistic: 93.8 on 1 and 6495 DF,  p-value: &lt;2e-16</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Die Werte im t-Test stimmen trotz der gleichen Schätzwerte für die
+Gewichte nicht ganz überein. Dies liegt daran, dass die
 <code>t.test()</code> Funktion per Default eine Variante rechnet die
 erlaubt, dass die Varianzen in den beiden Gruppen (rot und weiss)
 unterschiedlich sind. Die Regression dagegen geht stets davon aus, dass
 diese gleich sind, was wir im Detail in der Session zu robuste
 Statistiken besprechen werden. Rechne den <i>t</i>-Test noch einmal,
 diesmal mit dem zusätzlichen Argument
-<code>var.equal = TRUE</code>.</p></li>
+<code>var.equal = TRUE</code>.</li>
 </ol>
 <pre class="r"><code># t-test
 t.test(x = XX, y = XX, var.equal = )</code></pre>
+<pre class="r"><code># t-test
+t.test(x = weiss, y = rot, var.equal = TRUE)</code></pre>
+<pre><code>
+    Two Sample t-test
+
+data:  weiss and rot
+t = 10, df = 6495, p-value &lt;2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.193 0.291
+sample estimates:
+mean of x mean of y 
+     5.88      5.64 </code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li>Ordnung ist eingekehrt. Alle Werte im <i>t</i>-Test und der
 Regression sollten jetzt identisch sein, was daran liegt, dass die
@@ -328,6 +382,13 @@ wein_dummy &lt;- lm(formula = XX ~ XX,
 # Regression effekt
 wein_effekt &lt;- lm(formula = XX ~ XX, 
                   data = XX)</code></pre>
+<pre class="r"><code># Regression dummy
+wein_dummy &lt;- lm(formula = Qualität ~ Farbe_dummy, 
+                 data = wein)
+
+# Regression effekt
+wein_effekt &lt;- lm(formula = Qualität ~ Farbe_effekt, 
+                  data = wein)</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Printe nun die beiden Objekte und vergleiche die Gewichte.
 Diejenigen der Dummy-Kodierung sollten dir bekannt vorkommen. Wie
@@ -340,20 +401,65 @@ verändert, nur in die andere Richtung. Verifiziere die Gewichte mit den
 einfachen Rechnungen im Code unten.</p></li>
 </ol>
 <pre class="r"><code># Dummy-Kodierung
-mean(rot) # intercept
-mean(weiss) - mean(rot) # gewicht farbe
-
-# EffekKodierung
-(mean(rot) + mean(weiss))/2 # intercept
-mean(weiss) - (mean(rot) + mean(weiss))/2 # gewicht farbe</code></pre>
+mean(rot) # intercept</code></pre>
+<pre><code>[1] 5.64</code></pre>
+<pre class="r"><code>mean(weiss) - mean(rot) # gewicht farbe</code></pre>
+<pre><code>[1] 0.242</code></pre>
+<pre class="r"><code># EffekKodierung
+(mean(rot) + mean(weiss))/2 # intercept</code></pre>
+<pre><code>[1] 5.76</code></pre>
+<pre class="r"><code>mean(weiss) - (mean(rot) + mean(weiss))/2 # gewicht farbe</code></pre>
+<pre><code>[1] 0.121</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li><p>Vergleiche nun die <code>summary()</code> der beiden Modelle. Was
-unterscheidet sich, und was nicht?</p></li>
-<li><p>Die Kodierung hat ausgenommen die Skalierung des
-Regressionsgewichts und des zugehörigen Standardfehlers keinen Einfluss.
-<i>t</i>-Wert und Signifikanz sind identisch. Einzig der Intercept
-ändert sich wesentlich, da er unter der Effektkodierung tatsächlich
-weiter von Null entfernt ist.</p></li>
+<li>Vergleiche nun die <code>summary()</code> der beiden Modelle. Was
+unterscheidet sich, und was nicht?</li>
+</ol>
+<pre class="r"><code># Regression dummy
+summary(wein_dummy)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Farbe_dummy, data = wein)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-2.878 -0.878  0.122  0.364  3.122 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.6360     0.0217  259.92   &lt;2e-16 ***
+Farbe_dummy   0.2419     0.0250    9.69   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.867 on 6495 degrees of freedom
+Multiple R-squared:  0.0142,    Adjusted R-squared:  0.0141 
+F-statistic: 93.8 on 1 and 6495 DF,  p-value: &lt;2e-16</code></pre>
+<pre class="r"><code># Regression effekt
+summary(wein_effekt)</code></pre>
+<pre><code>
+Call:
+lm(formula = Qualität ~ Farbe_effekt, data = wein)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-2.878 -0.878  0.122  0.364  3.122 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    5.7570     0.0125  461.04   &lt;2e-16 ***
+Farbe_effekt   0.1209     0.0125    9.69   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.867 on 6495 degrees of freedom
+Multiple R-squared:  0.0142,    Adjusted R-squared:  0.0141 
+F-statistic: 93.8 on 1 and 6495 DF,  p-value: &lt;2e-16</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Die Kodierung hat ausgenommen die Skalierung des Regressionsgewichts
+und des zugehörigen Standardfehlers keinen Einfluss. <i>t</i>-Wert und
+Signifikanz sind identisch. Einzig der Intercept ändert sich wesentlich,
+da er unter der Effektkodierung tatsächlich weiter von Null entfernt
+ist.</li>
 </ol>
 </div>
 <div id="d---interaktionen" class="section level3">
@@ -371,6 +477,9 @@ berücksichtigt wird.</li>
 <pre class="r"><code># Regression mit Interaktion
 wein_lm &lt;- lm(formula = XX ~ XX * XX, 
               data = XX)</code></pre>
+<pre class="r"><code># Regression mit Interaktion
+wein_lm &lt;- lm(formula = Qualität ~ Farbe * Alkohol, 
+              data = wein)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Printe das Objekt und betrachte die Gewichte. Wie interpretierst
 du die einzelnen Werte?</p></li>
@@ -395,6 +504,9 @@ ggplot(data = wein,
   geom_jitter(width=2,height=1.5,size=.1) + theme_minimal() + theme(legend.position = &#39;none&#39;) +
   geom_smooth(data = wein %&gt;% filter(Farbe == &#39;weiss&#39;), method = &#39;lm&#39;) + 
   geom_smooth(data = wein %&gt;% filter(Farbe == &#39;rot&#39;), method = &#39;lm&#39;)</code></pre>
+<pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="LinearModelsII_practical_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Lasse dir nun die <code>summary()</code> anzeigen und inspiziere
 die <i>t</i>-Werte und Signifikanzen. Welche Prädiktoren sind
@@ -413,6 +525,12 @@ skaliere = function(x) (x - mean(x))/sd(x)
 # Regression mit skalierten Prädiktoren
 wein_lm &lt;- lm(formula = XX ~ XX * XX, 
               data = XX %&gt;% mutate_if(is.numeric, skaliere))</code></pre>
+<pre class="r"><code># Skalierungsfunktion
+skaliere = function(x) (x - mean(x))/sd(x)
+
+# Regression mit skalierten Prädiktoren
+wein_lm &lt;- lm(formula = Qualität ~ Farbe * Alkohol, 
+              data = wein %&gt;% mutate_if(is.numeric, skaliere))</code></pre>
 <ol start="7" style="list-style-type: decimal">
 <li><p>Printe zunächst einmal das Objekt und betrachte die Gewichte.
 Alle Werte haben sich substantiell verändert. Insbesondere hat nun
@@ -443,6 +561,9 @@ ggplot(data = wein %&gt;% mutate_if(is.numeric, skaliere),
   geom_jitter(width=2,height=1.5,size=.1) + theme_minimal() + theme(legend.position = &#39;none&#39;) +
   geom_smooth(data = wein %&gt;% mutate_if(is.numeric, skaliere) %&gt;% filter(Farbe == &#39;weiss&#39;), method = &#39;lm&#39;) + 
   geom_smooth(data = wein %&gt;% mutate_if(is.numeric, skaliere) %&gt;% filter(Farbe == &#39;rot&#39;), method = &#39;lm&#39;)</code></pre>
+<pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="LinearModelsII_practical_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="10" style="list-style-type: decimal">
 <li><p>Schaue dir nun die <code>summary()</code> an. Was hat sich
 verändert bzgl. <i>t</i>-Werten, Signifikanzen, und Standardfehlern, und
