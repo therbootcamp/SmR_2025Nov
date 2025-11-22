@@ -35,8 +35,8 @@ knitr::opts_chunk$set(comment = NA,
                       fig.width = 6, 
                       fig.height = 6,
                       fig.align = 'center',
-                      echo = FALSE, # change to display solutions
-                      eval = FALSE, # change to display solutions
+                      echo = TRUE, # change to display solutions
+                      eval = TRUE, # change to display solutions
                       warning = FALSE)
 
 options(digits = 3)
@@ -233,7 +233,7 @@ stichprobe
 
 ```{r, eval = FALSE, echo = TRUE}
 # t.test 
-psi_ttest <- t.test(XX ~ XX, data = XX, paired = TRUE)
+psi_ttest <- t.test(XX, XX, paired = TRUE)
 
 # Testergebnisse
 psi_ttest
@@ -241,7 +241,9 @@ psi_ttest
 
 ```{r}
 # t.test 
-psi_ttest <- t.test(Trefferrate ~ Bedingung, data = psi1, paired = TRUE)
+psi_ttest <- t.test(psi1[psi1$Bedingung == "control", ]$Trefferrate, 
+                    psi1[psi1$Bedingung == "erotic", ]$Trefferrate, 
+                    paired = TRUE)
 
 # Testergebnisse
 psi_ttest
@@ -267,13 +269,13 @@ df <- psi_ttest$parameter
 
 ```{r, echo = TRUE, eval = FALSE}
 # Kritische t-Werte
-t_25 <- qt(p = XX, df = XX)
+t_2.5 <- qt(p = XX, df = XX)
 t_97.5 <- qt(p = XX, df = XX)
 ```
 
 ```{r}
 # Kritische t-Werte
-t_.25 <- qt(p = .025, df = df)
+t_2.5 <- qt(p = .025, df = df)
 t_97.5 <- qt(p = .975, df = df)
 ```
 
@@ -287,7 +289,7 @@ delta_upper <- XX + XX * XX
 
 ```{r}
 # confidence limits
-delta_lower <- delta + t_.25 * se
+delta_lower <- delta + t_2.5 * se
 delta_upper <- delta + t_97.5 * se
 ```
 

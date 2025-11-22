@@ -228,10 +228,22 @@ Ordner.</p></li>
 <pre class="r"><code># Lade die nötigen Pakete
 library(tidyverse)
 library(lubridate)
-library(lme4)
-library(boot)
-library(quantreg)
-library(Rfit)</code></pre>
+library(lme4)</code></pre>
+<pre><code>Loading required package: Matrix</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack</code></pre>
+<pre class="r"><code>library(boot)
+library(quantreg)</code></pre>
+<pre><code>Loading required package: SparseM</code></pre>
+<pre><code>
+Attaching package: &#39;SparseM&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:Matrix&#39;:
+
+    det</code></pre>
+<pre class="r"><code>library(Rfit)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Verwende die <code>read_csv()</code> Funktion um
 <code>avocado</code> und <code>avocado_cali</code> einzulesen.</li>
@@ -266,17 +278,41 @@ enthält. Das Ziel ist es zunächst <code>Verkaufsvolumen</code> über
 <pre class="r"><code># Regression Verkausvolumen auf Preis
 cali_lm &lt;- lm(formula = YY ~ XX, 
                data = ZZ)</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = Verkaufsvolumen ~ Preis, 
+               data = avocado_cali)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Betrachte die <code>summary()</code> des Modells. Ist
+<li>Betrachte die <code>summary()</code> des Modells. Ist
 <code>Preis</code> ein guter Prädiktor für <code>Verkaufsvolumen</code>?
-Achte auch auf <code>R-squared</code>.</p></li>
-<li><p><code>Preis</code> ist ein signifikanter Prädiktor mit einem sehr
+Achte auch auf <code>R-squared</code>.</li>
+</ol>
+<pre class="r"><code>summary(cali_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-4692333 -1486900   351468  1342770  4276676 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 11577703     371529    31.2   &lt;2e-16 ***
+Preis       -6115691     256440   -23.9   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1840000 on 336 degrees of freedom
+Multiple R-squared:  0.629, Adjusted R-squared:  0.628 
+F-statistic:  569 on 1 and 336 DF,  p-value: &lt;2e-16</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><code>Preis</code> ist ein signifikanter Prädiktor mit einem sehr
 extremen <i>t</i>-Wert. Zudem weist <code>R-squared</code> einen hohen
 Wert von <code>62.8%</code> erklärte Varianz auf. Bedeutet dies nun,
 dass das Modell, welches einen linearen Zusammenhang annimmt, gut den
 Zusammenhang von <code>Preis</code> und <code>Verkaufsvolumen</code>
 beschreibt? Verwende den Code unten um die Daten und die Regression zu
-plotten.</p></li>
+plotten.</li>
 </ol>
 <pre class="r"><code># Plotte Modell und Daten
 ggplot(avocado_cali, aes(Preis, Verkaufsvolumen)) +
@@ -288,6 +324,7 @@ plottest.</li>
 </ol>
 <pre class="r"><code># Residualplot
 ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="5" style="list-style-type: decimal">
 <li>Trotz des guten <code>R-squared</code> Werts liegen offensichtliche
 Verletzungen der Annahmen vor: Linearität, Normalität, und
@@ -300,6 +337,10 @@ Speichere das Modell als <code>cali_lm</code>.</li>
 <pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
 cali_lm &lt;- lm(formula = XX ~ XX + XX, data = XX)
 ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="6" style="list-style-type: decimal">
 <li>Das hat geholfen! Aber die Sache sieht immer noch nicht ganz rund
 aus. Ein weiteres Problem existiert in der sehr schiefen Verteilung von
@@ -312,8 +353,12 @@ Transformation. Überprüfe zunächst mit dem Template wie sich die Schiefe
 darstellt und wie sie sich durch <code>log()</code> verändert.</li>
 </ol>
 <pre class="r"><code># Histogramm Verkaufsvolumen
-ggplot(avocado_cali, aes(Verkaufsvolumen)) + geom_histogram()
-ggplot(avocado_cali, aes(log(Verkaufsvolumen))) + geom_histogram()</code></pre>
+ggplot(avocado_cali, aes(Verkaufsvolumen)) + geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(avocado_cali, aes(log(Verkaufsvolumen))) + geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-12-2.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="7" style="list-style-type: decimal">
 <li>Sieht besser aus, oder? Zumindest etwas symmetrischer. Rechne nun
 eine Regression mit <code>log(Verkaufsvolumen)</code> als Kriterium und
@@ -322,6 +367,10 @@ kreiere den typischen Residualplot.</li>
 <pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
 cali_lm &lt;- lm(formula = log(XX) ~ XX + XX, data = XX)
 ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(log(Verkaufsvolumen) ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="8" style="list-style-type: decimal">
 <li>Die Punkte streuen nun etwas gleichmässiger um die Null-Gerade. Ganz
 ideal ist das Bild aber immer noch nicht, denn offensichtlich ist die
@@ -333,6 +382,10 @@ Ergo ist Homoskedastizität verletzt. Rechne nun eine Regression mit
 <pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
 cali_lm &lt;- lm(formula = XX ~ XX + XX, data = XX)
 ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_lm &lt;- lm(Verkaufsvolumen_index ~ Preis + Typ, data = avocado_cali)
+ggplot(mapping = aes(fitted(cali_lm), resid(cali_lm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="9" style="list-style-type: decimal">
 <li>Vielleicht ist jetzt die Varianz etwas ausgeglichener, ideal sieht
 es aber immer noch nicht aus. Ganz perfekt ist das aber immer noch
@@ -341,6 +394,8 @@ separat für die beiden Punktwolken bestimmt, überprüfen.</li>
 </ol>
 <pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
 tapply(resid(cali_lm), fitted(cali_lm) &gt; 7, sd)</code></pre>
+<pre><code>FALSE  TRUE 
+0.229 0.178 </code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li>Versuche nun als letztes die Poisson Verteilung mit
 <code>Verkaufszahlen</code> (einer Häufigkeitsvariable) als Kriterium.
@@ -349,6 +404,10 @@ Achtung: Die Warnungen könnt ihr ignorieren.</li>
 <pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
 cali_glm &lt;- glm(formula = XX ~ XX + XX, data = XX, family = &#39;XX&#39;)
 ggplot(mapping = aes(fitted(XX), resid(XX))) + geom_point()</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis &amp; Typ
+cali_glm &lt;- glm(Verkaufsvolumen ~ Preis + Typ, data = avocado_cali, family = &#39;poisson&#39;)
+ggplot(mapping = aes(fitted(cali_glm), resid(cali_glm))) + geom_point()</code></pre>
+<p><img src="RobustStats_practical_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
 <ol start="11" style="list-style-type: decimal">
 <li>Man könnte annehmen dies hätte die Angelegenheit weiter
 verschlechtert. Tatsächlich ist dies aber nicht so. Die
@@ -391,6 +450,34 @@ t.test(avocado_cali_2016$XX,
 # Verkaufsvolumen-Index 2016 vs 2017
 t.test(avocado_cali_2016$XX,
        avocado_cali_2017$XX, paired = TRUE)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen,
+       avocado_cali_2017$Verkaufsvolumen, paired = TRUE)</code></pre>
+<pre><code>
+    Paired t-test
+
+data:  avocado_cali_2016$Verkaufsvolumen and avocado_cali_2017$Verkaufsvolumen
+t = 2, df = 103, p-value = 0.05
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+  -3290 307840
+sample estimates:
+mean difference 
+         152275 </code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+t.test(avocado_cali_2016$Verkaufsvolumen_index,
+       avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)</code></pre>
+<pre><code>
+    Paired t-test
+
+data:  avocado_cali_2016$Verkaufsvolumen_index and avocado_cali_2017$Verkaufsvolumen_index
+t = 2, df = 103, p-value = 0.03
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ 0.0056 0.0965
+sample estimates:
+mean difference 
+          0.051 </code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><code>Verkaufsvolumen</code> zeigte keinen signifikanten
 Unterschied, <code>Verkaufsvolumen_index</code> dagegen schon. Dies ist
@@ -405,6 +492,24 @@ wilcox.test(avocado_cali_2016$XX,
 # Verkaufsvolumen-Index 2016 vs 2017
 wilcox.test(avocado_cali_2016$XX,
             avocado_cali_2017$XX, paired = TRUE)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen,
+            avocado_cali_2017$Verkaufsvolumen, paired = TRUE)</code></pre>
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  avocado_cali_2016$Verkaufsvolumen and avocado_cali_2017$Verkaufsvolumen
+V = 3491, p-value = 0.01
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+wilcox.test(avocado_cali_2016$Verkaufsvolumen_index,
+            avocado_cali_2017$Verkaufsvolumen_index, paired = TRUE)</code></pre>
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  avocado_cali_2016$Verkaufsvolumen_index and avocado_cali_2017$Verkaufsvolumen_index
+V = 3474, p-value = 0.02
+alternative hypothesis: true location shift is not equal to 0</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Nun ist in beiden Fällen der Unterschied signifikant, was in der Tat
 für einen robusten Unterschied spricht. Ein einfacher weg dies noch
@@ -430,6 +535,26 @@ n &lt;- length(signs)
 
 # p-Wert für Vorzeichentest
 pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre class="r"><code># Verkaufsvolumen 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$Verkaufsvolumen &gt; avocado_cali_2016$Verkaufsvolumen
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre><code>[1] 0.0475</code></pre>
+<pre class="r"><code># Verkaufsvolumen-Index 2016 vs 2017
+
+# Vorzeichentest Vorbereitung
+signs &lt;- avocado_cali_2017$Verkaufsvolumen_index &gt; avocado_cali_2016$Verkaufsvolumen_index
+n_plus &lt;- sum(signs)
+n &lt;- length(signs)
+
+# p-Wert für Vorzeichentest
+pbinom(q = n_plus, size = n, prob = .5)</code></pre>
+<pre><code>[1] 0.0475</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Auch hier zwei signifikante Ergebnisse. Nun kannst du langsam
 tatsächlich davon ausgehen, dass der Verkauf im Jahre 2017 gegenüber
@@ -449,6 +574,9 @@ einer normalen Regression.</li>
 <pre class="r"><code># Regression Verkausvolumen auf Preis
 cali_lm &lt;- lm(formula = YY ~ XX + XX, 
                data = ZZ)</code></pre>
+<pre class="r"><code># Regression Verkausvolumen auf Preis
+cali_lm &lt;- lm(formula = Verkaufsvolumen ~ Preis + Typ, 
+               data = avocado_cali)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Nun verwende das Template unten um zwei alternative Modelle zu
 rechnen. Eine Quantil-basierte Regression mit <code>rq()</code>
@@ -462,18 +590,75 @@ cali_rq &lt;- rq(formula = YY ~ XX + XX,
 # Rang-basierte Regression
 cali_rfit &lt;- rfit(formula = YY ~ XX + XX, 
                    data = ZZ)</code></pre>
+<pre class="r"><code># Quantil-basierte Regression
+cali_rq &lt;- rq(formula = Verkaufsvolumen ~ Preis + Typ, 
+              data = avocado_cali)
+
+# Rang-basierte Regression
+cali_rfit &lt;- rfit(formula = Verkaufsvolumen ~ Preis + Typ, 
+                  data = avocado_cali)</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Vergleiche die <code>summary()</code> der drei Modelle. Welche
-Unterschiede und Gemeinsamkeiten fallen dir auf?</p></li>
-<li><p>Die Summaries sind zunächst einmal nicht konsistent im Aufbau.
-Die Quantilregression liefert nur Konfidenzintervalle, was wir in der
+<li>Vergleiche die <code>summary()</code> der drei Modelle. Welche
+Unterschiede und Gemeinsamkeiten fallen dir auf?</li>
+</ol>
+<pre class="r"><code># regular regression
+summary(cali_lm)</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2029523  -338620   -65747   347099  4692280 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  7418161     181045   40.97  &lt; 2e-16 ***
+Preis       -1338574     155354   -8.62  2.8e-16 ***
+Typorganic  -5012181     121165  -41.37  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 745000 on 335 degrees of freedom
+Multiple R-squared:  0.939, Adjusted R-squared:  0.939 
+F-statistic: 2.59e+03 on 2 and 335 DF,  p-value: &lt;2e-16</code></pre>
+<pre class="r"><code># quantile regression
+summary(cali_rq)</code></pre>
+<pre><code>
+Call: rq(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+tau: [1] 0.5
+
+Coefficients:
+            coefficients lower bd   upper bd  
+(Intercept)   6.06e+06   -1.80e+308   6.18e+06
+Preis        -1.54e+05    -3.19e+05  -6.65e+04
+Typorganic   -5.64e+06    -5.74e+06   4.07e+19</code></pre>
+<pre class="r"><code># rank-based regression
+summary(cali_rfit)</code></pre>
+<pre><code>Call:
+rfit.default(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Coefficients:
+            Estimate Std. Error t.value p.value    
+(Intercept)  6364261      79959   79.59 &lt; 2e-16 ***
+Preis        -455900      68628   -6.64 1.2e-10 ***
+Typorganic  -5453944      53525 -101.89 &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Multiple R-squared (Robust): 0.93 
+Reduction in Dispersion Test: 2231 p-value: 0 </code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Die Summaries sind zunächst einmal nicht konsistent im Aufbau. Die
+Quantilregression liefert nur Konfidenzintervalle, was wir in der
 nächsten Session behandeln werden, entsprechend können wir keine p- oder
 t-Werte vergleichen. Du kannst aber zumindest die Gewichte vergleichen.
 Hier solltest du erkannt haben, dass die Gewichte der beiden robusten
 Regression deutlich näher aneinander sind und insbesondere das Gewicht
 des Preises als kleiner einschätzen, als dies die normale Regression
 tut. Dies ist ein Indiz dafür, dass der Einfluss des Preises ggf. von
-der normalen Regression überschätzt wurde.</p></li>
+der normalen Regression überschätzt wurde.</li>
 </ol>
 </div>
 <div id="e---bootstrap" class="section level3">
@@ -504,6 +689,11 @@ cali_boot&lt;- boot(data = XX,               # Der Datensatz
                  statistic = XX,          # Die Funktion
                  formula = XX ~ XX + XX,  # Die Modellgleichung
                  R = 1000)                # Die Anzahl der Ziehungen</code></pre>
+<pre class="r"><code># Lasse Bootstrap laufen
+cali_boot&lt;- boot(data = avocado_cali,              
+                 statistic = boot_lm,          
+                 formula = Verkaufsvolumen ~ Preis + Typ, 
+                 R = 1000)                </code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Printe das <code>cali_boot</code> und evaluiere das Ergebnis. Die
 Spalte <code>original</code> enthält die Gewichte für den gesamten
@@ -515,6 +705,20 @@ Bootstrap geschätzten Standardfehler der Gewichte.</li>
 </ol>
 <pre class="r"><code># Zeige Bootstrap Ergebnisse
 cali_boot</code></pre>
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = avocado_cali, statistic = boot_lm, R = 1000, formula = Verkaufsvolumen ~ 
+    Preis + Typ)
+
+
+Bootstrap Statistics :
+    original  bias    std. error
+t1*  7418161   -8019      274073
+t2* -1338574    7636      214383
+t3* -5012181   -4200      118745</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Das Ergebnis des Bootstrap kannst du nun einfach über eine
 z-Verteilung testen a la <code>z = b / se</code>, d.h., das Gewicht
@@ -523,9 +727,15 @@ sieht die relevanten Werte aus dem Objekt und berechnet die
 <i>z</i>-Werte für Intercept und die zwei Gewichte.</li>
 </ol>
 <pre class="r"><code># Berechne z-Werte
-cali_boot$t0[1] / sd(cali_boot$t[,1])
-cali_boot$t0[2] / sd(cali_boot$t[,2])
-cali_boot$t0[3] / sd(cali_boot$t[,3])</code></pre>
+cali_boot$t0[1] / sd(cali_boot$t[,1])</code></pre>
+<pre><code>(Intercept) 
+       27.1 </code></pre>
+<pre class="r"><code>cali_boot$t0[2] / sd(cali_boot$t[,2])</code></pre>
+<pre><code>Preis 
+-6.24 </code></pre>
+<pre class="r"><code>cali_boot$t0[3] / sd(cali_boot$t[,3])</code></pre>
+<pre><code>Typorganic 
+     -42.2 </code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Zum Abschluss vergleiche die durch Bootstrap ermittelten
 <i>z</i>-Werte mit den <i>t</i>-Werten aus der normalen Regression.
@@ -536,6 +746,25 @@ müssen die Werte nicht identisch sein.</li>
 </ol>
 <pre class="r"><code># Normale Regression
 summary(lm(Verkaufsvolumen ~ Preis + Typ, avocado_cali))</code></pre>
+<pre><code>
+Call:
+lm(formula = Verkaufsvolumen ~ Preis + Typ, data = avocado_cali)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2029523  -338620   -65747   347099  4692280 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  7418161     181045   40.97  &lt; 2e-16 ***
+Preis       -1338574     155354   -8.62  2.8e-16 ***
+Typorganic  -5012181     121165  -41.37  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 745000 on 335 degrees of freedom
+Multiple R-squared:  0.939, Adjusted R-squared:  0.939 
+F-statistic: 2.59e+03 on 2 and 335 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <div id="beispiele" class="section level2">
